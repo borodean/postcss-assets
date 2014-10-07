@@ -18,3 +18,12 @@ function compareFixtures(t, name, msg, opts, postcssOpts) {
   fs.writeFile('test/fixtures/' + name + '.actual.css', actual);
   t.equal(actual, expected, msg);
 }
+
+test('asset', function (t) {
+
+  compareFixtures(t, 'asset-loadpath', 'resolves a path', {
+    loadPaths: ['alpha/', 'beta/']
+  });
+
+  t.end();
+});
