@@ -6,4 +6,5 @@ body {
   background: asset("kateryna.jpg");
   background: asset('odalisque.jpg');
   background: asset('maria.jpg');
+  background: asset('beta/maria.jpg');
 }
