@@ -10,7 +10,6 @@ function fixture(name) {
 
 function compareFixtures(t, name, msg, opts, postcssOpts) {
 
-  opts = opts || {};
 
   var actual = postcss().use(plugin(opts)).process(fixture(name), postcssOpts).css.trim();
   var expected = fixture(name + '.expected');

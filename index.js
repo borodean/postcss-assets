@@ -6,6 +6,7 @@ var path = require('path');
 var R_ASSET = /asset\((.*?)([^\s'"]+)(.*?)\)/;
 
 module.exports = function (options) {
+  options = options || {};
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('./');
   return function (css) {
