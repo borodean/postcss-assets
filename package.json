@@ -1,0 +1,16 @@
+{
+  "name": "postcss-assets",
+  "version": "1.0.0",
+  "description": "PostCSS plugin to manage assets",
+  "author": "Vadim Borodean <borodean@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "postcss": "^2.2.5"
+  },
+  "devDependencies": {
+    "tape": "^3.0.0"
+  },
+  "scripts": {
+    "test": "tape test"
+  }
+}
