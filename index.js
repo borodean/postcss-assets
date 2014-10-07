@@ -14,10 +14,11 @@ module.exports = function (options) {
       if (decl.value.indexOf('asset(') !== 0) return;
       var matches = decl.value.match(R_ASSET);
       var resolvedPath;
-      options.loadPaths.some(function (loadPath) {
+      var some = options.loadPaths.some(function (loadPath) {
         resolvedPath = path.normalize('/' + loadPath + matches[2]);
         return fs.existsSync('test/fixtures' + resolvedPath);
       });
+      if (!some) throw new Error;
       decl.value = 'url(' + matches[1] + resolvedPath + matches[3] + ')';
     });
   };

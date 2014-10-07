@@ -26,7 +26,12 @@ test('asset', function (t) {
   compareFixtures(t, 'asset-loadpath', 'resolves a path', {
     loadPaths: ['alpha/', 'beta/']
   });
+
   compareFixtures(t, 'asset', 'resolves a path');
+
+  t.throws(function () {
+    process('asset-notfound');
+  });
 
   t.end();
 });
