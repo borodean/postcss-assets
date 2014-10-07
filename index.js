@@ -6,7 +6,6 @@ var path = require('path');
 var R_ASSET = /asset\((.*?)([^\s'"]+)(.*?)\)/;
 
 module.exports = function (options) {
-  options = options || {};
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('./');
   return function (css) {
@@ -16,7 +15,7 @@ module.exports = function (options) {
       var resolvedPath;
       var some = options.loadPaths.some(function (loadPath) {
         resolvedPath = path.normalize('/' + loadPath + matches[2]);
-        return fs.existsSync('test/fixtures' + resolvedPath);
+        return fs.existsSync(options.basePath + resolvedPath);
       });
       if (!some) throw new Error;
       decl.value = 'url(' + matches[1] + resolvedPath + matches[3] + ')';
