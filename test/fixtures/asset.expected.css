@@ -1,3 +1,4 @@
 body {
   background: url('/alpha/kateryna.jpg');
+  background: url('/alpha/kateryna.jpg?foo=bar#baz');
 }

@@ -1,3 +1,4 @@
 body {
   background: asset('alpha/kateryna.jpg');
+  background: asset('alpha/kateryna.jpg?foo=bar#baz');
 }
