@@ -4,7 +4,9 @@ var fs = require('fs');
 var path = require('path');
 
 var R_ASSET = /^asset\((\s*['"]?)(.*?)(['"]?\s*)\)$/;
-var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/g;
+var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
+var R_SLASH = /%5C/gi;
+var R_SPACE = /([0-9a-f]{1,6})%20/gi;
 var R_URL = /^([^\?#]+)(.*)/;
 
 module.exports = function (options) {
@@ -19,13 +21,13 @@ module.exports = function (options) {
       return fs.existsSync(options.basePath + resolvedPath + unescape(chunks[0]));
     });
     if (!some) throw new Error;
-    chunks[0] = encodeURI(resolvedPath + chunks[0]).replace('%5C', '\\');
+    chunks[0] = encodeURI(resolvedPath + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
     return chunks.join('');
   }
 
   function unescape(string) {
     return string.replace(R_ESCAPE, function (match, p1, p2) {
-      if (p1) return String.fromCharCode(p1);
+      if (p1) return String.fromCharCode(parseInt(p1, 16));
       return p2;
     });
   }
