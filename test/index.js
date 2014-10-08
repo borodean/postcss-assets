@@ -72,7 +72,7 @@ test('asset', function (t) {
   compareFixtures(t, 'asset', 'aliases to either asset-url or asset-inline', {
     basePath: 'test/fixtures/',
     inline: {
-      maxSize: 2560
+      maxSize: '2K'
     }
   });
   t.end();
@@ -80,5 +80,15 @@ test('asset', function (t) {
 
 test('asset-width, asset-height', function (t) {
   compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
+  t.end();
+});
+
+test('parseBytes', function (t) {
+  t.equal(plugin.parseBytes(128), 128, 'converts numbers');
+  t.equal(plugin.parseBytes('128'), 128, 'converts unitless values');
+  t.equal(plugin.parseBytes('2k'), 2048, 'converts kilobytes');
+  t.equal(plugin.parseBytes('3K'), 3072, 'converts uppercase units');
+  t.equal(plugin.parseBytes('2m'), 2097152, 'converts megabytes');
+  t.equal(plugin.parseBytes('25.5k'), 26112, 'converts fractional numbers');
   t.end();
 });
