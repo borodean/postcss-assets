@@ -1,11 +1,4 @@
 body {
-  background: asset('alpha/kateryna.jpg');
-  background: asset('alpha/kateryna_(shevchenko).jpg');
-  background: asset('alpha/\31 a2b3c.jpg');
-  background: asset('alpha/Ich \2665  B\FC cher.jpg');
-  background: asset('alpha/kateryna.jpg?foo=bar#baz');
-  background: asset('alpha/kateryna.jpg#baz');
-  background: asset('alpha/Gupsy Fortuneteller.jpg');
-  background: asset("alpha/Askold's Grave.jpg");
-  background: asset('alpha/Askold\'s Grave.jpg');
+  color: red;
+  background: asset('test/fixtures/alpha/kateryna.jpg');
 }

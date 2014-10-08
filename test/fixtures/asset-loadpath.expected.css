@@ -1,10 +1,5 @@
 body {
-  color: red;
-  background: url(/alpha/kateryna.jpg);
-  background: url(  /alpha/kateryna.jpg );
   background: url('/alpha/kateryna.jpg');
-  background: url("/alpha/kateryna.jpg");
-  background: url('/alpha/odalisque.jpg');
   background: url('/beta/maria.jpg');
   background: url('/beta/maria.jpg');
 }

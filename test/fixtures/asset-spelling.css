@@ -1,0 +1,15 @@
+body {
+  color: red;
+  background: asset(kateryna.jpg);
+  background: asset(  kateryna.jpg );
+  background: asset('kateryna.jpg');
+  background: asset("kateryna.jpg");
+  background: asset('odalisque.jpg');
+  background: asset('kateryna_(shevchenko).jpg');
+  background: asset('\6b ateryna.jpg');
+  background: asset('\kateryna.jpg');
+  background: asset('Ich \2665  B\FC cher.jpg');
+  background: asset('kateryna.jpg?foo=bar#baz');
+  background: asset('kateryna.jpg#baz');
+  background: asset('Gupsy Fortuneteller.jpg');
+}

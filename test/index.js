@@ -23,24 +23,27 @@ function compareFixtures(t, name, msg, opts, postcssOpts) {
 
 test('asset', function (t) {
 
-  compareFixtures(t, 'asset-loadpath', 'resolves a path', {
+  compareFixtures(t, 'asset', 'resolves paths');
+
+  compareFixtures(t, 'asset-basepath', 'resolves relative to the basePath', {
+    basePath: 'test/fixtures'
+  });
+
+  compareFixtures(t, 'asset-loadpath', 'resolves relative to the loadPaths', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/', 'beta/']
   });
 
-  compareFixtures(t, 'asset', 'resolves a path', {
-    basePath: 'test/fixtures'
+  compareFixtures(t, 'asset-spelling', 'recognizes various spelling', {
+    basePath: 'test/fixtures',
+    loadPaths: ['alpha/']
   });
 
   t.throws(function () {
     process('asset-notfound', {
       basePath: 'test/fixtures'
     });
-  });
-
-  compareFixtures(t, 'asset-basepath', 'resolves a path', {
-    basePath: 'test/fixtures/alpha/'
-  });
+  }, false, 'throws an exception');
 
   t.end();
 });

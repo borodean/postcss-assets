@@ -1,10 +1,5 @@
 body {
-  color: red;
-  background: asset(kateryna.jpg);
-  background: asset(  kateryna.jpg );
   background: asset('kateryna.jpg');
-  background: asset("kateryna.jpg");
-  background: asset('odalisque.jpg');
   background: asset('maria.jpg');
   background: asset('beta/maria.jpg');
 }
