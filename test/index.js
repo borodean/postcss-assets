@@ -34,6 +34,11 @@ test('asset', function (t) {
     loadPaths: ['alpha/', 'beta/']
   });
 
+  compareFixtures(t, 'asset-loadpath', 'resolves with loadPaths of a various spelling', {
+    basePath: 'test/fixtures',
+    loadPaths: ['./alpha/', 'beta']
+  });
+
   compareFixtures(t, 'asset-baseurl-1', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'

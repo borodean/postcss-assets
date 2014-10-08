@@ -15,14 +15,14 @@ module.exports = function (options) {
   options.basePath = options.basePath || process.cwd();
   options.baseUrl = options.baseUrl || '/';
   options.loadPaths = options.loadPaths || [];
-  options.loadPaths.unshift('./');
+  options.loadPaths.unshift('.');
 
   function resolve(fn) {
     var chunks = Array.prototype.slice.call(fn.match(R_URL), 1, 3);
     var unescapedPath = unescape(chunks[0]);
     var resolvedPath;
     var some = options.loadPaths.some(function (loadPath) {
-      resolvedPath = loadPath;
+      resolvedPath = path.join(loadPath, '/');
       return fs.existsSync(path.join(options.basePath, resolvedPath, unescapedPath));
     });
     resolvedUrl = url.resolve(options.baseUrl, resolvedPath);
