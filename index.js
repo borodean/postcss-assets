@@ -23,7 +23,7 @@ module.exports = function (options) {
     var resolvedPath;
     var some = options.loadPaths.some(function (loadPath) {
       resolvedPath = loadPath;
-      return fs.existsSync(options.basePath + '/' + resolvedPath + unescapedPath);
+      return fs.existsSync(path.join(options.basePath, resolvedPath, unescapedPath));
     });
     resolvedUrl = url.resolve(options.baseUrl, resolvedPath);
     if (!some) throw new Error("Asset not found or unreadable: " + chunks[0]);
