@@ -4,10 +4,12 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 
+var base64 = require('js-base64').Base64;
+var mime = require('mime');
 var sizeOf = require('image-size');
 
 var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
-var R_FUNC = /^(asset(?:-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
+var R_FUNC = /^(asset(?:-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
 var R_SLASH = /%5C/gi;
 var R_SPACE = /([0-9a-f]{1,6})%20/gi;
 var R_URL = /^([^\?#]+)(.*)/;
@@ -27,6 +29,13 @@ module.exports = function (options) {
     });
     if (!some) throw new Error("Asset not found or unreadable: " + assetPath);
     return matchingPath;
+  }
+
+  function resolveDataUrl(asset) {
+    var resolvedPath = resolvePath(asset);
+    var mimeType = mime.lookup(resolvedPath);
+    var data = base64.encode(fs.readFileSync(resolvedPath));
+    return 'data:' + mimeType + ';base64,' + data;
   }
 
   function resolvePath(asset) {
@@ -63,6 +72,9 @@ module.exports = function (options) {
       switch (matches[1]) {
       case 'asset':
         decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
+        break;
+      case 'asset-inline':
+        decl.value = 'url(' + matches[2] + resolveDataUrl(matches[3]) + matches[4] + ')';
         break;
       case 'asset-width':
         decl.value = sizeOf(resolvePath(matches[3])).width + 'px';

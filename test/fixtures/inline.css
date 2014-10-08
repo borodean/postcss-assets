@@ -1,0 +1,4 @@
+body {
+  background: asset-inline('alpha/blank.gif');
+  background: asset-inline(  'alpha/blank.gif' );
+}

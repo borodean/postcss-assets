@@ -63,6 +63,11 @@ test('asset', function (t) {
   t.end();
 });
 
+test('asset-inline', function (t) {
+  compareFixtures(t, 'inline', 'base64-encodes assets', { basePath: 'test/fixtures/' });
+  t.end();
+});
+
 test('asset-width, asset-height', function (t) {
   compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
   t.end();

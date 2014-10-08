@@ -6,6 +6,8 @@
   "license": "MIT",
   "dependencies": {
     "image-size": "^0.3.3",
+    "js-base64": "^2.1.5",
+    "mime": "^1.2.11",
     "postcss": "^2.2.5"
   },
   "devDependencies": {
