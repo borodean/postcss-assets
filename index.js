@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 
-var R_ASSET = /asset\((.*?)([^\s'"]+)(.*?)\)/;
+var R_ASSET = /asset\((\s*['"]?)(.*?)(['"]?\s*)\)/;
 
 module.exports = function (options) {
   options.loadPaths = options.loadPaths || [];
@@ -12,12 +12,14 @@ module.exports = function (options) {
 
   function resolve(fn) {
     var uri = url.parse(fn);
-    var pathname = uri.pathname;
+    var pathname = decodeURI(uri.pathname);
+    var resolvedPathname;
     var some = options.loadPaths.some(function (loadPath) {
-      uri.pathname = path.normalize('/' + loadPath + pathname);
-      return fs.existsSync(options.basePath + uri.pathname);
+      resolvedPathname = path.normalize('/' + loadPath + pathname);
+      return fs.existsSync(options.basePath + resolvedPathname);
     });
     if (!some) throw new Error;
+    uri.pathname = encodeURI(resolvedPathname);
     return url.format(uri);
   }
 
