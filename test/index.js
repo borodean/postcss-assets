@@ -68,6 +68,11 @@ test('asset-inline', function (t) {
   t.end();
 });
 
+test('asset', function (t) {
+  compareFixtures(t, 'asset', 'aliases to either asset-url or asset-inline', { basePath: 'test/fixtures/' });
+  t.end();
+});
+
 test('asset-width, asset-height', function (t) {
   compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
   t.end();
