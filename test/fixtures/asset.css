@@ -1,6 +1,7 @@
 body {
   background: asset('alpha/kateryna.jpg');
   background: asset('alpha/kateryna.jpg?foo=bar#baz');
+  background: asset('alpha/kateryna.jpg#baz');
   background: asset('alpha/Gupsy Fortuneteller.jpg');
   background: asset("alpha/Askold's Grave.jpg");
 }

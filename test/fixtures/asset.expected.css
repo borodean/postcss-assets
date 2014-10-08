@@ -1,6 +1,7 @@
 body {
   background: url('/alpha/kateryna.jpg');
   background: url('/alpha/kateryna.jpg?foo=bar#baz');
+  background: url('/alpha/kateryna.jpg#baz');
   background: url('/alpha/Gupsy%20Fortuneteller.jpg');
   background: url("/alpha/Askold's%20Grave.jpg");
 }
