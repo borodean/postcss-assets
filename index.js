@@ -2,6 +2,7 @@ var postcss = require('postcss');
 
 var fs = require('fs');
 var path = require('path');
+var url = require('url');
 
 var R_ASSET = /^asset\((\s*['"]?)(.*?)(['"]?\s*)\)$/;
 var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
@@ -12,6 +13,7 @@ var R_URL = /^([^\?#]+)(.*)/;
 module.exports = function (options) {
   options = options || {};
   options.basePath = options.basePath || process.cwd();
+  options.baseUrl = options.baseUrl || '/';
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('./');
 
@@ -19,11 +21,12 @@ module.exports = function (options) {
     var chunks = Array.prototype.slice.call(fn.match(R_URL), 1, 3);
     var resolvedPath;
     var some = options.loadPaths.some(function (loadPath) {
-      resolvedPath = path.normalize('/' + loadPath);
-      return fs.existsSync(options.basePath + resolvedPath + unescape(chunks[0]));
+      resolvedPath = loadPath;
+      return fs.existsSync(options.basePath + '/' + resolvedPath + unescape(chunks[0]));
     });
+    resolvedUrl = url.resolve(options.baseUrl, resolvedPath);
     if (!some) throw new Error;
-    chunks[0] = encodeURI(resolvedPath + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+    chunks[0] = encodeURI(resolvedUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
     return chunks.join('');
   }
 
