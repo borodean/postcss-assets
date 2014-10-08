@@ -1,0 +1,5 @@
+body {
+  background: asset-url('kateryna.jpg');
+  background: asset-url('maria.jpg');
+  background: asset-url('beta/maria.jpg');
+}

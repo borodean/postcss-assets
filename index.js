@@ -9,7 +9,7 @@ var mime = require('mime');
 var sizeOf = require('image-size');
 
 const R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
-const R_FUNC = /^(asset(?:-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
+const R_FUNC = /^(asset(?:-url|-inline|-width|-height))\((\s*['"]?)(.*?)(['"]?\s*)\)$/
 const R_SLASH = /%5C/gi;
 const R_SPACE = /([0-9a-f]{1,6})%20/gi;
 const R_URL = /^([^\?#]+)(.*)/;
@@ -70,7 +70,7 @@ module.exports = function (options) {
       if (!matches) return;
 
       switch (matches[1]) {
-      case 'asset':
+      case 'asset-url':
         decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
         break;
       case 'asset-inline':
@@ -86,3 +86,4 @@ module.exports = function (options) {
     });
   };
 };
+

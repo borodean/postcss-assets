@@ -21,41 +21,41 @@ function compareFixtures(t, name, msg, opts, postcssOpts) {
   t.equal(actual, expected, msg);
 }
 
-test('asset', function (t) {
+test('asset-url', function (t) {
 
-  compareFixtures(t, 'asset', 'resolves paths');
+  compareFixtures(t, 'url', 'resolves paths');
 
-  compareFixtures(t, 'asset-basepath', 'resolves relative to the basePath', {
+  compareFixtures(t, 'url-basepath', 'resolves relative to the basePath', {
     basePath: 'test/fixtures'
   });
 
-  compareFixtures(t, 'asset-loadpath', 'resolves relative to the loadPaths', {
+  compareFixtures(t, 'url-loadpath', 'resolves relative to the loadPaths', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/', 'beta/']
   });
 
-  compareFixtures(t, 'asset-loadpath', 'resolves with loadPaths of a various spelling', {
+  compareFixtures(t, 'url-loadpath', 'resolves with loadPaths of a various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['./alpha/', 'beta']
   });
 
-  compareFixtures(t, 'asset-baseurl-1', 'resolves relative to the baseUrl', {
+  compareFixtures(t, 'url-baseurl-1', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'
   });
 
-  compareFixtures(t, 'asset-baseurl-2', 'resolves relative to the baseUrl', {
+  compareFixtures(t, 'url-baseurl-2', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
   });
 
-  compareFixtures(t, 'asset-spelling', 'recognizes various spelling', {
+  compareFixtures(t, 'url-spelling', 'recognizes various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/']
   });
 
   t.throws(function () {
-    process('asset-notfound', {
+    process('url-notfound', {
       basePath: 'test/fixtures'
     });
   }, false, 'throws an exception');
