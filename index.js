@@ -52,6 +52,14 @@ module.exports = function (options) {
     return chunks.join('');
   }
 
+  function shouldBeInline(assetPath) {
+    if (options.inline && options.inline.maxSize) {
+      var size = fs.statSync(assetPath).size;
+      return (size <= options.inline.maxSize);
+    }
+    return false;
+  }
+
   function splitAsset(asset) {
     return Array.prototype.slice.call(asset.match(R_URL), 1, 3);
   }
@@ -71,6 +79,13 @@ module.exports = function (options) {
 
       switch (matches[1]) {
       case 'asset':
+        var assetPath = resolvePath(matches[3]);
+        if (shouldBeInline(assetPath)) {
+          decl.value = 'url(' + matches[2] + resolveDataUrl(matches[3]) + matches[4] + ')';
+        } else {
+          decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
+        }
+        break;
       case 'asset-url':
         decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
         break;

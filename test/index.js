@@ -69,7 +69,12 @@ test('asset-inline', function (t) {
 });
 
 test('asset', function (t) {
-  compareFixtures(t, 'asset', 'aliases to either asset-url or asset-inline', { basePath: 'test/fixtures/' });
+  compareFixtures(t, 'asset', 'aliases to either asset-url or asset-inline', {
+    basePath: 'test/fixtures/',
+    inline: {
+      maxSize: 2560
+    }
+  });
   t.end();
 });
 
