@@ -1,5 +1,6 @@
 body {
   background: asset('alpha/kateryna.jpg');
+  background: asset('alpha/kateryna_(shevchenko).jpg');
   background: asset('alpha/kateryna.jpg?foo=bar#baz');
   background: asset('alpha/kateryna.jpg#baz');
   background: asset('alpha/Gupsy Fortuneteller.jpg');

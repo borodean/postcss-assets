@@ -3,7 +3,7 @@ var postcss = require('postcss');
 var fs = require('fs');
 var path = require('path');
 
-var R_ASSET = /asset\((\s*['"]?)(.*?)(['"]?\s*)\)/;
+var R_ASSET = /^asset\((\s*['"]?)(.*?)(['"]?\s*)\)$/;
 var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/g;
 var R_URL = /^([^\?#]+)(.*)/;
 
