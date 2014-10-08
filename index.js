@@ -4,8 +4,10 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 
-var R_ASSET = /^asset\((\s*['"]?)(.*?)(['"]?\s*)\)$/;
+var sizeOf = require('image-size');
+
 var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
+var R_FUNC = /^(asset(?:-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
 var R_SLASH = /%5C/gi;
 var R_SPACE = /([0-9a-f]{1,6})%20/gi;
 var R_URL = /^([^\?#]+)(.*)/;
@@ -17,18 +19,32 @@ module.exports = function (options) {
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('.');
 
-  function resolve(fn) {
-    var chunks = Array.prototype.slice.call(fn.match(R_URL), 1, 3);
-    var unescapedPath = unescape(chunks[0]);
-    var resolvedPath;
+  function findMatchingLoadPath(assetPath) {
+    var matchingPath;
     var some = options.loadPaths.some(function (loadPath) {
-      resolvedPath = path.join(loadPath, '/');
-      return fs.existsSync(path.join(options.basePath, resolvedPath, unescapedPath));
+      matchingPath = path.join(loadPath, '/');
+      return fs.existsSync(path.join(options.basePath, matchingPath, assetPath));
     });
-    resolvedUrl = url.resolve(options.baseUrl, resolvedPath);
-    if (!some) throw new Error("Asset not found or unreadable: " + chunks[0]);
-    chunks[0] = encodeURI(resolvedUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+    if (!some) throw new Error("Asset not found or unreadable: " + assetPath);
+    return matchingPath;
+  }
+
+  function resolvePath(asset) {
+    var chunks = splitAsset(asset);
+    var assetPath = unescape(chunks[0]);
+    return path.join(options.basePath, findMatchingLoadPath(assetPath), assetPath);
+  }
+
+  function resolveUrl(asset) {
+    var chunks = splitAsset(asset);
+    var assetPath = unescape(chunks[0]);
+    var baseUrl = url.resolve(options.baseUrl, findMatchingLoadPath(assetPath));
+    chunks[0] = encodeURI(baseUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
     return chunks.join('');
+  }
+
+  function splitAsset(asset) {
+    return Array.prototype.slice.call(asset.match(R_URL), 1, 3);
   }
 
   function unescape(string) {
@@ -40,9 +56,21 @@ module.exports = function (options) {
 
   return function (css) {
     css.eachDecl(function (decl) {
-      if (decl.value.indexOf('asset(') !== 0) return;
-      var matches = decl.value.match(R_ASSET);
-      decl.value = 'url(' + matches[1] + resolve(matches[2]) + matches[3] + ')';
+
+      var matches = decl.value.match(R_FUNC);
+      if (!matches) return;
+
+      switch (matches[1]) {
+      case 'asset':
+        decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
+        break;
+      case 'asset-width':
+        decl.value = sizeOf(resolvePath(matches[3])).width + 'px';
+        break;
+      case 'asset-height':
+        decl.value = sizeOf(resolvePath(matches[3])).height + 'px';
+        break;
+      }
     });
   };
 };

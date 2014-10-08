@@ -5,6 +5,7 @@
   "author": "Vadim Borodean <borodean@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "image-size": "^0.3.3",
     "postcss": "^2.2.5"
   },
   "devDependencies": {
