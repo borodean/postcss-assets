@@ -25,7 +25,7 @@ module.exports = function (options) {
       return fs.existsSync(options.basePath + '/' + resolvedPath + unescape(chunks[0]));
     });
     resolvedUrl = url.resolve(options.baseUrl, resolvedPath);
-    if (!some) throw new Error;
+    if (!some) throw new Error("Asset not found or unreadable: " + chunks[0]);
     chunks[0] = encodeURI(resolvedUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
     return chunks.join('');
   }
