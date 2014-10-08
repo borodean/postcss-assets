@@ -8,11 +8,11 @@ var base64 = require('js-base64').Base64;
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-var R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
-var R_FUNC = /^(asset(?:-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
-var R_SLASH = /%5C/gi;
-var R_SPACE = /([0-9a-f]{1,6})%20/gi;
-var R_URL = /^([^\?#]+)(.*)/;
+const R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
+const R_FUNC = /^(asset(?:-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
+const R_SLASH = /%5C/gi;
+const R_SPACE = /([0-9a-f]{1,6})%20/gi;
+const R_URL = /^([^\?#]+)(.*)/;
 
 module.exports = function (options) {
   options = options || {};
