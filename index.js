@@ -10,6 +10,8 @@ var R_SPACE = /([0-9a-f]{1,6})%20/gi;
 var R_URL = /^([^\?#]+)(.*)/;
 
 module.exports = function (options) {
+  options = options || {};
+  options.basePath = options.basePath || process.cwd();
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('./');
 
