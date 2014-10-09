@@ -19,6 +19,7 @@ const R_URL = /^([^\?#]+)(.*)/;
 module.exports = function (options) {
 
   options = options || {};
+  options.baseUrl = options.baseUrl || '/';
 
   if (options.basePath) {
     options.basePath = path.resolve(options.basePath);
@@ -26,16 +27,20 @@ module.exports = function (options) {
     options.basePath = process.cwd();
   }
 
-  options.baseUrl = options.baseUrl || '/';
-
-  options.loadPaths = options.loadPaths || [];
-  options.loadPaths.unshift('.');
+  if (options.loadPaths) {
+    options.loadPaths = options.loadPaths.map(function (loadPath) {
+      return path.resolve(options.basePath, loadPath);
+    });
+  } else {
+    options.loadPaths = [];
+  }
+  options.loadPaths.unshift(options.basePath);
 
   function matchLoadPath(assetPath) {
     var matchingPath;
     var isFound = options.loadPaths.some(function (loadPath) {
-      matchingPath = path.join(loadPath, '/');
-      return fs.existsSync(path.join(options.basePath, matchingPath, assetPath));
+      matchingPath = loadPath;
+      return fs.existsSync(path.join(loadPath, assetPath));
     });
     if (!isFound) throw new Error("Asset not found or unreadable: " + assetPath);
     return matchingPath;
@@ -51,13 +56,15 @@ module.exports = function (options) {
   function resolvePath(assetStr) {
     var chunks = splitPathFromQuery(assetStr);
     var assetPath = unescapeCss(chunks[0]);
-    return path.join(options.basePath, matchLoadPath(assetPath), assetPath);
+    return path.resolve(matchLoadPath(assetPath), assetPath);
   }
 
   function resolveUrl(assetStr) {
     var chunks = splitPathFromQuery(assetStr);
     var assetPath = unescapeCss(chunks[0]);
-    var baseUrl = url.resolve(options.baseUrl, matchLoadPath(assetPath));
+    var baseToLoadPath = path.relative(options.basePath, matchLoadPath(assetPath));
+    baseToLoadPath = path.join(baseToLoadPath || '.', '/');
+    var baseUrl = url.resolve(options.baseUrl, baseToLoadPath);
     chunks[0] = encodeURI(baseUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
     return chunks.join('');
   }
