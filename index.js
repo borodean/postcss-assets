@@ -1,5 +1,7 @@
 var postcss = require('postcss');
 
+var parseBytes = require('./lib/parseBytes');
+
 var fs = require('fs');
 var path = require('path');
 var url = require('url');
@@ -55,7 +57,7 @@ module.exports = function (options) {
   function shouldBeInline(assetPath) {
     if (options.inline && options.inline.maxSize) {
       var size = fs.statSync(assetPath).size;
-      return (size <= module.exports.parseBytes(options.inline.maxSize));
+      return (size <= parseBytes(options.inline.maxSize));
     }
     return false;
   }
@@ -107,15 +109,3 @@ module.exports = function (options) {
     });
   };
 };
-
-module.exports.parseBytes = function (string) {
-  string = string.toString();
-  var value = parseFloat(string, 10);
-  var unit = string.slice(-1).toUpperCase();
-  if (unit === 'K') {
-    value *= 1024;
-  } else if (unit === 'M') {
-    value *= Math.pow(1024, 2);
-  }
-  return Math.floor(value);
-}
