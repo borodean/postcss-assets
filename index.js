@@ -21,33 +21,33 @@ module.exports = function (options) {
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('.');
 
-  function findMatchingLoadPath(assetPath) {
+  function matchLoadPath(assetPath) {
     var matchingPath;
-    var some = options.loadPaths.some(function (loadPath) {
+    var isFound = options.loadPaths.some(function (loadPath) {
       matchingPath = path.join(loadPath, '/');
       return fs.existsSync(path.join(options.basePath, matchingPath, assetPath));
     });
-    if (!some) throw new Error("Asset not found or unreadable: " + assetPath);
+    if (!isFound) throw new Error("Asset not found or unreadable: " + assetPath);
     return matchingPath;
   }
 
-  function resolveDataUrl(asset) {
-    var resolvedPath = resolvePath(asset);
+  function resolveDataUrl(assetStr) {
+    var resolvedPath = resolvePath(assetStr);
     var mimeType = mime.lookup(resolvedPath);
     var data = base64.encode(fs.readFileSync(resolvedPath));
     return 'data:' + mimeType + ';base64,' + data;
   }
 
-  function resolvePath(asset) {
-    var chunks = splitAsset(asset);
-    var assetPath = unescape(chunks[0]);
-    return path.join(options.basePath, findMatchingLoadPath(assetPath), assetPath);
+  function resolvePath(assetStr) {
+    var chunks = splitPathFromQuery(assetStr);
+    var assetPath = unescapeCss(chunks[0]);
+    return path.join(options.basePath, matchLoadPath(assetPath), assetPath);
   }
 
-  function resolveUrl(asset) {
-    var chunks = splitAsset(asset);
-    var assetPath = unescape(chunks[0]);
-    var baseUrl = url.resolve(options.baseUrl, findMatchingLoadPath(assetPath));
+  function resolveUrl(assetStr) {
+    var chunks = splitPathFromQuery(assetStr);
+    var assetPath = unescapeCss(chunks[0]);
+    var baseUrl = url.resolve(options.baseUrl, matchLoadPath(assetPath));
     chunks[0] = encodeURI(baseUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
     return chunks.join('');
   }
@@ -60,43 +60,48 @@ module.exports = function (options) {
     return false;
   }
 
-  function splitAsset(asset) {
-    return Array.prototype.slice.call(asset.match(R_URL), 1, 3);
+  function splitPathFromQuery(assetStr) {
+    return Array.prototype.slice.call(assetStr.match(R_URL), 1, 3);
   }
 
-  function unescape(string) {
-    return string.replace(R_ESCAPE, function (match, p1, p2) {
-      if (p1) return String.fromCharCode(parseInt(p1, 16));
-      return p2;
+  function unescapeCss(str) {
+    return str.replace(R_ESCAPE, function (match, hex, char) {
+      if (hex) return String.fromCharCode(parseInt(hex, 16));
+      return char;
     });
   }
 
-  return function (css) {
-    css.eachDecl(function (decl) {
+  return function (cssTree) {
+    cssTree.eachDecl(function (decl) {
 
       var matches = decl.value.match(R_FUNC);
       if (!matches) return;
 
-      switch (matches[1]) {
+      var method = matches[1];
+      var contentBefore = matches[2];
+      var assetStr = matches[3];
+      var contentAfter = matches[4];
+
+      switch (method) {
       case 'asset':
-        var assetPath = resolvePath(matches[3]);
+        var assetPath = resolvePath(assetStr);
         if (shouldBeInline(assetPath)) {
-          decl.value = 'url(' + matches[2] + resolveDataUrl(matches[3]) + matches[4] + ')';
+          decl.value = 'url(' + contentBefore + resolveDataUrl(assetStr) + contentAfter + ')';
         } else {
-          decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
+          decl.value = 'url(' + contentBefore + resolveUrl(assetStr) + contentAfter + ')';
         }
         break;
       case 'asset-url':
-        decl.value = 'url(' + matches[2] + resolveUrl(matches[3]) + matches[4] + ')';
+        decl.value = 'url(' + contentBefore + resolveUrl(assetStr) + contentAfter + ')';
         break;
       case 'asset-inline':
-        decl.value = 'url(' + matches[2] + resolveDataUrl(matches[3]) + matches[4] + ')';
+        decl.value = 'url(' + contentBefore + resolveDataUrl(assetStr) + contentAfter + ')';
         break;
       case 'asset-width':
-        decl.value = sizeOf(resolvePath(matches[3])).width + 'px';
+        decl.value = sizeOf(resolvePath(assetStr)).width + 'px';
         break;
       case 'asset-height':
-        decl.value = sizeOf(resolvePath(matches[3])).height + 'px';
+        decl.value = sizeOf(resolvePath(assetStr)).height + 'px';
         break;
       }
     });
