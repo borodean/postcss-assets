@@ -17,9 +17,17 @@ const R_SPACE = /([0-9a-f]{1,6})%20/gi;
 const R_URL = /^([^\?#]+)(.*)/;
 
 module.exports = function (options) {
+
   options = options || {};
-  options.basePath = options.basePath || process.cwd();
+
+  if (options.basePath) {
+    options.basePath = path.resolve(options.basePath);
+  } else {
+    options.basePath = process.cwd();
+  }
+
   options.baseUrl = options.baseUrl || '/';
+
   options.loadPaths = options.loadPaths || [];
   options.loadPaths.unshift('.');
 
