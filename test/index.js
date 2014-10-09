@@ -51,6 +51,11 @@ test('asset-url', function (t) {
     baseUrl: 'http://example.com'
   });
 
+  compareFixtures(t, 'url-relative', 'resolves relative paths', {
+    basePath: 'test/fixtures/alpha',
+    relativeTo: 'test/fixtures/beta'
+  });
+
   compareFixtures(t, 'url-spelling', 'recognizes various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/']

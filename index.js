@@ -36,6 +36,12 @@ module.exports = function (options) {
   }
   options.loadPaths.unshift(options.basePath);
 
+  if (options.relativeTo) {
+    options.relativeTo = path.resolve(options.relativeTo);
+  } else {
+    options.relativeTo = false;
+  }
+
   function matchLoadPath(assetPath) {
     var matchingPath;
     var isFound = options.loadPaths.some(function (loadPath) {
@@ -62,10 +68,16 @@ module.exports = function (options) {
   function resolveUrl(assetStr) {
     var chunks = splitPathFromQuery(assetStr);
     var assetPath = unescapeCss(chunks[0]);
-    var baseToLoadPath = path.relative(options.basePath, matchLoadPath(assetPath));
-    baseToLoadPath = path.join(baseToLoadPath || '.', '/');
-    var baseUrl = url.resolve(options.baseUrl, baseToLoadPath);
-    chunks[0] = encodeURI(baseUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+    if (options.relativeTo) {
+      var toLoadPath = path.relative(options.relativeTo, matchLoadPath(assetPath));
+      toLoadPath = path.join(toLoadPath, '/');
+      chunks[0] = encodeURI(toLoadPath + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+    } else {
+      var baseToLoadPath = path.relative(options.basePath, matchLoadPath(assetPath));
+      baseToLoadPath = path.join(baseToLoadPath || '.', '/');
+      var baseUrl = url.resolve(options.baseUrl, baseToLoadPath);
+      chunks[0] = encodeURI(baseUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+    }
     return chunks.join('');
   }
 
