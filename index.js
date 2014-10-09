@@ -1,6 +1,7 @@
 var postcss = require('postcss');
 
 var parseBytes = require('./lib/parseBytes');
+var unescapeCss = require('./lib/unescapeCss');
 
 var fs = require('fs');
 var path = require('path');
@@ -10,7 +11,6 @@ var base64 = require('js-base64').Base64;
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const R_ESCAPE = /\\(?:([0-9a-f]{1,6} ?)|(.))/gi;
 const R_FUNC = /^(asset(?:-url|-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
 const R_SLASH = /%5C/gi;
 const R_SPACE = /([0-9a-f]{1,6})%20/gi;
@@ -64,13 +64,6 @@ module.exports = function (options) {
 
   function splitPathFromQuery(assetStr) {
     return Array.prototype.slice.call(assetStr.match(R_URL), 1, 3);
-  }
-
-  function unescapeCss(str) {
-    return str.replace(R_ESCAPE, function (match, hex, char) {
-      if (hex) return String.fromCharCode(parseInt(hex, 16));
-      return char;
-    });
   }
 
   return function (cssTree) {
