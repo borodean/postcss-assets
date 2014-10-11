@@ -1,5 +1,0 @@
-body {
-  width: asset-width('beta/maria.jpg');
-  height: asset-height('beta/maria.jpg');
-  height: asset-height('beta/maria.jpg?foo=bar#baz');
-}

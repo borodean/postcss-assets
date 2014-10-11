@@ -11,7 +11,7 @@ var base64 = require('js-base64').Base64;
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const R_FUNC = /^(asset(?:-url|-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
+const R_FUNC = /^(url(?:-url|-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
 const R_SLASH = /%5C/gi;
 const R_SPACE = /([0-9a-f]{1,6})%20/gi;
 const R_URL = /^([^\?#]+)(.*)/;
@@ -105,7 +105,7 @@ module.exports = function (options) {
       var contentAfter = matches[4];
 
       switch (method) {
-      case 'asset':
+      case 'url':
         var assetPath = resolvePath(assetStr);
         if (shouldBeInline(assetPath)) {
           decl.value = 'url(' + contentBefore + resolveDataUrl(assetStr) + contentAfter + ')';
@@ -113,16 +113,16 @@ module.exports = function (options) {
           decl.value = 'url(' + contentBefore + resolveUrl(assetStr) + contentAfter + ')';
         }
         break;
-      case 'asset-url':
+      case 'url-url':
         decl.value = 'url(' + contentBefore + resolveUrl(assetStr) + contentAfter + ')';
         break;
-      case 'asset-inline':
+      case 'url-inline':
         decl.value = 'url(' + contentBefore + resolveDataUrl(assetStr) + contentAfter + ')';
         break;
-      case 'asset-width':
+      case 'url-width':
         decl.value = sizeOf(resolvePath(assetStr)).width + 'px';
         break;
-      case 'asset-height':
+      case 'url-height':
         decl.value = sizeOf(resolvePath(assetStr)).height + 'px';
         break;
       }

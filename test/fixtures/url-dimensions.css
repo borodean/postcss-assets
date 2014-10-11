@@ -1,0 +1,5 @@
+body {
+  width: url-width('beta/maria.jpg');
+  height: url-height('beta/maria.jpg');
+  height: url-height('beta/maria.jpg?foo=bar#baz');
+}

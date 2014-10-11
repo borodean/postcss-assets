@@ -1,0 +1,15 @@
+body {
+  color: red;
+  background: url-url(kateryna.jpg);
+  background: url-url(  kateryna.jpg );
+  background: url-url('kateryna.jpg');
+  background: url-url("kateryna.jpg");
+  background: url-url('odalisque.jpg');
+  background: url-url('kateryna_(shevchenko).jpg');
+  background: url-url('\6b ateryna.jpg');
+  background: url-url('\kateryna.jpg');
+  background: url-url('Ich \2665  B\FC cher.jpg');
+  background: url-url('kateryna.jpg?foo=bar#baz');
+  background: url-url('kateryna.jpg#baz');
+  background: url-url('Gupsy Fortuneteller.jpg');
+}

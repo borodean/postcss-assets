@@ -23,40 +23,40 @@ function compareFixtures(t, name, msg, opts, postcssOpts) {
   t.equal(actual, expected, msg);
 }
 
-test('asset-url', function (t) {
+test('url-url', function (t) {
 
-  compareFixtures(t, 'url', 'resolves paths');
+  compareFixtures(t, 'url-url', 'resolves paths');
 
-  compareFixtures(t, 'url-basepath', 'resolves relative to the basePath', {
+  compareFixtures(t, 'url-url-basepath', 'resolves relative to the basePath', {
     basePath: 'test/fixtures'
   });
 
-  compareFixtures(t, 'url-loadpath', 'resolves relative to the loadPaths', {
+  compareFixtures(t, 'url-url-loadpath', 'resolves relative to the loadPaths', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/', 'beta/']
   });
 
-  compareFixtures(t, 'url-loadpath', 'resolves with loadPaths of a various spelling', {
+  compareFixtures(t, 'url-url-loadpath', 'resolves with loadPaths of a various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['./alpha/', 'beta']
   });
 
-  compareFixtures(t, 'url-baseurl-1', 'resolves relative to the baseUrl', {
+  compareFixtures(t, 'url-url-baseurl-1', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'
   });
 
-  compareFixtures(t, 'url-baseurl-2', 'resolves relative to the baseUrl', {
+  compareFixtures(t, 'url-url-baseurl-2', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
   });
 
-  compareFixtures(t, 'url-relative', 'resolves relative paths', {
+  compareFixtures(t, 'url-url-relative', 'resolves relative paths', {
     basePath: 'test/fixtures/alpha',
     relativeTo: 'test/fixtures/beta'
   });
 
-  compareFixtures(t, 'url-spelling', 'recognizes various spelling', {
+  compareFixtures(t, 'url-url-spelling', 'recognizes various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/']
   });
@@ -70,13 +70,13 @@ test('asset-url', function (t) {
   t.end();
 });
 
-test('asset-inline', function (t) {
-  compareFixtures(t, 'inline', 'base64-encodes assets', { basePath: 'test/fixtures/' });
+test('url-inline', function (t) {
+  compareFixtures(t, 'url-inline', 'base64-encodes assets', { basePath: 'test/fixtures/' });
   t.end();
 });
 
-test('asset', function (t) {
-  compareFixtures(t, 'asset', 'aliases to either asset-url or asset-inline', {
+test('url', function (t) {
+  compareFixtures(t, 'url', 'aliases to either url-url or url-inline', {
     basePath: 'test/fixtures/',
     inline: {
       maxSize: '2K'
@@ -85,8 +85,8 @@ test('asset', function (t) {
   t.end();
 });
 
-test('asset-width, asset-height', function (t) {
-  compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
+test('url-width, url-height', function (t) {
+  compareFixtures(t, 'url-dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
   t.end();
 });
 

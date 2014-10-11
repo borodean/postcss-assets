@@ -1,0 +1,4 @@
+body {
+  background: url-inline('alpha/blank.gif');
+  background: url-inline(  'alpha/blank.gif' );
+}
