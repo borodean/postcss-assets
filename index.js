@@ -107,14 +107,12 @@ module.exports = function (options) {
           return sizeOf(resolvePath(assetStr)).width + 'px';
         } else if (modifier === 'height') {
           return sizeOf(resolvePath(assetStr)).height + 'px';
-        } else {
-          var assetPath = resolvePath(assetStr);
-          if (shouldBeInline(assetPath)) {
-            return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
-          } else {
-            return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
-          }
         }
+        var assetPath = resolvePath(assetStr);
+        if (shouldBeInline(assetPath)) {
+          return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
+        }
+        return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
       });
     });
   };
