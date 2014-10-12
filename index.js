@@ -11,7 +11,8 @@ var base64 = require('js-base64').Base64;
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const R_FUNC = /^(url(?:-url|-inline|-width|-height)?)\((\s*['"]?)(.*?)(['"]?\s*)\)$/
+const R_FUNC = /^(url(?:-url|-inline|-width|-height)?)\((\s*)(.*?)(\s*)\)$/
+const R_PARAMS = /(['"]?)(.+)\1(?:\s(.+))?/;
 const R_SLASH = /%5C/gi;
 const R_SPACE = /([0-9a-f]{1,6})%20/gi;
 const R_URL = /^([^\?#]+)(.*)/;
@@ -101,29 +102,32 @@ module.exports = function (options) {
 
       var method = matches[1];
       var contentBefore = matches[2];
-      var assetStr = matches[3];
+      var params = matches[3].match(R_PARAMS);
+      var quote = params[1];
+      var assetStr = params[2];
+      var modifier = params[3];
       var contentAfter = matches[4];
 
       switch (method) {
       case 'url':
-        var assetPath = resolvePath(assetStr);
-        if (shouldBeInline(assetPath)) {
-          decl.value = 'url(' + contentBefore + resolveDataUrl(assetStr) + contentAfter + ')';
+        if (modifier === 'width') {
+          decl.value = sizeOf(resolvePath(assetStr)).width + 'px';
+        } else if (modifier === 'height') {
+          decl.value = sizeOf(resolvePath(assetStr)).height + 'px';
         } else {
-          decl.value = 'url(' + contentBefore + resolveUrl(assetStr) + contentAfter + ')';
+          var assetPath = resolvePath(assetStr);
+          if (shouldBeInline(assetPath)) {
+            decl.value = 'url(' + contentBefore + quote + resolveDataUrl(assetStr) + quote + contentAfter + ')';
+          } else {
+            decl.value = 'url(' + contentBefore + quote + resolveUrl(assetStr) + quote + contentAfter + ')';
+          }
         }
         break;
       case 'url-url':
-        decl.value = 'url(' + contentBefore + resolveUrl(assetStr) + contentAfter + ')';
+        decl.value = 'url(' + contentBefore + quote + resolveUrl(assetStr) + quote + contentAfter + ')';
         break;
       case 'url-inline':
-        decl.value = 'url(' + contentBefore + resolveDataUrl(assetStr) + contentAfter + ')';
-        break;
-      case 'url-width':
-        decl.value = sizeOf(resolvePath(assetStr)).width + 'px';
-        break;
-      case 'url-height':
-        decl.value = sizeOf(resolvePath(assetStr)).height + 'px';
+        decl.value = 'url(' + contentBefore + quote + resolveDataUrl(assetStr) + quote + contentAfter + ')';
         break;
       }
     });
