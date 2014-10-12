@@ -1,5 +1,3 @@
-var postcss = require('postcss');
-
 var mapFunctions = require('./lib/mapFunctions');
 var parseBytes = require('./lib/parseBytes');
 var unescapeCss = require('./lib/unescapeCss');
@@ -13,8 +11,6 @@ var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const R_SLASH = /%5C/gi;
-const R_SPACE = /([0-9a-f]{1,6})%20/gi;
 const R_URL = /^([^\?#]+)(.*)/;
 
 module.exports = function (options) {

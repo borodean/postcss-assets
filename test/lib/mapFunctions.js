@@ -3,14 +3,14 @@ var test = require('tape');
 var mapFunctions = require('../../lib/mapFunctions');
 
 function compact(arr) {
-  return Array.prototype.filter.call(arr, function (i) { return i })
-};
+  return Array.prototype.filter.call(arr, function (i) { return i; });
+}
 
 function checkArgs(t, input, expected, msg) {
   var actual = [];
   mapFunctions(input, function () {
     actual = actual.concat(compact(arguments));
-  })
+  });
   t.deepEqual(actual, expected, msg);
 }
 
