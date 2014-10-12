@@ -51,12 +51,16 @@ module.exports = function (options) {
   }
 
   function matchPath(assetPath) {
-    var matchingPath;
+    var exception, matchingPath;
     var isFound = options.loadPaths.some(function (loadPath) {
       matchingPath = path.join(loadPath, assetPath);
       return fs.existsSync(matchingPath);
     });
-    if (!isFound) throw new Error("Asset not found or unreadable: " + assetPath);
+    if (!isFound) {
+      exception = new Error("Asset not found or unreadable: " + assetPath);
+      exception.name = 'ENOENT';
+      throw exception;
+    }
     return matchingPath;
   }
 
@@ -98,27 +102,36 @@ module.exports = function (options) {
 
       decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
 
-        var assetPath = resolvePath(assetStr);
-        var prop = vendor.unprefixed(decl.prop);
+        try {
 
-        if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
-          return sizeOf(assetPath).width + 'px';
+          var assetPath = resolvePath(assetStr);
+          var prop = vendor.unprefixed(decl.prop);
+
+          if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
+            return sizeOf(assetPath).width + 'px';
+          }
+
+          if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
+            return sizeOf(assetPath).height + 'px';
+          }
+
+          if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
+            var size = sizeOf(assetPath);
+            return size.width + 'px ' + size.height + 'px';
+          }
+
+          if (shouldBeInline(assetPath)) {
+            return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
+          }
+
+          return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
+
+        } catch (exception) {
+          if (exception.name !== 'ENOENT') {
+            throw exception;
+          }
+          console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
         }
-
-        if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
-          return sizeOf(assetPath).height + 'px';
-        }
-
-        if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
-          var size = sizeOf(assetPath);
-          return size.width + 'px ' + size.height + 'px';
-        }
-
-        if (shouldBeInline(assetPath)) {
-          return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
-        }
-
-        return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
       });
     });
   };

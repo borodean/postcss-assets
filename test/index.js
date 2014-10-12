@@ -64,11 +64,9 @@ test('path resolving', function (t) {
     loadPaths: ['alpha/']
   });
 
-  t.throws(function () {
-    process('resolve-notfound', {
-      basePath: 'test/fixtures'
-    });
-  }, false, 'throws an exception');
+  compareFixtures(t, 'resolve-notfound', 'does nothing', {
+    basePath: 'test/fixtures'
+  });
 
   t.end();
 });
