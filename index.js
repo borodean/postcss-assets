@@ -77,8 +77,7 @@ module.exports = function (options) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
     if (options.relativeTo) {
-      var toAsset = path.relative(options.relativeTo, matchPath(assetPath));
-      assetUrl.pathname = toAsset;
+      assetUrl.pathname = path.relative(options.relativeTo, matchPath(assetPath));
     } else {
       var baseToAsset = path.relative(options.basePath, matchPath(assetPath));
       assetUrl.pathname = url.resolve(options.baseUrl, baseToAsset);
@@ -99,18 +98,26 @@ module.exports = function (options) {
 
       decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
 
-        if (AUTO_WIDTH.indexOf(vendor.unprefixed(decl.prop)) !== -1 || modifier === 'width') {
-          return sizeOf(resolvePath(assetStr)).width + 'px';
-        } else if (AUTO_HEIGHT.indexOf(vendor.unprefixed(decl.prop)) !== -1 || modifier === 'height') {
-          return sizeOf(resolvePath(assetStr)).height + 'px';
-        } else if (AUTO_SIZE.indexOf(vendor.unprefixed(decl.prop)) !== -1 || modifier === 'size') {
-          var size = sizeOf(resolvePath(assetStr));
+        var assetPath = resolvePath(assetStr);
+        var prop = vendor.unprefixed(decl.prop);
+
+        if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
+          return sizeOf(assetPath).width + 'px';
+        }
+
+        if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
+          return sizeOf(assetPath).height + 'px';
+        }
+
+        if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
+          var size = sizeOf(assetPath);
           return size.width + 'px ' + size.height + 'px';
         }
-        var assetPath = resolvePath(assetStr);
+
         if (shouldBeInline(assetPath)) {
           return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
         }
+
         return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
       });
     });
