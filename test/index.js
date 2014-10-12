@@ -23,46 +23,46 @@ function compareFixtures(t, name, msg, opts, postcssOpts) {
   t.equal(actual, expected, msg);
 }
 
-test('url-url', function (t) {
+test('path resolving', function (t) {
 
-  compareFixtures(t, 'url-url', 'resolves paths');
+  compareFixtures(t, 'resolve', 'resolves paths');
 
-  compareFixtures(t, 'url-url-basepath', 'resolves relative to the basePath', {
+  compareFixtures(t, 'resolve-basepath', 'resolves relative to the basePath', {
     basePath: 'test/fixtures'
   });
 
-  compareFixtures(t, 'url-url-loadpath', 'resolves relative to the loadPaths', {
+  compareFixtures(t, 'resolve-loadpath', 'resolves relative to the loadPaths', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/', 'beta/']
   });
 
-  compareFixtures(t, 'url-url-loadpath', 'resolves with loadPaths of a various spelling', {
+  compareFixtures(t, 'resolve-loadpath', 'resolves with loadPaths of a various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['./alpha/', 'beta']
   });
 
-  compareFixtures(t, 'url-url-baseurl-1', 'resolves relative to the baseUrl', {
+  compareFixtures(t, 'resolve-baseurl-1', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'
   });
 
-  compareFixtures(t, 'url-url-baseurl-2', 'resolves relative to the baseUrl', {
+  compareFixtures(t, 'resolve-baseurl-2', 'resolves relative to the baseUrl', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
   });
 
-  compareFixtures(t, 'url-url-relative', 'resolves relative paths', {
+  compareFixtures(t, 'resolve-relative', 'resolves relative paths', {
     basePath: 'test/fixtures/alpha',
     relativeTo: 'test/fixtures/beta'
   });
 
-  compareFixtures(t, 'url-url-spelling', 'recognizes various spelling', {
+  compareFixtures(t, 'resolve-spelling', 'recognizes various spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/']
   });
 
   t.throws(function () {
-    process('url-notfound', {
+    process('resolve-notfound', {
       basePath: 'test/fixtures'
     });
   }, false, 'throws an exception');
@@ -70,23 +70,20 @@ test('url-url', function (t) {
   t.end();
 });
 
-test('url-inline', function (t) {
-  compareFixtures(t, 'url-inline', 'base64-encodes assets', { basePath: 'test/fixtures/' });
-  t.end();
-});
+test('path inlining', function (t) {
 
-test('url', function (t) {
-  compareFixtures(t, 'url', 'aliases to either url-url or url-inline', {
+  compareFixtures(t, 'inline', 'base64-encodes matching assets', {
     basePath: 'test/fixtures/',
     inline: {
       maxSize: '2K'
     }
   });
+
   t.end();
 });
 
-test('url-width, url-height', function (t) {
-  compareFixtures(t, 'url-dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
+test('dimensions', function (t) {
+  compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
   t.end();
 });
 
