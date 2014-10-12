@@ -1,3 +1,5 @@
+var vendor = require('postcss/lib/vendor');
+
 var mapFunctions = require('./lib/mapFunctions');
 var parseBytes = require('./lib/parseBytes');
 var unescapeCss = require('./lib/unescapeCss');
@@ -10,6 +12,17 @@ var base64 = require('js-base64').Base64;
 var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
+
+const AUTO_SIZE   = ['background-size', 'border-image-width', 'border-width',
+                     'margin', 'padding'];
+const AUTO_WIDTH  = ['border-left', 'border-left-width', 'border-right',
+                     'border-right-width', 'left', 'margin-left',
+                     'margin-right', 'max-width', 'min-width', 'padding-left',
+                     'padding-right', 'width'];
+const AUTO_HEIGHT = ['border-bottom', 'border-bottom-width', 'border-top',
+                     'border-top-width', 'bottom', 'height', 'margin-bottom',
+                     'margin-top', 'max-height', 'min-height',
+                     'padding-bottom', 'padding-top'];
 
 const R_URL = /^([^\?#]+)(.*)/;
 
@@ -95,10 +108,13 @@ module.exports = function (options) {
 
       decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
 
-        if (decl.prop === 'width' || modifier === 'width') {
+        if (AUTO_WIDTH.indexOf(vendor.unprefixed(decl.prop)) !== -1 || modifier === 'width') {
           return sizeOf(resolvePath(assetStr)).width + 'px';
-        } else if (decl.prop === 'height' || modifier === 'height') {
+        } else if (AUTO_HEIGHT.indexOf(vendor.unprefixed(decl.prop)) !== -1 || modifier === 'height') {
           return sizeOf(resolvePath(assetStr)).height + 'px';
+        } else if (AUTO_SIZE.indexOf(vendor.unprefixed(decl.prop)) !== -1 || modifier === 'size') {
+          var size = sizeOf(resolvePath(assetStr));
+          return size.width + 'px ' + size.height + 'px';
         }
         var assetPath = resolvePath(assetStr);
         if (shouldBeInline(assetPath)) {
