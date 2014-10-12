@@ -2,4 +2,6 @@ body {
   width: url('beta/maria.jpg' width);
   height: url('beta/maria.jpg' height);
   height: url('beta/maria.jpg?foo=bar#baz' height);
+  width: url('beta/maria.jpg');
+  height: url('beta/maria.jpg');
 }

@@ -95,9 +95,9 @@ module.exports = function (options) {
 
       decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
 
-        if (modifier === 'width') {
+        if (decl.prop === 'width' || modifier === 'width') {
           return sizeOf(resolvePath(assetStr)).width + 'px';
-        } else if (modifier === 'height') {
+        } else if (decl.prop === 'height' || modifier === 'height') {
           return sizeOf(resolvePath(assetStr)).height + 'px';
         }
         var assetPath = resolvePath(assetStr);
