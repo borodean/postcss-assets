@@ -1,5 +1,6 @@
 var postcss = require('postcss');
 
+var mapFunctions = require('./lib/mapFunctions');
 var parseBytes = require('./lib/parseBytes');
 var unescapeCss = require('./lib/unescapeCss');
 
@@ -11,8 +12,6 @@ var base64 = require('js-base64').Base64;
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const R_FUNC = /url\((\s*)((['"]?).*?\3.*?)(\s*)\)/gi;
-const R_PARAMS = /(['"]?)(.+)\1(?:\s(.+))?/;
 const R_SLASH = /%5C/gi;
 const R_SPACE = /([0-9a-f]{1,6})%20/gi;
 const R_URL = /^([^\?#]+)(.*)/;
@@ -97,11 +96,7 @@ module.exports = function (options) {
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
 
-      decl.value = decl.value.replace(R_FUNC, function (matches, before, params, quote, after) {
-
-        params = params.match(R_PARAMS);
-        var assetStr = params[2];
-        var modifier = params[3];
+      decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
 
         if (modifier === 'width') {
           return sizeOf(resolvePath(assetStr)).width + 'px';
