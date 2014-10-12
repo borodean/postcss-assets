@@ -87,3 +87,4 @@ test('dimensions', function (t) {
 });
 
 require('./lib/parseBytes');
+require('./lib/unescapeCss');
