@@ -5,6 +5,10 @@ var plugin = require('..');
 var fs = require('fs');
 var test = require('tape');
 
+require('./lib/mapFunctions');
+require('./lib/parseBytes');
+require('./lib/unescapeCss');
+
 function fixture(name) {
   return fs.readFileSync('test/fixtures/' + name + '.css', 'utf8').trim();
 }
@@ -85,6 +89,3 @@ test('dimensions', function (t) {
   compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
   t.end();
 });
-
-require('./lib/parseBytes');
-require('./lib/unescapeCss');
