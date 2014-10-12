@@ -50,11 +50,11 @@ module.exports = function (options) {
     options.relativeTo = false;
   }
 
-  function matchLoadPath(assetPath) {
+  function matchPath(assetPath) {
     var matchingPath;
     var isFound = options.loadPaths.some(function (loadPath) {
-      matchingPath = loadPath;
-      return fs.existsSync(path.join(loadPath, assetPath));
+      matchingPath = path.join(loadPath, assetPath);
+      return fs.existsSync(matchingPath);
     });
     if (!isFound) throw new Error("Asset not found or unreadable: " + assetPath);
     return matchingPath;
@@ -70,21 +70,18 @@ module.exports = function (options) {
   function resolvePath(assetStr) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
-    return path.resolve(matchLoadPath(assetPath), assetPath);
+    return matchPath(assetPath);
   }
 
   function resolveUrl(assetStr) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
     if (options.relativeTo) {
-      var toLoadPath = path.relative(options.relativeTo, matchLoadPath(assetPath));
-      toLoadPath = path.join(toLoadPath, '/');
-      assetUrl.pathname = url.resolve(toLoadPath, assetPath);
+      var toAsset = path.relative(options.relativeTo, matchPath(assetPath));
+      assetUrl.pathname = toAsset;
     } else {
-      var baseToLoadPath = path.relative(options.basePath, matchLoadPath(assetPath));
-      baseToLoadPath = path.join(baseToLoadPath || '.', '/');
-      var baseUrl = url.resolve(options.baseUrl, baseToLoadPath);
-      assetUrl.pathname = url.resolve(baseUrl, assetPath);
+      var baseToAsset = path.relative(options.basePath, matchPath(assetPath));
+      assetUrl.pathname = url.resolve(options.baseUrl, baseToAsset);
     }
     return cssesc(url.format(assetUrl));
   }
