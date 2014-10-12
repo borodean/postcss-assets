@@ -2,6 +2,10 @@ body {
   color: red;
   background: url(kateryna.jpg);
   background: url(  kateryna.jpg );
+  background: no-repeat url(kateryna.jpg) #000;
+  background:
+    url('kateryna.jpg'),
+    url('odalisque.jpg');
   background: url('kateryna.jpg');
   background: url("kateryna.jpg");
   background: url('odalisque.jpg');

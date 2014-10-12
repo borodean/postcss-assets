@@ -11,7 +11,7 @@ var base64 = require('js-base64').Base64;
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const R_FUNC = /^url\((\s*)(.*?)(\s*)\)$/
+const R_FUNC = /url\((\s*)((['"]?).*?\3.*?)(\s*)\)/gi;
 const R_PARAMS = /(['"]?)(.+)\1(?:\s(.+))?/;
 const R_SLASH = /%5C/gi;
 const R_SPACE = /([0-9a-f]{1,6})%20/gi;
@@ -97,28 +97,25 @@ module.exports = function (options) {
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
 
-      var matches = decl.value.match(R_FUNC);
-      if (!matches) return;
+      decl.value = decl.value.replace(R_FUNC, function (matches, before, params, quote, after) {
 
-      var contentBefore = matches[1];
-      var params = matches[2].match(R_PARAMS);
-      var quote = params[1];
-      var assetStr = params[2];
-      var modifier = params[3];
-      var contentAfter = matches[3];
+        params = params.match(R_PARAMS);
+        var assetStr = params[2];
+        var modifier = params[3];
 
-      if (modifier === 'width') {
-        decl.value = sizeOf(resolvePath(assetStr)).width + 'px';
-      } else if (modifier === 'height') {
-        decl.value = sizeOf(resolvePath(assetStr)).height + 'px';
-      } else {
-        var assetPath = resolvePath(assetStr);
-        if (shouldBeInline(assetPath)) {
-          decl.value = 'url(' + contentBefore + quote + resolveDataUrl(assetStr) + quote + contentAfter + ')';
+        if (modifier === 'width') {
+          return sizeOf(resolvePath(assetStr)).width + 'px';
+        } else if (modifier === 'height') {
+          return sizeOf(resolvePath(assetStr)).height + 'px';
         } else {
-          decl.value = 'url(' + contentBefore + quote + resolveUrl(assetStr) + quote + contentAfter + ')';
+          var assetPath = resolvePath(assetStr);
+          if (shouldBeInline(assetPath)) {
+            return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
+          } else {
+            return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
+          }
         }
-      }
+      });
     });
   };
 };
