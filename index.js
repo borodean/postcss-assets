@@ -9,6 +9,7 @@ var path = require('path');
 var url = require('url');
 
 var base64 = require('js-base64').Base64;
+var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 
@@ -66,19 +67,19 @@ module.exports = function (options) {
   }
 
   function resolveUrl(assetStr) {
-    var chunks = splitPathFromQuery(assetStr);
-    var assetPath = unescapeCss(chunks[0]);
+    var assetUrl = url.parse(unescapeCss(assetStr));
+    var assetPath = decodeURI(assetUrl.pathname);
     if (options.relativeTo) {
       var toLoadPath = path.relative(options.relativeTo, matchLoadPath(assetPath));
       toLoadPath = path.join(toLoadPath, '/');
-      chunks[0] = encodeURI(toLoadPath + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+      assetUrl.pathname = url.resolve(toLoadPath, assetPath);
     } else {
       var baseToLoadPath = path.relative(options.basePath, matchLoadPath(assetPath));
       baseToLoadPath = path.join(baseToLoadPath || '.', '/');
       var baseUrl = url.resolve(options.baseUrl, baseToLoadPath);
-      chunks[0] = encodeURI(baseUrl + chunks[0]).replace(R_SLASH, '\\').replace(R_SPACE, '$1 ');
+      assetUrl.pathname = url.resolve(baseUrl, assetPath);
     }
-    return chunks.join('');
+    return cssesc(url.format(assetUrl));
   }
 
   function shouldBeInline(assetPath) {

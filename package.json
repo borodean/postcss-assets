@@ -5,6 +5,7 @@
   "author": "Vadim Borodean <borodean@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cssesc": "^0.1.0",
     "image-size": "^0.3.3",
     "js-base64": "^2.1.5",
     "mime": "^1.2.11",
