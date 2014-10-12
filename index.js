@@ -24,8 +24,6 @@ const AUTO_HEIGHT = ['border-bottom', 'border-bottom-width', 'border-top',
                      'margin-top', 'max-height', 'min-height',
                      'padding-bottom', 'padding-top'];
 
-const R_URL = /^([^\?#]+)(.*)/;
-
 module.exports = function (options) {
 
   options = options || {};
@@ -70,8 +68,8 @@ module.exports = function (options) {
   }
 
   function resolvePath(assetStr) {
-    var chunks = splitPathFromQuery(assetStr);
-    var assetPath = unescapeCss(chunks[0]);
+    var assetUrl = url.parse(unescapeCss(assetStr));
+    var assetPath = decodeURI(assetUrl.pathname);
     return path.resolve(matchLoadPath(assetPath), assetPath);
   }
 
@@ -97,10 +95,6 @@ module.exports = function (options) {
       return (size <= parseBytes(options.inline.maxSize));
     }
     return false;
-  }
-
-  function splitPathFromQuery(assetStr) {
-    return Array.prototype.slice.call(assetStr.match(R_URL), 1, 3);
   }
 
   return function (cssTree) {
