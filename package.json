@@ -4,6 +4,10 @@
   "description": "PostCSS plugin to manage assets",
   "author": "Vadim Borodean <borodean@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url":  "https://github.com/borodean/postcss-assets"
+  },
   "dependencies": {
     "cssesc": "^0.1.0",
     "image-size": "^0.3.3",
