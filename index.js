@@ -67,8 +67,14 @@ module.exports = function (options) {
   function resolveDataUrl(assetStr) {
     var resolvedPath = resolvePath(assetStr);
     var mimeType = mime.lookup(resolvedPath);
-    var data = base64.encode(fs.readFileSync(resolvedPath));
-    return 'data:' + mimeType + ';base64,' + data;
+    if (mimeType === 'image/svg+xml') {
+      var data = cssesc(fs.readFileSync(resolvedPath).toString());
+      var encoding = 'utf8';
+    } else {
+      data = base64.encode(fs.readFileSync(resolvedPath));
+      encoding = 'base64';
+    }
+    return 'data:' + mimeType + ';' + encoding + ',' + data;
   }
 
   function resolvePath(assetStr) {
