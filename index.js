@@ -113,17 +113,24 @@ module.exports = function (options) {
           var assetPath = resolvePath(assetStr);
           var prop = vendor.unprefixed(decl.prop);
 
-          if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
-            return sizeOf(assetPath).width + 'px';
-          }
+          try {
 
-          if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
-            return sizeOf(assetPath).height + 'px';
-          }
+            if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
+              return sizeOf(assetPath).width + 'px';
+            }
 
-          if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
-            var size = sizeOf(assetPath);
-            return size.width + 'px ' + size.height + 'px';
+            if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
+              return sizeOf(assetPath).height + 'px';
+            }
+
+            if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
+              var size = sizeOf(assetPath);
+              return size.width + 'px ' + size.height + 'px';
+            }
+          } catch (e) {
+            var err = new Error("Image corrupted: " + assetPath);
+            err.name = 'ECORRUPT';
+            throw err;
           }
 
           if (shouldBeInline(assetPath)) {
@@ -133,10 +140,16 @@ module.exports = function (options) {
           return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
 
         } catch (exception) {
-          if (exception.name !== 'ENOENT') {
+          switch (exception.name) {
+          case 'ECORRUPT':
+            console.warn(exception.message);
+            break;
+          case 'ENOENT':
+            console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
+            break;
+          default:
             throw exception;
           }
-          console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
         }
       });
     });

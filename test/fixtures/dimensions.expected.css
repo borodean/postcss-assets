@@ -40,4 +40,6 @@ body {
   min-height: 60px;
   padding-bottom: 60px;
   padding-top: 60px;
+
+  width: url('alpha/invalid.jpg');
 }

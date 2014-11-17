@@ -40,4 +40,6 @@ body {
   min-height: url('beta/maria.jpg');
   padding-bottom: url('beta/maria.jpg');
   padding-top: url('beta/maria.jpg');
+
+  width: url('alpha/invalid.jpg');
 }
