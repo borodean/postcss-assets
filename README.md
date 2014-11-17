@@ -69,11 +69,11 @@ These options isolate stylesheets from environmental changes.
 
 ### Load paths
 
-To make Assets search for files in specific directories, define load paths:
+To make PostCSS Assets search for files in specific directories, define load paths:
 
 ```js
 var options = {
-  loadPaths: ['fonts/', 'media/patterns/', '/images/']
+  loadPaths: ['fonts/', 'media/patterns/', 'images/']
 };
 ```
 
