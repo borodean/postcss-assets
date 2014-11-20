@@ -42,4 +42,8 @@ body {
   padding-top: 60px;
 
   width: url('alpha/invalid.jpg');
+
+  background-position: 45px 60px;
+  border-width: 45px;
+  border-width: 60px;
 }

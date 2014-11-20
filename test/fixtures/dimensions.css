@@ -42,4 +42,8 @@ body {
   padding-top: url('beta/maria.jpg');
 
   width: url('alpha/invalid.jpg');
+
+  background-position: size('beta/maria.jpg');
+  border-width: width('beta/maria.jpg');
+  border-width: height('beta/maria.jpg');
 }

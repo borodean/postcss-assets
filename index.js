@@ -106,7 +106,7 @@ module.exports = function (options) {
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
 
-      decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
+      decl.value = mapFunctions(decl.value, function (name, before, quote, assetStr, modifier, after) {
 
         try {
 
@@ -115,15 +115,15 @@ module.exports = function (options) {
 
           try {
 
-            if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
+            if ((modifier || name) === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
               return sizeOf(assetPath).width + 'px';
             }
 
-            if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
+            if ((modifier || name) === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
               return sizeOf(assetPath).height + 'px';
             }
 
-            if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
+            if ((modifier || name) === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
               var size = sizeOf(assetPath);
               return size.width + 'px ' + size.height + 'px';
             }
