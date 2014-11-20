@@ -13,17 +13,6 @@ var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const AUTO_SIZE   = ['background-size', 'border-image-width', 'border-width',
-                     'margin', 'padding'];
-const AUTO_WIDTH  = ['border-left', 'border-left-width', 'border-right',
-                     'border-right-width', 'left', 'margin-left',
-                     'margin-right', 'max-width', 'min-width', 'padding-left',
-                     'padding-right', 'width'];
-const AUTO_HEIGHT = ['border-bottom', 'border-bottom-width', 'border-top',
-                     'border-top-width', 'bottom', 'height', 'margin-bottom',
-                     'margin-top', 'max-height', 'min-height',
-                     'padding-bottom', 'padding-top'];
-
 module.exports = function (options) {
 
   options = options || {};
@@ -106,24 +95,23 @@ module.exports = function (options) {
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
 
-      decl.value = mapFunctions(decl.value, function (name, before, quote, assetStr, modifier, after) {
+      decl.value = mapFunctions(decl.value, function (name, before, quote, assetStr, after) {
 
         try {
 
           var assetPath = resolvePath(assetStr);
-          var prop = vendor.unprefixed(decl.prop);
 
           try {
 
-            if ((modifier || name) === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
+            if (name === 'width') {
               return sizeOf(assetPath).width + 'px';
             }
 
-            if ((modifier || name) === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
+            if (name === 'height') {
               return sizeOf(assetPath).height + 'px';
             }
 
-            if ((modifier || name) === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
+            if (name === 'size') {
               var size = sizeOf(assetPath);
               return size.width + 'px ' + size.height + 'px';
             }
