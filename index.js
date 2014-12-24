@@ -39,10 +39,18 @@ module.exports = function (options) {
     options.relativeTo = false;
   }
 
-  function getImageSize(assetStr) {
+  function getImageSize(assetStr, density) {
     var assetPath = resolvePath(assetStr.value);
+    var size;
     try {
-      return sizeOf(assetPath);
+      size = sizeOf(assetPath);
+      if (typeof density !== 'undefined') {
+        density = parseFloat(density.value, 10);
+        console.log(density);
+        size.width  = +(size.width  / density).toFixed(4);
+        size.height = +(size.height / density).toFixed(4);
+      }
+      return size;
     } catch (exception) {
       var err = new Error("Image corrupted: " + assetPath);
       err.name = 'ECORRUPT';
@@ -119,16 +127,16 @@ module.exports = function (options) {
             return 'url(' + assetStr + ')';
           },
 
-          'width': function (assetStr) {
-            return getImageSize(assetStr).width + 'px';
+          'width': function (assetStr, density) {
+            return getImageSize(assetStr, density).width  + 'px';
           },
 
-          'height': function (assetStr) {
-            return getImageSize(assetStr).height + 'px';
+          'height': function (assetStr, density) {
+            return getImageSize(assetStr, density).height + 'px';
           },
 
-          'size': function (assetStr) {
-            var size = getImageSize(assetStr);
+          'size': function (assetStr, density) {
+            var size = getImageSize(assetStr, density);
             return size.width + 'px ' + size.height + 'px';
           }
         });

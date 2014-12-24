@@ -3,5 +3,10 @@ body {
   width: 45px;
   height: 60px;
 
+  width: 22.5px;
+  height: 30px;
+
+  width: 34.6154px;
+
   width: width('alpha/invalid.jpg');
 }
