@@ -39,6 +39,17 @@ module.exports = function (options) {
     options.relativeTo = false;
   }
 
+  function getImageSize(assetStr) {
+    var assetPath = resolvePath(assetStr.value);
+    try {
+      return sizeOf(assetPath);
+    } catch (exception) {
+      var err = new Error("Image corrupted: " + assetPath);
+      err.name = 'ECORRUPT';
+      throw err;
+    }
+  }
+
   function matchPath(assetPath) {
     var exception, matchingPath;
     var isFound = options.loadPaths.some(function (loadPath) {
@@ -94,52 +105,45 @@ module.exports = function (options) {
 
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
+      try {
+        decl.value = mapFunctions(decl.value, {
+          'url': function (assetStr) {
+            var assetPath = resolvePath(assetStr.value);
 
-      decl.value = mapFunctions(decl.value, function (name, before, quote, assetStr, after) {
-
-        try {
-
-          var assetPath = resolvePath(assetStr);
-
-          try {
-
-            if (name === 'width') {
-              return sizeOf(assetPath).width + 'px';
+            if (shouldBeInline(assetPath)) {
+              assetStr.value = resolveDataUrl(assetStr.value);
+            } else {
+              assetStr.value = resolveUrl(assetStr.value);
             }
 
-            if (name === 'height') {
-              return sizeOf(assetPath).height + 'px';
-            }
+            return 'url(' + assetStr + ')';
+          },
 
-            if (name === 'size') {
-              var size = sizeOf(assetPath);
-              return size.width + 'px ' + size.height + 'px';
-            }
-          } catch (e) {
-            var err = new Error("Image corrupted: " + assetPath);
-            err.name = 'ECORRUPT';
-            throw err;
+          'width': function (assetStr) {
+            return getImageSize(assetStr).width + 'px';
+          },
+
+          'height': function (assetStr) {
+            return getImageSize(assetStr).height + 'px';
+          },
+
+          'size': function (assetStr) {
+            var size = getImageSize(assetStr);
+            return size.width + 'px ' + size.height + 'px';
           }
-
-          if (shouldBeInline(assetPath)) {
-            return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
-          }
-
-          return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
-
-        } catch (exception) {
-          switch (exception.name) {
-          case 'ECORRUPT':
-            console.warn(exception.message);
-            break;
-          case 'ENOENT':
-            console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
-            break;
-          default:
-            throw exception;
-          }
+        });
+      } catch (exception) {
+        switch (exception.name) {
+        case 'ECORRUPT':
+          console.warn(exception.message);
+          break;
+        case 'ENOENT':
+          console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
+          break;
+        default:
+          throw exception;
         }
-      });
+      }
     });
   };
 };

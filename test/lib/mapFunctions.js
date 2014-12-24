@@ -2,34 +2,70 @@ var test = require('tape');
 
 var mapFunctions = require('../../lib/mapFunctions');
 
-function compact(arr) {
-  return Array.prototype.filter.call(arr, function (i) { return i; });
-}
+const MAP = {
+  'decrease': function (params) {
+    return parseFloat(params, 10) - 1 + 'px';
+  },
+  'increase': function (params) {
+    return parseFloat(params, 10) + 1 + 'px';
+  },
+  'double': function (params) {
+    return parseFloat(params, 10) * 2 + 'px';
+  },
+  'url': function (params) {
+    return 'url(https://github.com/' + params + ')';
+  },
+  'combine': function (a, b) {
+    return parseFloat(a, 10) + parseFloat(b, 10) + 'px';
+  }
+};
 
-function checkArgs(t, input, expected, msg) {
-  var actual = [];
-  mapFunctions(input, function () {
-    actual = actual.concat(compact(arguments));
-  });
-  t.deepEqual(actual, expected, msg);
+function checkMapping (t, source, expectedResult, msg) {
+  t.equal(mapFunctions(source, MAP), expectedResult, msg);
 }
 
 test('mapFunctions', function (t) {
+  checkMapping(t,
+    'increase(100px)',
+    '101px',
+    'maps functions'
+  );
 
-  checkArgs(t, 'url(kateryna.jpg)', ['url', 'kateryna.jpg'], 'parses unquoted param');
-  checkArgs(t, 'url(\'kateryna.jpg\')', ['url', '\'', 'kateryna.jpg'], 'parses single-quoted param');
-  checkArgs(t, 'url("kateryna.jpg")', ['url', '"', 'kateryna.jpg'], 'parses double-quoted param');
-  checkArgs(t, 'url("kateryna_(shevchenko).jpg")', ['url', '"', 'kateryna_(shevchenko).jpg'], 'parses param with parentheses');
+  checkMapping(t,
+    'increase(100px), decrease(100px)',
+    '101px, 99px',
+    'maps sibling functions'
+  );
 
-  checkArgs(t, 'url("Gupsy Fortuneteller.jpg")', ['url', '"', 'Gupsy Fortuneteller.jpg'], 'parses param with spaces');
-  checkArgs(t, 'url(\'Baba O\\\'Riley.jpg\')', ['url', '\'', 'Baba O\\\'Riley.jpg'], 'parses param escaped quotes');
+  checkMapping(t,
+    'double(increase(100px))',
+    '202px',
+    'maps nested functions'
+  );
 
-  checkArgs(t, 'url(  kateryna.jpg )', ['url', '  ', 'kateryna.jpg', ' '], 'parses extra space');
+  checkMapping(t,
+    'unknown(100px)',
+    'unknown(100px)',
+    'skips unknown functions'
+  );
 
-  checkArgs(t, '#000 url(kateryna.jpg) no-repeat', ['url', 'kateryna.jpg'], 'parses complex values');
-  checkArgs(t, 'url(kateryna.jpg), url(odalisque.jpg)', ['url', 'kateryna.jpg', 'url', 'odalisque.jpg'], 'parses multiple values');
+  checkMapping(t,
+    'unknown(increase(100px))',
+    'unknown(101px)',
+    'maps inside unknown functions'
+  );
 
-  checkArgs(t, 'width(kateryna.jpg), height(kateryna.jpg), size(kateryna.jpg)', ['width', 'kateryna.jpg', 'height', 'kateryna.jpg', 'size', 'kateryna.jpg'], 'accepts different function names');
+  checkMapping(t,
+    'url(borodean)',
+    'url(https://github.com/borodean)',
+    'maps urls as functions'
+  );
+
+  checkMapping(t,
+    'combine(20px, 15px)',
+    '35px',
+    'accepts multiple parameters'
+  );
 
   t.end();
 });
