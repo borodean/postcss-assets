@@ -72,14 +72,7 @@ test('path resolving', function (t) {
 });
 
 test('path inlining', function (t) {
-
-  compareFixtures(t, 'inline', 'base64-encodes matching assets', {
-    basePath: 'test/fixtures/',
-    inline: {
-      maxSize: '2K'
-    }
-  });
-
+  compareFixtures(t, 'inline', 'base64-encodes assets', { basePath: 'test/fixtures/' });
   t.end();
 });
 

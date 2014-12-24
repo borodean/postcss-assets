@@ -1,7 +1,6 @@
 body {
-  background: url('alpha/blank.gif');
-  background: url(  'alpha/blank.gif' );
-  background: url('alpha/kateryna.jpg');
-  background: url('alpha/trapezium.svg');
-  background: url('alpha/trapezium-single-quotes.svg');
+  background: inline('alpha/blank.gif');
+  background: inline(  'alpha/blank.gif' );
+  background: inline('alpha/trapezium.svg');
+  background: inline('alpha/trapezium-single-quotes.svg');
 }

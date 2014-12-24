@@ -103,27 +103,17 @@ module.exports = function (options) {
     return cssesc(url.format(assetUrl));
   }
 
-  function shouldBeInline(assetPath) {
-    if (options.inline && options.inline.maxSize) {
-      var size = fs.statSync(assetPath).size;
-      return (size <= parseBytes(options.inline.maxSize));
-    }
-    return false;
-  }
-
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
       try {
         decl.value = mapFunctions(decl.value, {
           'url': function (assetStr) {
-            var assetPath = resolvePath(assetStr.value);
+            assetStr.value = resolveUrl(assetStr.value);
+            return 'url(' + assetStr + ')';
+          },
 
-            if (shouldBeInline(assetPath)) {
-              assetStr.value = resolveDataUrl(assetStr.value);
-            } else {
-              assetStr.value = resolveUrl(assetStr.value);
-            }
-
+          'inline': function (assetStr) {
+            assetStr.value = resolveDataUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },
 
