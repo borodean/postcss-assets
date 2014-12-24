@@ -1,45 +1,12 @@
 body {
-  width: url('beta/maria.jpg' width);
-  height: url('beta/maria.jpg' height);
-  height: url('beta/maria.jpg?foo=bar#baz' height);
-  width: url('beta/maria.jpg');
-  height: url('beta/maria.jpg');
-  background-size: url('beta/maria.jpg' size);
-  -webkit-background-size: url('beta/maria.jpg');
-     -moz-background-size: url('beta/maria.jpg');
-          background-size: url('beta/maria.jpg');
+  background-size: size('beta/maria.jpg');
+  width: width('beta/maria.jpg');
+  height: height('beta/maria.jpg');
 
-  background-size: url('beta/maria.jpg');
-  border-image-width: url('beta/maria.jpg');
-  border-width: url('beta/maria.jpg');
-  margin: url('beta/maria.jpg');
-  padding: url('beta/maria.jpg');
+  width: width('beta/maria.jpg', 2);
+  height: height('beta/maria.jpg', 2);
 
-  border-left: url('beta/maria.jpg') solid red;
-  border-left-width: url('beta/maria.jpg');
-  border-right: dashed url('beta/maria.jpg') blue;
-  border-right-width: url('beta/maria.jpg');
-  left: url('beta/maria.jpg');
-  margin-left: url('beta/maria.jpg');
-  margin-right: url('beta/maria.jpg');
-  max-width: url('beta/maria.jpg');
-  min-width: url('beta/maria.jpg');
-  padding-left: url('beta/maria.jpg');
-  padding-right: url('beta/maria.jpg');
-  width: url('beta/maria.jpg');
+  width: width('beta/maria.jpg', 1.3);
 
-  border-bottom: double green url('beta/maria.jpg');
-  border-bottom-width: url('beta/maria.jpg');
-  border-top: black url('beta/maria.jpg') solid;
-  border-top-width: url('beta/maria.jpg');
-  bottom: url('beta/maria.jpg');
-  height: url('beta/maria.jpg');
-  margin-bottom: url('beta/maria.jpg');
-  margin-top: url('beta/maria.jpg');
-  max-height: url('beta/maria.jpg');
-  min-height: url('beta/maria.jpg');
-  padding-bottom: url('beta/maria.jpg');
-  padding-top: url('beta/maria.jpg');
-
-  width: url('alpha/invalid.jpg');
+  width: width('alpha/invalid.jpg');
 }

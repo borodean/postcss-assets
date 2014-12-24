@@ -6,10 +6,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url":  "https://github.com/borodean/postcss-assets"
+    "url": "https://github.com/borodean/postcss-assets"
   },
   "dependencies": {
     "cssesc": "^0.1.0",
+    "gonzales": "^1.0.7",
     "image-size": "^0.3.3",
     "js-base64": "^2.1.5",
     "mime": "^1.2.11",

@@ -98,6 +98,7 @@ body {
 ### Base path
 
 If the root directory of your site is not where you execute PostCSS Assets, correct it:
+
 ```js
 var options = {
   basePath: 'source/'
@@ -109,6 +110,7 @@ PostCSS Assets would treat `source` directory as `/` for all URLs and load paths
 ### Base URL
 
 If the URL of your base path is not `/`, correct it:
+
 ```js
 var options = {
   baseUrl: 'http://example.com/wp-content/themes/'
@@ -118,6 +120,7 @@ var options = {
 ### Relative paths
 
 To make resolved paths relative, define a directory to relate to:
+
 ```js
 var options = {
   relativeTo: 'assets/css'
@@ -127,47 +130,38 @@ var options = {
 Image dimensions
 ----------------
 
-Image width or height are automatically calculated, if a dimensional property has an ```url(...)``` value:
+PostCSS Assets calculates dimensions of PNG, JPEG, GIF, SVG and WebP images:
 
 ```css
 body {
-  width: url('images/foobar.png'); /* 320px */
-  height: url('images/foobar.png'); /* 240px */
-  background-size: url('images/foobar.png'); /* 320px 240px */
+  width: width('images/foobar.png'); /* 320px */
+  height: height('images/foobar.png'); /* 240px */
+  background-size: size('images/foobar.png'); /* 320px 240px */
 }
 ```
 
-This would happen for every property with a clear orientation:
+To correct the dimensions for images with a high density, pass it as a second parameter:
 
 ```css
 body {
-  left: url('images/foobar.png'); /* 320px */
-  border-top: url('images/foobar.png') solid #000; /* 240px solid #000 */
-  margin: url('images/foobar.png'); /* 320px 240px */
-}
-```
-
-To override the orientation, set a modifier:
-
-```css
-body {
-  width: url('images/foobar.png' height); /* 240px */
-  height: url('images/foobar.png' width); /* 320px */
+  width: width('images/foobar.png', 2); /* 160px */
+  height: height('images/foobar.png', 2); /* 120px */
+  background-size: size('images/foobar.png', 2); /* 160px 120px */
 }
 ```
 
 Inlining files
 --------------
 
-```js
-var options = {
-  inline: {
-    maxSize: '52K'
-  }
-};
+PostCSS inlines files to a stylesheet in Base64 encoding:
+
+```css
+body {
+  background: inline('images/foobar.png');
+}
 ```
 
-This would make all the files smaller than 52 kilobytes be inlined to a stylesheet in Base64 encoding. SVG files would be inlined unencoded, because [then they benefit in size](http://css-tricks.com/probably-dont-base64-svg/).
+SVG files would be inlined unencoded, because [then they benefit in size](http://css-tricks.com/probably-dont-base64-svg/).
 
 Full list of options
 --------------------
@@ -178,13 +172,3 @@ Full list of options
 | `baseUrl`        | URL of the project when running the web server.                                 | `/`     |
 | `loadPaths`      | Specific directories to look for the files.                                     | `[]`    |
 | `relativeTo`     | Directory to relate to when resolving URLs. If `false`, disables relative URLs. | `false` |
-| `inline.maxSize` | Maximum size of files to inline to CSS. If undefined, disables the inlining.    |         |
-
-Full list of modifiers
-----------------------
-
-| Modifier | Description                                                     |
-|:---------|:----------------------------------------------------------------|
-| `width`  | Converts to image width.                                        |
-| `height` | Converts to image height.                                       |
-| `size`   | Converts to both image width and height separated with a space. |
