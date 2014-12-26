@@ -13,17 +13,6 @@ var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-const AUTO_SIZE   = ['background-size', 'border-image-width', 'border-width',
-                     'margin', 'padding'];
-const AUTO_WIDTH  = ['border-left', 'border-left-width', 'border-right',
-                     'border-right-width', 'left', 'margin-left',
-                     'margin-right', 'max-width', 'min-width', 'padding-left',
-                     'padding-right', 'width'];
-const AUTO_HEIGHT = ['border-bottom', 'border-bottom-width', 'border-top',
-                     'border-top-width', 'bottom', 'height', 'margin-bottom',
-                     'margin-top', 'max-height', 'min-height',
-                     'padding-bottom', 'padding-top'];
-
 module.exports = function (options) {
 
   options = options || {};
@@ -48,6 +37,25 @@ module.exports = function (options) {
     options.relativeTo = path.resolve(options.relativeTo);
   } else {
     options.relativeTo = false;
+  }
+
+  function getImageSize(assetStr, density) {
+    var assetPath = resolvePath(assetStr.value);
+    var size;
+    try {
+      size = sizeOf(assetPath);
+      if (typeof density !== 'undefined') {
+        density = parseFloat(density.value, 10);
+        console.log(density);
+        size.width  = +(size.width  / density).toFixed(4);
+        size.height = +(size.height / density).toFixed(4);
+      }
+      return size;
+    } catch (exception) {
+      var err = new Error("Image corrupted: " + assetPath);
+      err.name = 'ECORRUPT';
+      throw err;
+    }
   }
 
   function matchPath(assetPath) {
@@ -95,50 +103,45 @@ module.exports = function (options) {
     return cssesc(url.format(assetUrl));
   }
 
-  function shouldBeInline(assetPath) {
-    if (options.inline && options.inline.maxSize) {
-      var size = fs.statSync(assetPath).size;
-      return (size <= parseBytes(options.inline.maxSize));
-    }
-    return false;
-  }
-
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
+      try {
+        decl.value = mapFunctions(decl.value, {
+          'url': function (assetStr) {
+            assetStr.value = resolveUrl(assetStr.value);
+            return 'url(' + assetStr + ')';
+          },
 
-      decl.value = mapFunctions(decl.value, function (before, quote, assetStr, modifier, after) {
+          'inline': function (assetStr) {
+            assetStr.value = resolveDataUrl(assetStr.value);
+            return 'url(' + assetStr + ')';
+          },
 
-        try {
+          'width': function (assetStr, density) {
+            return getImageSize(assetStr, density).width  + 'px';
+          },
 
-          var assetPath = resolvePath(assetStr);
-          var prop = vendor.unprefixed(decl.prop);
+          'height': function (assetStr, density) {
+            return getImageSize(assetStr, density).height + 'px';
+          },
 
-          if (modifier === 'width' || AUTO_WIDTH.indexOf(prop) !== -1) {
-            return sizeOf(assetPath).width + 'px';
-          }
-
-          if (modifier === 'height' || AUTO_HEIGHT.indexOf(prop) !== -1) {
-            return sizeOf(assetPath).height + 'px';
-          }
-
-          if (modifier === 'size' || AUTO_SIZE.indexOf(prop) !== -1) {
-            var size = sizeOf(assetPath);
+          'size': function (assetStr, density) {
+            var size = getImageSize(assetStr, density);
             return size.width + 'px ' + size.height + 'px';
           }
-
-          if (shouldBeInline(assetPath)) {
-            return 'url(' + before + quote + resolveDataUrl(assetStr) + quote + after + ')';
-          }
-
-          return 'url(' + before + quote + resolveUrl(assetStr) + quote + after + ')';
-
-        } catch (exception) {
-          if (exception.name !== 'ENOENT') {
-            throw exception;
-          }
+        });
+      } catch (exception) {
+        switch (exception.name) {
+        case 'ECORRUPT':
+          console.warn(exception.message);
+          break;
+        case 'ENOENT':
           console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
+          break;
+        default:
+          throw exception;
         }
-      });
+      }
     });
   };
 };
