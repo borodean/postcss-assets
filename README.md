@@ -54,7 +54,7 @@ grunt.initConfig({
       processors: [
         assets({
           loadPaths: ['images/']
-        }).postcss
+        })
       ]
     },
     dist: { src: 'build/*.css' }
