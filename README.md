@@ -32,7 +32,7 @@ Usage
 
 ```js
 gulp.task('assets', function () {
-  var postcss = require('postcss');
+  var postcss = require('gulp-postcss');
   var assets  = require('postcss-assets');
 
   return gulp.src('source/*.css')
