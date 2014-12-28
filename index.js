@@ -39,6 +39,13 @@ module.exports = function (options) {
     options.relativeTo = false;
   }
 
+  if (options.cachebuster === true) {
+    options.cachebuster = function (path) {
+      var mtime = fs.statSync(path).mtime;
+      return mtime.getTime().toString(16);
+    };
+  }
+
   function getImageSize(assetStr, density) {
     var assetPath = resolvePath(assetStr.value);
     var size;
@@ -99,6 +106,14 @@ module.exports = function (options) {
     } else {
       var baseToAsset = path.relative(options.basePath, matchPath(assetPath));
       assetUrl.pathname = url.resolve(options.baseUrl, baseToAsset);
+    }
+    if (options.cachebuster) {
+      if (assetUrl.search) {
+        assetUrl.search = assetUrl.search + '&';
+      } else {
+        assetUrl.search = '?';
+      }
+      assetUrl.search += options.cachebuster(assetPath);
     }
     return cssesc(url.format(assetUrl));
   }
