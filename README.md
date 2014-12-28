@@ -13,6 +13,7 @@ Table of contents
   * [Base path](#base-path)
   * [Base URL](#base-url)
   * [Relative paths](#relative-paths)
+* [Cachebuster](#cachebuster)
 * [Image dimensions](#image-dimensions)
 * [Inlining files](#inlining-files)
 * [Full list of options](#full-list-of-options)
@@ -130,7 +131,7 @@ var options = {
 Cachebuster
 -----------
 
-PostCSS Assets can bust the assets cache, changing urls depending on asset’s modification date:
+PostCSS Assets can bust assets cache, changing urls depending on asset’s modification date:
 
 ```js
 var options = {
