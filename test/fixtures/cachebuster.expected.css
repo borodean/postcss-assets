@@ -1,0 +1,4 @@
+body {
+  background: url('/test/fixtures/alpha/kateryna.jpg?20');
+  background: url('/test/fixtures/alpha/kateryna.jpg?foo=bar&20');
+}
