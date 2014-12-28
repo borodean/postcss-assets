@@ -32,7 +32,7 @@ Usage
 
 ```js
 gulp.task('assets', function () {
-  var postcss = require('postcss');
+  var postcss = require('gulp-postcss');
   var assets  = require('postcss-assets');
 
   return gulp.src('source/*.css')
@@ -127,6 +127,33 @@ var options = {
 };
 ```
 
+Cachebuster
+-----------
+
+PostCSS Assets can bust the assets cache, changing urls depending on asset’s modification date:
+
+```js
+var options = {
+  cachebuster: true
+};
+```
+
+```css
+body {
+  background: url('/images/icons/baz.png?14a931c501f');
+}
+```
+
+To define a custom cachebuster pass a function as an option:
+
+```js
+var options = {
+  cachebuster: function (path) {
+    return fs.statSync(path).mtime.getTime().toString(16);
+  }
+};
+```
+
 Image dimensions
 ----------------
 
@@ -166,9 +193,10 @@ SVG files would be inlined unencoded, because [then they benefit in size](http:/
 Full list of options
 --------------------
 
-| Option           | Description                                                                     | Default |
-|:-----------------|:--------------------------------------------------------------------------------|:--------|
-| `basePath`       | Root directory of the project.                                                  | `.`     |
-| `baseUrl`        | URL of the project when running the web server.                                 | `/`     |
-| `loadPaths`      | Specific directories to look for the files.                                     | `[]`    |
-| `relativeTo`     | Directory to relate to when resolving URLs. If `false`, disables relative URLs. | `false` |
+| Option           | Description                                                                       | Default |
+|:-----------------|:----------------------------------------------------------------------------------|:--------|
+| `basePath`       | Root directory of the project.                                                    | `.`     |
+| `baseUrl`        | URL of the project when running the web server.                                   | `/`     |
+| `cachebuster`    | If cache should be busted. Pass a function to define custom busting strategy.     | `false` |
+| `loadPaths`      | Specific directories to look for the files.                                       | `[]`    |
+| `relativeTo`     | Directory to relate to when resolving URLs. When `false`, disables relative URLs. | `false` |

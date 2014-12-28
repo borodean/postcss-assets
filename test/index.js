@@ -26,6 +26,12 @@ function compareFixtures(t, name, msg, opts, postcssOpts) {
   t.equal(actual, expected, msg);
 }
 
+function modifyFile(path) {
+  var atime = fs.statSync(path).atime;
+  var mtime = new Date();
+  fs.utimesSync(path, atime, mtime);
+}
+
 test('path resolving', function (t) {
 
   compareFixtures(t, 'resolve', 'resolves paths');
@@ -78,5 +84,21 @@ test('path inlining', function (t) {
 
 test('dimensions', function (t) {
   compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
+  t.end();
+});
+
+test('cachebuster', function (t) {
+  var options = { cachebuster: true };
+  var a = process('cachebuster', options);
+  modifyFile('test/fixtures/alpha/kateryna.jpg');
+  var b = process('cachebuster', options);
+  t.notEqual(a, b, 'busts cache');
+
+  compareFixtures(t, 'cachebuster', 'accepts buster function', {
+    cachebuster: function (path) {
+      return path.length.toString(16);
+    }
+  });
+
   t.end();
 });
