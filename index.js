@@ -53,7 +53,6 @@ module.exports = function (options) {
       size = sizeOf(assetPath);
       if (typeof density !== 'undefined') {
         density = parseFloat(density.value, 10);
-        console.log(density);
         size.width  = +(size.width  / density).toFixed(4);
         size.height = +(size.height / density).toFixed(4);
       }
