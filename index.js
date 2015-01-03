@@ -112,7 +112,7 @@ module.exports = function (options) {
       } else {
         assetUrl.search = '?';
       }
-      assetUrl.search += options.cachebuster(assetPath);
+      assetUrl.search += options.cachebuster(resolvePath(assetPath));
     }
     return cssesc(url.format(assetUrl));
   }
