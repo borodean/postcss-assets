@@ -88,17 +88,20 @@ test('dimensions', function (t) {
 });
 
 test('cachebuster', function (t) {
-  var options = { cachebuster: true };
+  var options = {
+    cachebuster: true,
+    loadPaths: ['test/fixtures/alpha/']
+  };
   var a = process('cachebuster', options);
   modifyFile('test/fixtures/alpha/kateryna.jpg');
   var b = process('cachebuster', options);
   t.notEqual(a, b, 'busts cache');
 
-  compareFixtures(t, 'cachebuster', 'accepts buster function', {
-    cachebuster: function (path) {
-      return path.length.toString(16);
-    }
-  });
+  options.cachebuster = function (path) {
+    return path.length.toString(16);
+  };
+
+  compareFixtures(t, 'cachebuster', 'accepts buster function', options);
 
   t.end();
 });
