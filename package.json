@@ -14,7 +14,7 @@
     "image-size": "^0.3.5",
     "js-base64": "^2.1.5",
     "mime": "^1.2.11",
-    "postcss": "^3.0.7"
+    "postcss": "^4.0.0"
   },
   "devDependencies": {
     "tape": "^3.0.3"
