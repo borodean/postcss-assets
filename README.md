@@ -17,7 +17,6 @@ Table of contents
 * [Image dimensions](#image-dimensions)
 * [Inlining files](#inlining-files)
 * [Full list of options](#full-list-of-options)
-* [Full list of modifiers](#full-list-of-modifiers)
 
 Installation
 ------------
