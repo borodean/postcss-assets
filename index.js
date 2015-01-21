@@ -8,7 +8,6 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 
-var base64 = require('js-base64').Base64;
 var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
@@ -85,7 +84,7 @@ module.exports = function (options) {
       var data = cssesc(fs.readFileSync(resolvedPath).toString());
       var encoding = 'utf8';
     } else {
-      data = base64.encode(fs.readFileSync(resolvedPath));
+      data = new Buffer(fs.readFileSync(resolvedPath), 'binary').toString('base64');
       encoding = 'base64';
     }
     return 'data:' + mimeType + ';' + encoding + ',' + data;
