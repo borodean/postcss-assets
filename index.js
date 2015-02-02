@@ -158,3 +158,7 @@ module.exports = function (options) {
     });
   };
 };
+
+module.exports.postcss = function (cssTree) {
+  module.exports()(cssTree);
+}
