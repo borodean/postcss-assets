@@ -98,7 +98,7 @@ test('cachebuster', function (t) {
   t.notEqual(a, b, 'busts cache');
 
   options.cachebuster = function (path) {
-    return path.length.toString(16);
+    return path[path.length - 1];
   };
 
   compareFixtures(t, 'cachebuster', 'accepts buster function', options);
