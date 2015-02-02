@@ -87,6 +87,11 @@ test('dimensions', function (t) {
   t.end();
 });
 
+test('relative paths', function (t) {
+  compareFixtures(t, 'relative', 'resolves relative path', {}, { from: 'test/fixtures/relative.css' });
+  t.end();
+});
+
 test('cachebuster', function (t) {
   var options = {
     cachebuster: true,
