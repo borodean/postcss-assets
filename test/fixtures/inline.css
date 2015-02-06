@@ -1,6 +1,11 @@
 body {
   background: inline('alpha/blank.gif');
   background: inline(  'alpha/blank.gif' );
+  background: inline(alpha/trapezium.svg);
   background: inline('alpha/trapezium.svg');
+  background: inline(alpha/trapezium-single-quotes.svg);
   background: inline('alpha/trapezium-single-quotes.svg');
+  background: inline(alpha/trapezium-mixed-quotes.svg);
+  background: inline('alpha/trapezium-mixed-quotes.svg');
+  background: inline("alpha/trapezium-mixed-quotes.svg");
 }
