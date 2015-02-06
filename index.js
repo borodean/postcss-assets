@@ -45,8 +45,8 @@ module.exports = function (options) {
     };
   }
 
-  function getImageSize(assetStr, density) {
-    var assetPath = resolvePath(assetStr.value);
+  function getImageSize(decl, assetStr, density) {
+    var assetPath = resolvePath(decl, assetStr.value);
     var size;
     try {
       size = sizeOf(assetPath);
@@ -63,12 +63,18 @@ module.exports = function (options) {
     }
   }
 
-  function matchPath(assetPath) {
-    var exception, matchingPath;
-    var isFound = options.loadPaths.some(function (loadPath) {
-      matchingPath = path.join(loadPath, assetPath);
-      return fs.existsSync(matchingPath);
-    });
+  function matchPath(decl, assetPath) {
+    var exception, matchingPath, isFound;
+    if ( assetPath[0] == '.' ) {
+      var from = decl.source.input.file;
+      matchingPath = path.join(path.dirname(from), assetPath);
+      isFound = fs.existsSync(matchingPath);
+    } else {
+      isFound = options.loadPaths.some(function (loadPath) {
+        matchingPath = path.join(loadPath, assetPath);
+        return fs.existsSync(matchingPath);
+      });
+    }
     if (!isFound) {
       exception = new Error("Asset not found or unreadable: " + assetPath);
       exception.name = 'ENOENT';
@@ -77,8 +83,8 @@ module.exports = function (options) {
     return matchingPath;
   }
 
-  function resolveDataUrl(assetStr) {
-    var resolvedPath = resolvePath(assetStr);
+  function resolveDataUrl(decl, assetStr) {
+    var resolvedPath = resolvePath(decl, assetStr);
     var mimeType = mime.lookup(resolvedPath);
     if (mimeType === 'image/svg+xml') {
       var data = cssesc(fs.readFileSync(resolvedPath).toString());
@@ -90,19 +96,19 @@ module.exports = function (options) {
     return 'data:' + mimeType + ';' + encoding + ',' + data;
   }
 
-  function resolvePath(assetStr) {
+  function resolvePath(decl, assetStr) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
-    return matchPath(assetPath);
+    return matchPath(decl, assetPath);
   }
 
-  function resolveUrl(assetStr) {
+  function resolveUrl(decl, assetStr) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
     if (options.relativeTo) {
-      assetUrl.pathname = path.relative(options.relativeTo, matchPath(assetPath));
+      assetUrl.pathname = path.relative(options.relativeTo, matchPath(decl, assetPath));
     } else {
-      var baseToAsset = path.relative(options.basePath, matchPath(assetPath));
+      var baseToAsset = path.relative(options.basePath, matchPath(decl, assetPath));
       assetUrl.pathname = url.resolve(options.baseUrl, baseToAsset);
     }
     if (options.cachebuster) {
@@ -121,25 +127,25 @@ module.exports = function (options) {
       try {
         decl.value = mapFunctions(decl.value, {
           'url': function (assetStr) {
-            assetStr.value = resolveUrl(assetStr.value);
+            assetStr.value = resolveUrl(decl, assetStr.value);
             return 'url(' + assetStr + ')';
           },
 
           'inline': function (assetStr) {
-            assetStr.value = resolveDataUrl(assetStr.value);
+            assetStr.value = resolveDataUrl(decl, assetStr.value);
             return 'url(' + assetStr + ')';
           },
 
           'width': function (assetStr, density) {
-            return getImageSize(assetStr, density).width  + 'px';
+            return getImageSize(decl, assetStr, density).width  + 'px';
           },
 
           'height': function (assetStr, density) {
-            return getImageSize(assetStr, density).height + 'px';
+            return getImageSize(decl, assetStr, density).height + 'px';
           },
 
           'size': function (assetStr, density) {
-            var size = getImageSize(assetStr, density);
+            var size = getImageSize(decl, assetStr, density);
             return size.width + 'px ' + size.height + 'px';
           }
         });
