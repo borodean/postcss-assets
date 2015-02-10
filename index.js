@@ -120,7 +120,7 @@ module.exports = function (options) {
     cssTree.eachDecl(function (decl) {
       try {
         decl.value = mapFunctions(decl.value, {
-          'url': function (assetStr) {
+          'resolve': function (assetStr) {
             assetStr.value = resolveUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },

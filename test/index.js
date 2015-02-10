@@ -1,9 +1,9 @@
 var postcss = require('postcss');
+var expect = require('chai').expect;
 
 var plugin = require('..');
 
 var fs = require('fs');
-var test = require('tape');
 
 require('./lib/mapFunctions');
 require('./lib/parseBytes');
@@ -17,13 +17,14 @@ function process(name, opts, postcssOpts) {
   return postcss().use(plugin(opts)).process(fixture(name), postcssOpts).css.trim();
 }
 
-function compareFixtures(t, name, msg, opts, postcssOpts) {
+function compareFixtures(name, opts, postcssOpts) {
+  return function () {
+    var actual = process(name, opts, postcssOpts);
+    var expected = fixture(name + '.expected');
 
-  var actual = process(name, opts, postcssOpts);
-  var expected = fixture(name + '.expected');
-
-  fs.writeFile('test/fixtures/' + name + '.actual.css', actual);
-  t.equal(actual, expected, msg);
+    fs.writeFile('test/fixtures/' + name + '.actual.css', actual);
+    expect(actual).to.equal(expected);
+  };
 }
 
 function modifyFile(path) {
@@ -32,76 +33,79 @@ function modifyFile(path) {
   fs.utimesSync(path, atime, mtime);
 }
 
-test('path resolving', function (t) {
+describe('path resolving', function () {
+  it('resolves paths', compareFixtures('resolve'));
 
-  compareFixtures(t, 'resolve', 'resolves paths');
-
-  compareFixtures(t, 'resolve-basepath', 'resolves relative to the basePath', {
+  it('resolves relative to the basePath', compareFixtures('resolve-basepath', {
     basePath: 'test/fixtures'
-  });
+  }));
 
-  compareFixtures(t, 'resolve-loadpath', 'resolves relative to the loadPaths', {
+  it('resolves relative to the loadPaths', compareFixtures('resolve-loadpath', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/', 'beta/']
-  });
+  }));
 
-  compareFixtures(t, 'resolve-loadpath', 'resolves with loadPaths of a various spelling', {
+  it('resolves with loadPaths of a various spelling', compareFixtures('resolve-loadpath', {
     basePath: 'test/fixtures',
     loadPaths: ['./alpha/', 'beta']
-  });
+  }));
 
-  compareFixtures(t, 'resolve-baseurl-1', 'resolves relative to the baseUrl', {
+  it('resolves relative to the baseUrl', compareFixtures('resolve-baseurl-1', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'
-  });
+  }));
 
-  compareFixtures(t, 'resolve-baseurl-2', 'resolves relative to the baseUrl', {
+  it('resolves relative to the baseUrl', compareFixtures('resolve-baseurl-2', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
-  });
+  }));
 
-  compareFixtures(t, 'resolve-relative', 'resolves relative paths', {
+  it('resolves relative paths', compareFixtures('resolve-relative', {
     basePath: 'test/fixtures/alpha',
     relativeTo: 'test/fixtures/beta'
-  });
+  }));
 
-  compareFixtures(t, 'resolve-spelling', 'recognizes various spelling', {
+  it('recognizes various spelling', compareFixtures('resolve-spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/']
-  });
+  }));
 
-  compareFixtures(t, 'resolve-notfound', 'does nothing', {
+  it('does nothing', compareFixtures('resolve-notfound', {
     basePath: 'test/fixtures'
+  }));
+});
+
+describe('path inlining', function () {
+  it('base64-encodes assets', compareFixtures('inline', { basePath: 'test/fixtures/' }));
+});
+
+describe('dimensions', function () {
+  it('resolves dimensions', compareFixtures('dimensions', { basePath: 'test/fixtures/' }));
+});
+
+describe('cachebuster', function () {
+  it('busts cache', function () {
+    var options = {
+      cachebuster: true,
+      loadPaths: ['test/fixtures/alpha/']
+    };
+
+    var resultA = process('cachebuster', options);
+    modifyFile('test/fixtures/alpha/kateryna.jpg');
+
+    var resultB = process('cachebuster', options);
+
+    expect(resultA).to.not.equal(resultB);
   });
 
-  t.end();
-});
+  it('accepts buster function', function () {
+    var options = {
+      cachebuster: function (path) {
+        return path[path.length - 1];
+      },
+      loadPaths: ['test/fixtures/alpha/']
+    };
 
-test('path inlining', function (t) {
-  compareFixtures(t, 'inline', 'base64-encodes assets', { basePath: 'test/fixtures/' });
-  t.end();
-});
-
-test('dimensions', function (t) {
-  compareFixtures(t, 'dimensions', 'resolves dimensions', { basePath: 'test/fixtures/' });
-  t.end();
-});
-
-test('cachebuster', function (t) {
-  var options = {
-    cachebuster: true,
-    loadPaths: ['test/fixtures/alpha/']
-  };
-  var a = process('cachebuster', options);
-  modifyFile('test/fixtures/alpha/kateryna.jpg');
-  var b = process('cachebuster', options);
-  t.notEqual(a, b, 'busts cache');
-
-  options.cachebuster = function (path) {
-    return path[path.length - 1];
-  };
-
-  compareFixtures(t, 'cachebuster', 'accepts buster function', options);
-
-  t.end();
+    compareFixtures('cachebuster', options)();
+  });
 });

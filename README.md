@@ -81,8 +81,8 @@ Example:
 
 ```css
 body {
-  background: url('foobar.jpg');
-  background: url('icons/baz.png');
+  background: resolve('foobar.jpg');
+  background: resolve('icons/baz.png');
 }
 ```
 

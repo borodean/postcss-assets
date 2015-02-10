@@ -12,13 +12,14 @@
     "cssesc": "^0.1.0",
     "gonzales": "^1.0.7",
     "image-size": "^0.3.5",
-    "mime": "^1.2.11",
-    "postcss": "^4.0.0"
+    "mime": "^1.3.4",
+    "postcss": "^4.0.3"
   },
   "devDependencies": {
-    "tape": "^3.0.3"
+    "chai": "^1.10.0",
+    "mocha": "^2.1.0"
   },
   "scripts": {
-    "test": "tape test"
+    "test": "mocha -R spec test"
   }
 }

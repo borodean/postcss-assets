@@ -1,4 +1,4 @@
-var test = require('tape');
+var expect = require('chai').expect;
 
 var mapFunctions = require('../../lib/mapFunctions');
 
@@ -20,52 +20,17 @@ const MAP = {
   }
 };
 
-function checkMapping (t, source, expectedResult, msg) {
-  t.equal(mapFunctions(source, MAP), expectedResult, msg);
+function checkMapping (source, expectedResult) {
+  return function () {
+    expect(mapFunctions(source, MAP)).to.equal(expectedResult);
+  };
 }
 
-test('mapFunctions', function (t) {
-  checkMapping(t,
-    'increase(100px)',
-    '101px',
-    'maps functions'
-  );
-
-  checkMapping(t,
-    'increase(100px), decrease(100px)',
-    '101px, 99px',
-    'maps sibling functions'
-  );
-
-  checkMapping(t,
-    'double(increase(100px))',
-    '202px',
-    'maps nested functions'
-  );
-
-  checkMapping(t,
-    'unknown(100px)',
-    'unknown(100px)',
-    'skips unknown functions'
-  );
-
-  checkMapping(t,
-    'unknown(increase(100px))',
-    'unknown(101px)',
-    'maps inside unknown functions'
-  );
-
-  checkMapping(t,
-    'url(borodean)',
-    'url(https://github.com/borodean)',
-    'maps urls as functions'
-  );
-
-  checkMapping(t,
-    'combine(20px, 15px)',
-    '35px',
-    'accepts multiple parameters'
-  );
-
-  t.end();
+describe('mapFunctions', function () {
+  it('maps functions', checkMapping('increase(100px)', '101px'));
+  it('maps sibling functions', checkMapping('increase(100px), decrease(100px)', '101px, 99px'));
+  it('maps nested functions', checkMapping('double(increase(100px))', '202px'));
+  it('skips unknown functions', checkMapping('unknown(100px)', 'unknown(100px)'));
+  it('maps inside unknown functions', checkMapping('unknown(increase(100px))', 'unknown(101px)'));
+  it('accepts multiple parameters', checkMapping('combine(20px, 15px)', '35px'));
 });
