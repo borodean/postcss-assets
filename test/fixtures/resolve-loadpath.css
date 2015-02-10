@@ -1,5 +1,5 @@
 body {
-  background: url('kateryna.jpg');
-  background: url('maria.jpg');
-  background: url('beta/maria.jpg');
+  background: resolve('kateryna.jpg');
+  background: resolve('maria.jpg');
+  background: resolve('beta/maria.jpg');
 }

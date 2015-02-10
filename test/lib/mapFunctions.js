@@ -56,12 +56,6 @@ test('mapFunctions', function (t) {
   );
 
   checkMapping(t,
-    'url(borodean)',
-    'url(https://github.com/borodean)',
-    'maps urls as functions'
-  );
-
-  checkMapping(t,
     'combine(20px, 15px)',
     '35px',
     'accepts multiple parameters'

@@ -1,18 +1,18 @@
 body {
   color: red;
-  background: url(kateryna.jpg);
-  background: url(  kateryna.jpg );
-  background: no-repeat url(kateryna.jpg) #000;
+  background: resolve(kateryna.jpg);
+  background: resolve(  kateryna.jpg );
+  background: no-repeat resolve(kateryna.jpg) #000;
   background:
-    url('kateryna.jpg'),
-    url('odalisque.jpg');
-  background: url('kateryna.jpg');
-  background: url('./kateryna.jpg');
-  background: url("kateryna.jpg");
-  background: url('odalisque.jpg');
-  background: url('kateryna_(shevchenko).jpg');
-  background: url('\6b ateryna.jpg');
-  background: url('kateryna.jpg?foo=bar#baz');
-  background: url('kateryna.jpg#baz');
-  background: url('Gupsy Fortuneteller.jpg');
+    resolve('kateryna.jpg'),
+    resolve('odalisque.jpg');
+  background: resolve('kateryna.jpg');
+  background: resolve('./kateryna.jpg');
+  background: resolve("kateryna.jpg");
+  background: resolve('odalisque.jpg');
+  background: resolve('kateryna_(shevchenko).jpg');
+  background: resolve('\6b ateryna.jpg');
+  background: resolve('kateryna.jpg?foo=bar#baz');
+  background: resolve('kateryna.jpg#baz');
+  background: resolve('Gupsy Fortuneteller.jpg');
 }
