@@ -1,13 +1,29 @@
-var test = require('tape');
+var expect = require('chai').expect;
 
 var parseBytes = require('../../lib/parseBytes');
 
-test('parseBytes', function (t) {
-  t.equal(parseBytes(128), 128, 'converts numbers');
-  t.equal(parseBytes('128'), 128, 'converts unitless values');
-  t.equal(parseBytes('2k'), 2048, 'converts kilobytes');
-  t.equal(parseBytes('3K'), 3072, 'converts uppercase units');
-  t.equal(parseBytes('2m'), 2097152, 'converts megabytes');
-  t.equal(parseBytes('25.5k'), 26112, 'converts fractional numbers');
-  t.end();
+describe('parseBytes', function () {
+  it('converts numbers', function () {
+    expect(parseBytes(128)).to.equal(128);
+  });
+
+  it('converts unitless values', function () {
+    expect(parseBytes('128')).to.equal(128);
+  });
+
+  it('converts kilobytes', function () {
+    expect(parseBytes('2k')).to.equal(2048);
+  });
+
+  it('converts uppercase units', function () {
+    expect(parseBytes('3K')).to.equal(3072);
+  });
+
+  it('converts megabytes', function () {
+    expect(parseBytes('2m')).to.equal(2097152);
+  });
+
+  it('converts fractional numbers', function () {
+    expect(parseBytes('25.5k')).to.equal(26112);
+  });
 });
