@@ -16,7 +16,7 @@
     "postcss": "^4.0.3"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
+    "chai": "^2.0.0",
     "mocha": "^2.1.0"
   },
   "scripts": {
