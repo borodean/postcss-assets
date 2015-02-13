@@ -14,6 +14,8 @@ var sizeOf = require('image-size');
 
 module.exports = function (options) {
 
+  var inputPath;
+
   options = options || {};
   options.baseUrl = options.baseUrl || '/';
 
@@ -65,7 +67,12 @@ module.exports = function (options) {
 
   function matchPath(assetPath) {
     var exception, matchingPath;
-    var isFound = options.loadPaths.some(function (loadPath) {
+    if (typeof inputPath === 'string') {
+      var loadPaths = [path.dirname(inputPath)].concat(options.loadPaths);
+    } else {
+      loadPaths = options.loadPaths;
+    }
+    var isFound = loadPaths.some(function (loadPath) {
       matchingPath = path.join(loadPath, assetPath);
       return fs.existsSync(matchingPath);
     });
@@ -118,6 +125,9 @@ module.exports = function (options) {
 
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
+
+      inputPath = decl.source.input.file;
+
       try {
         decl.value = mapFunctions(decl.value, {
           'resolve': function (assetStr) {
