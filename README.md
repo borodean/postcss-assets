@@ -81,12 +81,12 @@ Example:
 
 ```css
 body {
-  background: url('foobar.jpg');
-  background: url('icons/baz.png');
+  background: resolve('foobar.jpg');
+  background: resolve('icons/baz.png');
 }
 ```
 
-PostCSS Assets would look for the files in load paths, then in the base path. If it succeed, it would resolve a true URL:
+PostCSS Assets would look for the files relative to the source file, then in load paths, then in the base path. If it succeed, it would resolve a true URL:
 
 ```css
 body {

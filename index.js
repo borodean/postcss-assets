@@ -14,6 +14,8 @@ var sizeOf = require('image-size');
 
 module.exports = function (options) {
 
+  var inputPath;
+
   options = options || {};
   options.baseUrl = options.baseUrl || '/';
 
@@ -65,7 +67,12 @@ module.exports = function (options) {
 
   function matchPath(assetPath) {
     var exception, matchingPath;
-    var isFound = options.loadPaths.some(function (loadPath) {
+    if (typeof inputPath === 'string') {
+      var loadPaths = [path.dirname(inputPath)].concat(options.loadPaths);
+    } else {
+      loadPaths = options.loadPaths;
+    }
+    var isFound = loadPaths.some(function (loadPath) {
       matchingPath = path.join(loadPath, assetPath);
       return fs.existsSync(matchingPath);
     });
@@ -118,9 +125,12 @@ module.exports = function (options) {
 
   return function (cssTree) {
     cssTree.eachDecl(function (decl) {
+
+      inputPath = decl.source.input.file;
+
       try {
         decl.value = mapFunctions(decl.value, {
-          'url': function (assetStr) {
+          'resolve': function (assetStr) {
             assetStr.value = resolveUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },
@@ -146,11 +156,9 @@ module.exports = function (options) {
       } catch (exception) {
         switch (exception.name) {
         case 'ECORRUPT':
-          console.warn(exception.message);
-          break;
+          throw decl.error(exception.message);
         case 'ENOENT':
-          console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
-          break;
+          throw decl.error(exception.message + '\nLoad paths:\n  ' + options.loadPaths.join('\n  '));
         default:
           throw exception;
         }
@@ -161,4 +169,4 @@ module.exports = function (options) {
 
 module.exports.postcss = function (cssTree) {
   module.exports()(cssTree);
-}
+};
