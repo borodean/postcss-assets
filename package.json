@@ -9,6 +9,7 @@
     "url": "https://github.com/borodean/postcss-assets"
   },
   "dependencies": {
+    "6to5": "^3.6.0",
     "cssesc": "^0.1.0",
     "gonzales": "^1.0.7",
     "image-size": "^0.3.5",
