@@ -9,8 +9,12 @@ require('./lib/mapFunctions');
 require('./lib/parseBytes');
 require('./lib/unescapeCss');
 
+function fixturePath(name) {
+  return 'test/fixtures/' + name + '.css';
+}
+
 function fixture(name) {
-  return fs.readFileSync('test/fixtures/' + name + '.css', 'utf8').trim();
+  return fs.readFileSync(fixturePath(name), 'utf8').trim();
 }
 
 function process(css, opts, postcssOpts) {
@@ -18,7 +22,7 @@ function process(css, opts, postcssOpts) {
 }
 
 function processFixture(name, opts, postcssOpts) {
-  return process(fixture(name), opts, postcssOpts);
+  return process(fixture(name), opts, { from: fixturePath(name) });
 }
 
 function compareFixtures(name, opts, postcssOpts) {
@@ -62,6 +66,11 @@ describe('path resolving', function () {
   it('resolves relative to the baseUrl', compareFixtures('resolve-baseurl-2', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
+  }));
+
+  it('resolves relative to the CSS file', compareFixtures('resolve-css-relative-paths', {
+    basePath: 'test',
+    loadPaths: ['fixtures/alpha']
   }));
 
   it('resolves relative paths', compareFixtures('resolve-relative', {
