@@ -146,11 +146,9 @@ module.exports = function (options) {
       } catch (exception) {
         switch (exception.name) {
         case 'ECORRUPT':
-          console.warn(exception.message);
-          break;
+          throw decl.error(exception.message);
         case 'ENOENT':
-          console.warn('%s\nLoad paths:\n  %s', exception.message, options.loadPaths.join('\n  '));
-          break;
+          throw decl.error(exception.message + '\nLoad paths:\n  ' + options.loadPaths.join('\n  '));
         default:
           throw exception;
         }
@@ -161,4 +159,4 @@ module.exports = function (options) {
 
 module.exports.postcss = function (cssTree) {
   module.exports()(cssTree);
-}
+};

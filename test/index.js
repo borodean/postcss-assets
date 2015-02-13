@@ -13,13 +13,17 @@ function fixture(name) {
   return fs.readFileSync('test/fixtures/' + name + '.css', 'utf8').trim();
 }
 
-function process(name, opts, postcssOpts) {
-  return postcss().use(plugin(opts)).process(fixture(name), postcssOpts).css.trim();
+function process(css, opts, postcssOpts) {
+  return postcss().use(plugin(opts)).process(css, postcssOpts).css.trim();
+}
+
+function processFixture(name, opts, postcssOpts) {
+  return process(fixture(name), opts, postcssOpts);
 }
 
 function compareFixtures(name, opts, postcssOpts) {
   return function () {
-    var actual = process(name, opts, postcssOpts);
+    var actual = processFixture(name, opts, postcssOpts);
     var expected = fixture(name + '.expected');
 
     fs.writeFile('test/fixtures/' + name + '.actual.css', actual);
@@ -70,9 +74,11 @@ describe('path resolving', function () {
     loadPaths: ['alpha/']
   }));
 
-  it('does nothing', compareFixtures('resolve-notfound', {
-    basePath: 'test/fixtures'
-  }));
+  it('throws an error', function () {
+    expect(function () {
+      process('body { background: resolve("three-bears.jpg"); }');
+    }).to.throw('Asset not found or unreadable');
+  });
 });
 
 describe('path inlining', function () {
@@ -81,6 +87,12 @@ describe('path inlining', function () {
 
 describe('dimensions', function () {
   it('resolves dimensions', compareFixtures('dimensions', { basePath: 'test/fixtures/' }));
+
+  it('throws an error', function () {
+    expect(function () {
+      process('body { width: width("test/fixtures/alpha/invalid.jpg"); }');
+    }).to.throw('Image corrupted');
+  });
 });
 
 describe('cachebuster', function () {
@@ -90,10 +102,10 @@ describe('cachebuster', function () {
       loadPaths: ['test/fixtures/alpha/']
     };
 
-    var resultA = process('cachebuster', options);
+    var resultA = processFixture('cachebuster', options);
     modifyFile('test/fixtures/alpha/kateryna.jpg');
 
-    var resultB = process('cachebuster', options);
+    var resultB = processFixture('cachebuster', options);
 
     expect(resultA).to.not.equal(resultB);
   });
