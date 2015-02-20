@@ -1,4 +1,4 @@
-module.exports = function (string) {
+export default function (string) {
   string = string.toString();
   var value = parseFloat(string, 10);
   var unit = string.slice(-1).toUpperCase();

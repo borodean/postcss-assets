@@ -12,7 +12,7 @@ var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-module.exports = function (options) {
+var assets = function (options) {
 
   var inputPath;
 
@@ -167,6 +167,8 @@ module.exports = function (options) {
   };
 };
 
-module.exports.postcss = function (cssTree) {
-  module.exports()(cssTree);
+assets.postcss = function (cssTree) {
+  assets()(cssTree);
 };
+
+export default assets;

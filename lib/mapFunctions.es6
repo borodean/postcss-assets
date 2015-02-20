@@ -24,7 +24,7 @@ CSSString.prototype.toString = function () {
   return this.quotes + this.value + this.quotes;
 };
 
-module.exports = function mapFunctions(cssValue, map) {
+export default function (cssValue, map) {
   var ast = gonzales.srcToCSSP(cssValue, 'value');
 
   var traverse = function (node) {
