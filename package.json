@@ -18,9 +18,11 @@
   },
   "devDependencies": {
     "chai": "^2.0.0",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.0",
     "mocha": "^2.1.0"
   },
   "scripts": {
-    "test": "mocha -R spec test"
+    "test": "gulp"
   }
 }
