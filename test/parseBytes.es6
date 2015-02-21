@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import parseBytes from '../../lib/parseBytes';
+import parseBytes from '../lib/parseBytes';
 
 describe('parseBytes', function () {
   it('converts numbers', function () {

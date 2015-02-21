@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import unescapeCss from '../../lib/unescapeCss';
+import unescapeCss from '../lib/unescapeCss';
 
 describe('unescapeCss', function () {
   it('does nothing', function () {

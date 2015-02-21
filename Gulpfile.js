@@ -1,8 +1,9 @@
 var gulp = require('gulp');
 
 gulp.task('test', function () {
+  require('./');
   var mocha = require('gulp-mocha');
-  return gulp.src('test/index.js', {
+  return gulp.src('test/**/*.es6', {
     read: false
   })
     .pipe(mocha());
@@ -12,7 +13,6 @@ gulp.task('watch', ['default'], function () {
   gulp.watch([
     'index.js',
     'lib/**/*.es6',
-    'test/index.js',
     'test/**/*.es6'
   ], ['default']);
 });

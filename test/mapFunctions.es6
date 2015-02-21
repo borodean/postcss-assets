@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import mapFunctions from '../../lib/mapFunctions';
+import mapFunctions from '../lib/mapFunctions';
 
 const MAP = {
   'decrease': function (params) {

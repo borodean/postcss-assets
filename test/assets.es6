@@ -1,7 +1,7 @@
 import postcss from 'postcss';
 import { expect } from 'chai';
 
-import plugin from '../../lib/assets';
+import plugin from '../lib/assets';
 
 import fs from 'fs';
 
