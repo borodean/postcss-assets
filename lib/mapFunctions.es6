@@ -1,28 +1,27 @@
 import gonzales from 'gonzales';
 import list from 'postcss/lib/list';
 
-function CSSString (str) {
-  this.quotes = str[0];
+class CSSString {
+  constructor(string) {
+    this.quotes = string[0];
+    if (this.quotes === "'" || this.quotes === '"') {
+      this.value = string.slice(1, -1);
+    } else {
+      this.value = string;
+      this.quotes = '';
+    }
+  }
 
-  if (this.quotes === "'" || this.quotes === '"') {
-    this.value = str.slice(1, -1);
-  } else {
-    this.value = str;
-    this.quotes = '';
+  toString() {
+    if (!this.quotes && (this.value.indexOf("'") !== -1 || this.value.indexOf('"') !== -1)) {
+      this.quotes = "'";
+    }
+    if (this.quotes === '"') {
+      this.quotes = "'";
+    }
+    return this.quotes + this.value + this.quotes;
   }
 }
-
-CSSString.prototype.toString = function () {
-  if (!this.quotes && (this.value.indexOf("'") !== -1 || this.value.indexOf('"') !== -1)) {
-    this.quotes = "'";
-  }
-
-  if (this.quotes === '"') {
-    this.quotes = "'";
-  }
-
-  return this.quotes + this.value + this.quotes;
-};
 
 export default function (cssValue, map) {
   var ast = gonzales.srcToCSSP(cssValue, 'value');
