@@ -15,7 +15,7 @@ gulp.task('test', function () {
     }));
 });
 
-gulp.task('watch', ['default'], function () {
+gulp.task('watch', function () {
   gulp.watch([
     'index.js',
     'lib/**/*.es6',
