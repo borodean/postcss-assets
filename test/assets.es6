@@ -37,71 +37,55 @@ function modifyFile(path) {
   fs.utimesSync(path, atime, mtime);
 }
 
-describe('path resolving', function () {
-  it('resolves paths', compareFixtures('resolve'));
+describe('resolve', function () {
+  it('should resolve paths', compareFixtures('resolve'));
 
-  it('resolves relative to the basePath', compareFixtures('resolve-basepath', {
+  it('should resolve relative to the base path', compareFixtures('resolve-basepath', {
     basePath: 'test/fixtures'
   }));
 
-  it('resolves relative to the loadPaths', compareFixtures('resolve-loadpath', {
+  it('should resolve relative to the load paths', compareFixtures('resolve-loadpath', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/', 'beta/']
   }));
 
-  it('resolves with loadPaths of a various spelling', compareFixtures('resolve-loadpath', {
+  it('should resolve relative to the load paths of a funky spelling', compareFixtures('resolve-loadpath', {
     basePath: 'test/fixtures',
     loadPaths: ['./alpha/', 'beta']
   }));
 
-  it('resolves relative to the baseUrl', compareFixtures('resolve-baseurl-1', {
+  it('should resolve relative to the base URL', compareFixtures('resolve-baseurl-1', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'
   }));
 
-  it('resolves relative to the baseUrl', compareFixtures('resolve-baseurl-2', {
+  it('should resolve relative to the base URL respecting domain', compareFixtures('resolve-baseurl-2', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
   }));
 
-  it('resolves relative to the CSS file', compareFixtures('resolve-css-relative-paths', {
+  it('should resolve relative to the CSS file', compareFixtures('resolve-css-relative-paths', {
     basePath: 'test',
     loadPaths: ['fixtures/alpha']
   }));
 
-  it('resolves relative paths', compareFixtures('resolve-relative', {
+  it('should resolve relative paths', compareFixtures('resolve-relative', {
     basePath: 'test/fixtures/alpha',
     relativeTo: 'test/fixtures/beta'
   }));
 
-  it('recognizes various spelling', compareFixtures('resolve-spelling', {
+  it('should recognize funky spelling', compareFixtures('resolve-spelling', {
     basePath: 'test/fixtures',
     loadPaths: ['alpha/']
   }));
 
-  it('throws an error', function () {
+  it('should throw an error when an asset is unavailable', function () {
     expect(function () {
       process('body { background: resolve("three-bears.jpg"); }');
     }).to.throw('Asset not found or unreadable');
   });
-});
 
-describe('path inlining', function () {
-  it('base64-encodes assets', compareFixtures('inline', { basePath: 'test/fixtures/' }));
-});
-
-describe('dimensions', function () {
-  it('resolves dimensions', compareFixtures('dimensions', { basePath: 'test/fixtures/' }));
-
-  it('throws an error', function () {
-    expect(function () {
-      process('body { width: width("test/fixtures/alpha/invalid.jpg"); }');
-    }).to.throw('Image corrupted');
-  });
-});
-
-describe('cachebuster', function () {
-  it('busts cache', function () {
+  it('should bust cache', function () {
     var options = {
       cachebuster: true,
       loadPaths: ['test/fixtures/alpha/']
@@ -115,7 +99,7 @@ describe('cachebuster', function () {
     expect(resultA).to.not.equal(resultB);
   });
 
-  it('accepts buster function', function () {
+  it('should accept custom buster function', function () {
     var options = {
       cachebuster: function (path) {
         return path[path.length - 1];
@@ -124,5 +108,19 @@ describe('cachebuster', function () {
     };
 
     compareFixtures('cachebuster', options)();
+  });
+});
+
+describe('inline', function () {
+  it('should base64-encode assets', compareFixtures('inline', { basePath: 'test/fixtures/' }));
+});
+
+describe('width, height and size', function () {
+  it('should resolve dimensions', compareFixtures('dimensions', { basePath: 'test/fixtures/' }));
+
+  it('should throw an error when an image is corrupted', function () {
+    expect(function () {
+      process('body { width: width("test/fixtures/alpha/invalid.jpg"); }');
+    }).to.throw('Image corrupted');
   });
 });

@@ -26,11 +26,11 @@ function checkMapping (source, expectedResult) {
   };
 }
 
-describe('mapFunctions', function () {
-  it('maps functions', checkMapping('increase(100px)', '101px'));
-  it('maps sibling functions', checkMapping('increase(100px), decrease(100px)', '101px, 99px'));
-  it('maps nested functions', checkMapping('double(increase(100px))', '202px'));
-  it('skips unknown functions', checkMapping('unknown(100px)', 'unknown(100px)'));
-  it('maps inside unknown functions', checkMapping('unknown(increase(100px))', 'unknown(101px)'));
-  it('accepts multiple parameters', checkMapping('combine(20px, 15px)', '35px'));
+describe('mapFunctions()', function () {
+  it('should map functions', checkMapping('increase(100px)', '101px'));
+  it('should map sibling functions', checkMapping('increase(100px), decrease(100px)', '101px, 99px'));
+  it('should map nested functions', checkMapping('double(increase(100px))', '202px'));
+  it('should skip unknown functions', checkMapping('unknown(100px)', 'unknown(100px)'));
+  it('should map inside unknown functions', checkMapping('unknown(increase(100px))', 'unknown(101px)'));
+  it('should accept multiple parameters', checkMapping('combine(20px, 15px)', '35px'));
 });

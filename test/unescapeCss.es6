@@ -2,20 +2,16 @@ import { expect } from 'chai';
 
 import unescapeCss from '../lib/unescapeCss';
 
-describe('unescapeCss', function () {
-  it('does nothing', function () {
-    expect(unescapeCss('whatever')).to.equal('whatever');
-  });
-
-  it('unescapes simple chars', function () {
+describe('unescapeCss()', function () {
+  it('should unescape plain chars', function () {
     expect(unescapeCss('Romeo \\+ Juliette')).to.equal('Romeo + Juliette');
   });
 
-  it('unescapes ASCII chars', function () {
+  it('should unescape ASCII chars', function () {
     expect(unescapeCss('\\34\\32')).to.equal('42');
   });
 
-  it('unescapes Unicode chars', function () {
+  it('should unescape Unicode chars', function () {
     expect(unescapeCss('I \\2665  NY')).to.equal('I ♥ NY');
   });
 });
