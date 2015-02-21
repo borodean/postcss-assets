@@ -12,9 +12,6 @@ const MAP = {
   'double': function (params) {
     return parseFloat(params, 10) * 2 + 'px';
   },
-  'url': function (params) {
-    return 'url(https://github.com/' + params + ')';
-  },
   'combine': function (a, b) {
     return parseFloat(a, 10) + parseFloat(b, 10) + 'px';
   }
