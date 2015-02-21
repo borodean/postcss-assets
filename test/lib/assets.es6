@@ -1,9 +1,9 @@
-var postcss = require('postcss');
-var expect = require('chai').expect;
+import postcss from 'postcss';
+import { expect } from 'chai';
 
-var plugin = require('../../lib/assets');
+import plugin from '../../lib/assets';
 
-var fs = require('fs');
+import fs from 'fs';
 
 function fixturePath(name) {
   return 'test/fixtures/' + name + '.css';

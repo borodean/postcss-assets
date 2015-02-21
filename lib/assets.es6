@@ -1,16 +1,16 @@
-var vendor = require('postcss/lib/vendor');
+import vendor from 'postcss/lib/vendor';
 
-var mapFunctions = require('./mapFunctions');
-var parseBytes = require('./parseBytes');
-var unescapeCss = require('./unescapeCss');
+import mapFunctions from './mapFunctions';
+import parseBytes from './parseBytes';
+import unescapeCss from './unescapeCss';
 
-var fs = require('fs');
-var path = require('path');
-var url = require('url');
+import fs from 'fs';
+import path from 'path';
+import url from 'url';
 
-var cssesc = require('cssesc');
-var mime = require('mime');
-var sizeOf = require('image-size');
+import cssesc from 'cssesc';
+import mime from 'mime';
+import sizeOf from 'image-size';
 
 class Assets {
 

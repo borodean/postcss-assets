@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
+import { expect } from 'chai';
 
-var unescapeCss = require('../../lib/unescapeCss');
+import unescapeCss from '../../lib/unescapeCss';
 
 describe('unescapeCss', function () {
   it('does nothing', function () {

@@ -1,5 +1,5 @@
-var gonzales = require('gonzales');
-var list = require('postcss/lib/list');
+import gonzales from 'gonzales';
+import list from 'postcss/lib/list';
 
 function CSSString (str) {
   this.quotes = str[0];

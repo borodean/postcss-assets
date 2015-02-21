@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
+import { expect } from 'chai';
 
-var parseBytes = require('../../lib/parseBytes');
+import parseBytes from '../../lib/parseBytes';
 
 describe('parseBytes', function () {
   it('converts numbers', function () {
