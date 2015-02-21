@@ -12,43 +12,45 @@ var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 
-var assets = function (options) {
+class Assets {
 
-  var inputPath;
+  constructor(options = {}) {
+    this.options = options;
+    this.options.baseUrl = this.options.baseUrl || '/';
 
-  options = options || {};
-  options.baseUrl = options.baseUrl || '/';
+    if (this.options.basePath) {
+      this.options.basePath = path.resolve(this.options.basePath);
+    } else {
+      this.options.basePath = process.cwd();
+    }
 
-  if (options.basePath) {
-    options.basePath = path.resolve(options.basePath);
-  } else {
-    options.basePath = process.cwd();
+    if (this.options.loadPaths) {
+      this.options.loadPaths = this.options.loadPaths.map((loadPath) => {
+        return path.resolve(this.options.basePath, loadPath);
+      });
+    } else {
+      this.options.loadPaths = [];
+    }
+    this.options.loadPaths.unshift(this.options.basePath);
+
+    if (this.options.relativeTo) {
+      this.options.relativeTo = path.resolve(this.options.relativeTo);
+    } else {
+      this.options.relativeTo = false;
+    }
+
+    if (this.options.cachebuster === true) {
+      this.options.cachebuster = function (path) {
+        var mtime = fs.statSync(path).mtime;
+        return mtime.getTime().toString(16);
+      };
+    }
+
+    this.postcss = this.postcss.bind(this);
   }
 
-  if (options.loadPaths) {
-    options.loadPaths = options.loadPaths.map(function (loadPath) {
-      return path.resolve(options.basePath, loadPath);
-    });
-  } else {
-    options.loadPaths = [];
-  }
-  options.loadPaths.unshift(options.basePath);
-
-  if (options.relativeTo) {
-    options.relativeTo = path.resolve(options.relativeTo);
-  } else {
-    options.relativeTo = false;
-  }
-
-  if (options.cachebuster === true) {
-    options.cachebuster = function (path) {
-      var mtime = fs.statSync(path).mtime;
-      return mtime.getTime().toString(16);
-    };
-  }
-
-  function getImageSize(assetStr, density) {
-    var assetPath = resolvePath(assetStr.value);
+  getImageSize(assetStr, density) {
+    var assetPath = this.resolvePath(assetStr.value);
     var size;
     try {
       size = sizeOf(assetPath);
@@ -65,12 +67,12 @@ var assets = function (options) {
     }
   }
 
-  function matchPath(assetPath) {
+  matchPath(assetPath) {
     var exception, matchingPath;
-    if (typeof inputPath === 'string') {
-      var loadPaths = [path.dirname(inputPath)].concat(options.loadPaths);
+    if (typeof this.inputPath === 'string') {
+      var loadPaths = [path.dirname(this.inputPath)].concat(this.options.loadPaths);
     } else {
-      loadPaths = options.loadPaths;
+      loadPaths = this.options.loadPaths;
     }
     var isFound = loadPaths.some(function (loadPath) {
       matchingPath = path.join(loadPath, assetPath);
@@ -84,8 +86,8 @@ var assets = function (options) {
     return matchingPath;
   }
 
-  function resolveDataUrl(assetStr) {
-    var resolvedPath = resolvePath(assetStr);
+  resolveDataUrl(assetStr) {
+    var resolvedPath = this.resolvePath(assetStr);
     var mimeType = mime.lookup(resolvedPath);
     if (mimeType === 'image/svg+xml') {
       var data = cssesc(fs.readFileSync(resolvedPath).toString());
@@ -97,59 +99,59 @@ var assets = function (options) {
     return 'data:' + mimeType + ';' + encoding + ',' + data;
   }
 
-  function resolvePath(assetStr) {
+  resolvePath(assetStr) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
-    return matchPath(assetPath);
+    return this.matchPath(assetPath);
   }
 
-  function resolveUrl(assetStr) {
+  resolveUrl(assetStr) {
     var assetUrl = url.parse(unescapeCss(assetStr));
     var assetPath = decodeURI(assetUrl.pathname);
-    if (options.relativeTo) {
-      assetUrl.pathname = path.relative(options.relativeTo, matchPath(assetPath));
+    if (this.options.relativeTo) {
+      assetUrl.pathname = path.relative(this.options.relativeTo, this.matchPath(assetPath));
     } else {
-      var baseToAsset = path.relative(options.basePath, matchPath(assetPath));
-      assetUrl.pathname = url.resolve(options.baseUrl, baseToAsset);
+      var baseToAsset = path.relative(this.options.basePath, this.matchPath(assetPath));
+      assetUrl.pathname = url.resolve(this.options.baseUrl, baseToAsset);
     }
-    if (options.cachebuster) {
+    if (this.options.cachebuster) {
       if (assetUrl.search) {
         assetUrl.search = assetUrl.search + '&';
       } else {
         assetUrl.search = '?';
       }
-      assetUrl.search += options.cachebuster(resolvePath(assetPath));
+      assetUrl.search += this.options.cachebuster(this.resolvePath(assetPath));
     }
     return cssesc(url.format(assetUrl));
   }
 
-  return function (cssTree) {
-    cssTree.eachDecl(function (decl) {
+  postcss (cssTree) {
+    cssTree.eachDecl((decl) => {
 
-      inputPath = decl.source.input.file;
+      this.inputPath = decl.source.input.file;
 
       try {
         decl.value = mapFunctions(decl.value, {
-          'resolve': function (assetStr) {
-            assetStr.value = resolveUrl(assetStr.value);
+          'resolve': (assetStr) => {
+            assetStr.value = this.resolveUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },
 
-          'inline': function (assetStr) {
-            assetStr.value = resolveDataUrl(assetStr.value);
+          'inline': (assetStr) => {
+            assetStr.value = this.resolveDataUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },
 
-          'width': function (assetStr, density) {
-            return getImageSize(assetStr, density).width  + 'px';
+          'width': (assetStr, density) => {
+            return this.getImageSize(assetStr, density).width  + 'px';
           },
 
-          'height': function (assetStr, density) {
-            return getImageSize(assetStr, density).height + 'px';
+          'height': (assetStr, density) => {
+            return this.getImageSize(assetStr, density).height + 'px';
           },
 
-          'size': function (assetStr, density) {
-            var size = getImageSize(assetStr, density);
+          'size': (assetStr, density) => {
+            var size = this.getImageSize(assetStr, density);
             return size.width + 'px ' + size.height + 'px';
           }
         });
@@ -158,7 +160,7 @@ var assets = function (options) {
         case 'ECORRUPT':
           throw decl.error(exception.message);
         case 'ENOENT':
-          throw decl.error(exception.message + '\nLoad paths:\n  ' + options.loadPaths.join('\n  '));
+          throw decl.error(exception.message + '\nLoad paths:\n  ' + this.options.loadPaths.join('\n  '));
         default:
           throw exception;
         }
@@ -167,8 +169,12 @@ var assets = function (options) {
   };
 };
 
+var assets = function (options) {
+  return new Assets(options);
+};
+
 assets.postcss = function (cssTree) {
-  assets()(cssTree);
+  assets().postcss(cssTree);
 };
 
 export default assets;
