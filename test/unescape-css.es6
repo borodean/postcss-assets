@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import unescapeCss from '../lib/unescapeCss';
+import unescapeCss from '../lib/unescape-css';
 
 describe('unescapeCss()', function () {
   it('should unescape plain chars', function () {

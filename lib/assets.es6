@@ -1,7 +1,7 @@
 import vendor from 'postcss/lib/vendor';
 
-import mapFunctions from './mapFunctions';
-import unescapeCss from './unescapeCss';
+import mapFunctions from './map-functions';
+import unescapeCss from './unescape-css';
 
 import fs from 'fs';
 import path from 'path';
