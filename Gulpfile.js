@@ -6,7 +6,9 @@ gulp.task('test', function () {
   return gulp.src('test/**/*.es6', {
     read: false
   })
-    .pipe(mocha());
+    .pipe(mocha({
+      bail: true
+    }));
 });
 
 gulp.task('watch', ['default'], function () {
