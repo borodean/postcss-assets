@@ -13,17 +13,14 @@ import mime from 'mime';
 import sizeOf from 'image-size';
 
 class Assets {
-
   constructor(options = {}) {
     this.options = options;
     this.options.baseUrl = this.options.baseUrl || '/';
-
     if (this.options.basePath) {
       this.options.basePath = path.resolve(this.options.basePath);
     } else {
       this.options.basePath = process.cwd();
     }
-
     if (this.options.loadPaths) {
       this.options.loadPaths = this.options.loadPaths.map((loadPath) => {
         return path.resolve(this.options.basePath, loadPath);
@@ -32,26 +29,23 @@ class Assets {
       this.options.loadPaths = [];
     }
     this.options.loadPaths.unshift(this.options.basePath);
-
     if (this.options.relativeTo) {
       this.options.relativeTo = path.resolve(this.options.relativeTo);
     } else {
       this.options.relativeTo = false;
     }
-
     if (this.options.cachebuster === true) {
       this.options.cachebuster = function (path) {
         var mtime = fs.statSync(path).mtime;
         return mtime.getTime().toString(16);
       };
     }
-
     this.postcss = this.postcss.bind(this);
   }
 
   getImageSize(assetStr, density) {
-    var assetPath = this.resolvePath(assetStr.value);
-    var size;
+    var assetPath, err, size;
+    assetPath = this.resolvePath(assetStr.value);
     try {
       size = sizeOf(assetPath);
       if (typeof density !== 'undefined') {
@@ -61,20 +55,20 @@ class Assets {
       }
       return size;
     } catch (exception) {
-      var err = new Error("Image corrupted: " + assetPath);
+      err = new Error("Image corrupted: " + assetPath);
       err.name = 'ECORRUPT';
       throw err;
     }
   }
 
   matchPath(assetPath) {
-    var exception, matchingPath;
+    var exception, isFound, loadPaths, matchingPath;
     if (typeof this.inputPath === 'string') {
-      var loadPaths = [path.dirname(this.inputPath)].concat(this.options.loadPaths);
+      loadPaths = [path.dirname(this.inputPath)].concat(this.options.loadPaths);
     } else {
       loadPaths = this.options.loadPaths;
     }
-    var isFound = loadPaths.some(function (loadPath) {
+    isFound = loadPaths.some(function (loadPath) {
       matchingPath = path.join(loadPath, assetPath);
       return fs.existsSync(matchingPath);
     });
@@ -87,11 +81,12 @@ class Assets {
   }
 
   resolveDataUrl(assetStr) {
-    var resolvedPath = this.resolvePath(assetStr);
-    var mimeType = mime.lookup(resolvedPath);
+    var data, encoding, mimeType, resolvedPath;
+    resolvedPath = this.resolvePath(assetStr);
+    mimeType = mime.lookup(resolvedPath);
     if (mimeType === 'image/svg+xml') {
-      var data = cssesc(fs.readFileSync(resolvedPath).toString());
-      var encoding = 'utf8';
+      data = cssesc(fs.readFileSync(resolvedPath).toString());
+      encoding = 'utf8';
     } else {
       data = new Buffer(fs.readFileSync(resolvedPath), 'binary').toString('base64');
       encoding = 'base64';
@@ -106,12 +101,13 @@ class Assets {
   }
 
   resolveUrl(assetStr) {
-    var assetUrl = url.parse(unescapeCss(assetStr));
-    var assetPath = decodeURI(assetUrl.pathname);
+    var assetPath, assetUrl, baseToAsset;
+    assetUrl = url.parse(unescapeCss(assetStr));
+    assetPath = decodeURI(assetUrl.pathname);
     if (this.options.relativeTo) {
       assetUrl.pathname = path.relative(this.options.relativeTo, this.matchPath(assetPath));
     } else {
-      var baseToAsset = path.relative(this.options.basePath, this.matchPath(assetPath));
+      baseToAsset = path.relative(this.options.basePath, this.matchPath(assetPath));
       assetUrl.pathname = url.resolve(this.options.baseUrl, baseToAsset);
     }
     if (this.options.cachebuster) {
@@ -127,30 +123,24 @@ class Assets {
 
   postcss (cssTree) {
     cssTree.eachDecl((decl) => {
-
       this.inputPath = decl.source.input.file;
-
       try {
         decl.value = mapFunctions(decl.value, {
-          'resolve': (assetStr) => {
+          resolve: (assetStr) => {
             assetStr.value = this.resolveUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },
-
-          'inline': (assetStr) => {
+          inline: (assetStr) => {
             assetStr.value = this.resolveDataUrl(assetStr.value);
             return 'url(' + assetStr + ')';
           },
-
-          'width': (assetStr, density) => {
+          width: (assetStr, density) => {
             return this.getImageSize(assetStr, density).width  + 'px';
           },
-
-          'height': (assetStr, density) => {
+          height: (assetStr, density) => {
             return this.getImageSize(assetStr, density).height + 'px';
           },
-
-          'size': (assetStr, density) => {
+          size: (assetStr, density) => {
             var size = this.getImageSize(assetStr, density);
             return size.width + 'px ' + size.height + 'px';
           }
@@ -167,7 +157,7 @@ class Assets {
       }
     });
   };
-};
+}
 
 var assets = function (options) {
   return new Assets(options);

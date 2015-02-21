@@ -12,4 +12,4 @@ export default function (string) {
     break;
   }
   return Math.floor(value);
-};
+}

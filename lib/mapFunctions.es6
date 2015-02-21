@@ -24,35 +24,30 @@ class CSSString {
 }
 
 export default function (cssValue, map) {
-  var ast = gonzales.srcToCSSP(cssValue, 'value');
-
-  var traverse = function (node) {
-    var type = node[0];
-    var children = node.slice(1);
-
+  var ast, traverse;
+  ast = gonzales.srcToCSSP(cssValue, 'value');
+  traverse = function (node) {
+    var body, children, method, name, type;
+    type = node[0];
+    children = node.slice(1);
     if (type === 'funktion') {
-      var name = children[0][1];
-      var body = children[1].slice(1).map(function (x) {
-        return gonzales.csspToSrc(traverse(x));;
+      name = children[0][1];
+      body = children[1].slice(1).map(function (x) {
+        return gonzales.csspToSrc(traverse(x));
       }).join('');
-
-      var process = map[name];
-
-      if (typeof process === 'function') {
-        return ['raw', process.apply(this, list.comma(body).map(function (param) {
+      method = map[name];
+      if (typeof method === 'function') {
+        return ['raw', method.apply(this, list.comma(body).map(function (param) {
           return new CSSString(param);
         }))];
       }
     }
-
     return [type].concat(children.map(function (child) {
       if (Array.isArray(child)) {
         return traverse(child);
       }
-
       return child;
     }));
   };
-
   return gonzales.csspToSrc(traverse(ast));
-};
+}
