@@ -54,7 +54,7 @@ class Assets {
       }
       return size;
     } catch (exception) {
-      err = new Error("Image corrupted: " + assetPath);
+      err = new Error('Image corrupted: ' + assetPath);
       err.name = 'ECORRUPT';
       throw err;
     }
@@ -72,7 +72,7 @@ class Assets {
       return fs.existsSync(matchingPath);
     });
     if (!isFound) {
-      exception = new Error("Asset not found or unreadable: " + assetPath);
+      exception = new Error('Asset not found or unreadable: ' + assetPath);
       exception.name = 'ENOENT';
       throw exception;
     }
