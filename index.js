@@ -9,6 +9,7 @@ var path = require('path');
 var url = require('url');
 
 var cssesc = require('cssesc');
+var SvgEncoder = require("directory-encoder/lib/svg-uri-encoder.js");
 var mime = require('mime');
 var sizeOf = require('image-size');
 
@@ -88,7 +89,7 @@ module.exports = function (options) {
     var resolvedPath = resolvePath(assetStr);
     var mimeType = mime.lookup(resolvedPath);
     if (mimeType === 'image/svg+xml') {
-      var data = cssesc(fs.readFileSync(resolvedPath).toString());
+      var data = (new SvgEncoder(resolvedPath)).encode();
       var encoding = 'utf8';
     } else {
       data = new Buffer(fs.readFileSync(resolvedPath), 'binary').toString('base64');
