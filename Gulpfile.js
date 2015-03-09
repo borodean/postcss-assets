@@ -1,13 +1,8 @@
 var gulp = require('gulp');
 
 gulp.task('test', function () {
-  require('babel/register')({
-    // All the subsequent files required by node with the extension of `.es6`
-    // will be transformed to ES5
-    extensions: ['.es6']
-  });
   var mocha = require('gulp-mocha');
-  return gulp.src('test/**/*.es6', {
+  return gulp.src('test/**/*.js', {
     read: false
   })
     .pipe(mocha({
@@ -16,10 +11,10 @@ gulp.task('test', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch([
+  return gulp.watch([
     'index.js',
-    'lib/**/*.es6',
-    'test/**/*.es6'
+    'lib/**/*.js',
+    'test/**/*.js'
   ], ['default']);
 });
 
