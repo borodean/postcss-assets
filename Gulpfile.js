@@ -6,6 +6,12 @@ var javascripts = [
   'test/**/*.js'
 ];
 
+gulp.task('jscs', function () {
+  var jscs = require('gulp-jscs');
+  return gulp.src(javascripts)
+    .pipe(jscs());
+});
+
 gulp.task('lint', function () {
   var jshint = require('gulp-jshint');
   return gulp.src(javascripts)
