@@ -1,0 +1,21 @@
+{
+  "bitwise": true,
+  "boss": true,
+  "eqnull": true,
+  "expr": true,
+  "immed": true,
+  "indent": 2,
+  "laxbreak": true,
+  "loopfunc": true,
+  "maxlen": 200,
+  "mocha": true,
+  "newcap": true,
+  "noarg": true,
+  "node": true,
+  "noempty": true,
+  "nonew": true,
+  "strict": false,
+  "sub": true,
+  "trailing": true,
+  "undef": true
+}
