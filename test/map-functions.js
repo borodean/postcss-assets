@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 
 var mapFunctions = require('../lib/map-functions');
 
-const MAP = {
+var MAP = {
   'decrease': function (params) {
     return parseFloat(params, 10) - 1 + 'px';
   },
