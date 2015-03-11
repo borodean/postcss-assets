@@ -10,7 +10,10 @@ var javascripts = [
 gulp.task('jscs', function () {
   var jscs = require('gulp-jscs');
   return gulp.src(javascripts)
-    .pipe(jscs());
+    .pipe(jscs({
+      preset: 'yandex',
+      disallowMultipleVarDecl: 'exceptUndefined'
+    }));
 });
 
 gulp.task('lint', function () {

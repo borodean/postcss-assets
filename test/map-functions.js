@@ -3,21 +3,21 @@ var expect = require('chai').expect;
 var mapFunctions = require('../lib/map-functions');
 
 var MAP = {
-  'decrease': function (params) {
+  decrease: function (params) {
     return parseFloat(params, 10) - 1 + 'px';
   },
-  'increase': function (params) {
+  increase: function (params) {
     return parseFloat(params, 10) + 1 + 'px';
   },
-  'double': function (params) {
+  double: function (params) {
     return parseFloat(params, 10) * 2 + 'px';
   },
-  'combine': function (a, b) {
+  combine: function (a, b) {
     return parseFloat(a, 10) + parseFloat(b, 10) + 'px';
   }
 };
 
-function checkMapping (source, expectedResult) {
+function checkMapping(source, expectedResult) {
   return function () {
     expect(mapFunctions(source, MAP)).to.equal(expectedResult);
   };

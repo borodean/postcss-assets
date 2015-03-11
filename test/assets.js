@@ -18,7 +18,9 @@ function process(css, opts, postcssOpts) {
 }
 
 function processFixture(name, opts, postcssOpts) {
-  return process(fixture(name), opts, { from: fixturePath(name) });
+  return process(fixture(name), opts, {
+    from: fixturePath(name)
+  });
 }
 
 function compareFixtures(name, opts, postcssOpts) {
@@ -112,11 +114,15 @@ describe('resolve', function () {
 });
 
 describe('inline', function () {
-  it('should base64-encode assets', compareFixtures('inline', { basePath: 'test/fixtures/' }));
+  it('should base64-encode assets', compareFixtures('inline', {
+    basePath: 'test/fixtures/'
+  }));
 });
 
 describe('width, height and size', function () {
-  it('should resolve dimensions', compareFixtures('dimensions', { basePath: 'test/fixtures/' }));
+  it('should resolve dimensions', compareFixtures('dimensions', {
+    basePath: 'test/fixtures/'
+  }));
 
   it('should throw an error when an image is corrupted', function () {
     expect(function () {
