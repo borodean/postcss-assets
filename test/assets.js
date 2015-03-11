@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 var plugin = require('..');
 
 var fs = require('fs');
+var path = require('path');
 
 function fixturePath(name) {
   return 'test/fixtures/' + name + '.css';
@@ -33,10 +34,10 @@ function compareFixtures(name, opts, postcssOpts) {
   };
 }
 
-function modifyFile(path) {
-  var atime = fs.statSync(path).atime;
+function modifyFile(pathString) {
+  var atime = fs.statSync(pathString).atime;
   var mtime = new Date();
-  fs.utimesSync(path, atime, mtime);
+  fs.utimesSync(pathString, atime, mtime);
 }
 
 describe('resolve', function () {
@@ -101,15 +102,35 @@ describe('resolve', function () {
     expect(resultA).to.not.equal(resultB);
   });
 
-  it('should accept custom buster function', function () {
-    var options = {
-      cachebuster: function (path) {
-        return path[path.length - 1];
+  it('should accept custom buster function returning a string', function () {
+    compareFixtures('cachebuster-string', {
+      cachebuster: function () {
+        return 'cachebuster';
       },
       loadPaths: ['test/fixtures/alpha/']
-    };
+    })();
+  });
 
-    compareFixtures('cachebuster', options)();
+  it('should accept custom buster function returning an object', function () {
+    compareFixtures('cachebuster-object', {
+      cachebuster: function (filePath, urlPathname) {
+        var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
+        return {
+          pathname: path.dirname(urlPathname) + '/' + filename,
+          query: 'buster'
+        };
+      },
+      loadPaths: ['test/fixtures/alpha/']
+    })();
+  });
+
+  it('should accept custom buster function returning a falsy value', function () {
+    compareFixtures('cachebuster-falsy', {
+      cachebuster: function () {
+        return;
+      },
+      loadPaths: ['test/fixtures/alpha/']
+    })();
   });
 });
 
