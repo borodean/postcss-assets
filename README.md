@@ -166,10 +166,10 @@ Busting the cache via path:
 
 ```js
 var options = {
-  cachebuster: function (resolvedFilePath, resolvedUrlPathname) {
-    var hash = fs.statSync(resolvedFilePath).mtime.getTime().toString(16);
+  cachebuster: function (filePath, urlPathname) {
+    var hash = fs.statSync(filePath).mtime.getTime().toString(16);
     return {
-      pathname: path.dirname(resolvedUrlPathname) + '/' + path.basename(resolvedUrlPathname, path.extname(resolvedUrlPathname)) + hash + path.extname(resolvedUrlPathname),
+      pathname: path.dirname(urlPathname) + '/' + path.basename(urlPathname, path.extname(urlPathname)) + hash + path.extname(urlPathname),
       query: false // you may omit this one
     }
   }
