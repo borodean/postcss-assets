@@ -1,5 +1,3 @@
-var vendor = require('postcss/lib/vendor');
-
 var mapFunctions = require('./lib/map-functions');
 var unescapeCss = require('./lib/unescape-css');
 
@@ -49,8 +47,8 @@ Assets.prototype.getImageSize = function (assetStr, density) {
     size = sizeOf(assetPath);
     if (typeof density !== 'undefined') {
       density = parseFloat(density.value, 10);
-      size.width  = +(size.width  / density).toFixed(4);
-      size.height = +(size.height / density).toFixed(4);
+      size.width  = Number((size.width  / density).toFixed(4));
+      size.height = Number((size.height / density).toFixed(4));
     }
     return size;
   } catch (exception) {

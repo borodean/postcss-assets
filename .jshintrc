@@ -1,0 +1,16 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "devel": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "latedef": true,
+  "loopfunc": true,
+  "mocha": true,
+  "noarg": true,
+  "node": true,
+  "nonbsp": true,
+  "nonew": true,
+  "undef": true,
+  "unused": true
+}
