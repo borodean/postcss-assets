@@ -100,7 +100,7 @@ Assets.prototype.resolvePath = function (assetStr) {
 };
 
 Assets.prototype.resolveUrl = function (assetStr) {
-  var assetPath, assetUrl, baseToAsset;
+  var assetPath, assetUrl, baseToAsset, cachebusterOutput;
   assetUrl = url.parse(unescapeCss(assetStr));
   assetPath = decodeURI(assetUrl.pathname);
   if (this.options.relativeTo) {
@@ -110,12 +110,26 @@ Assets.prototype.resolveUrl = function (assetStr) {
     assetUrl.pathname = url.resolve(this.options.baseUrl, baseToAsset);
   }
   if (this.options.cachebuster) {
-    if (assetUrl.search) {
-      assetUrl.search = assetUrl.search + '&';
-    } else {
-      assetUrl.search = '?';
+    var cachebusterOutput = this.options.cachebuster(this.resolvePath(assetPath), assetUrl.pathname);
+    if (cachebusterOutput) {
+      if (typeof cachebusterOutput === 'string') {
+        if (assetUrl.search) {
+          assetUrl.search = assetUrl.search + '&' + cachebusterOutput;
+        } else {
+          assetUrl.search = '?' + cachebusterOutput;
+        }
+      }
+      if (cachebusterOutput.path) {
+        assetUrl.pathname = cachebusterOutput.path;
+      }
+      if (cachebusterOutput.query) {
+        if (assetUrl.search) {
+          assetUrl.search = assetUrl.search + '&' + cachebusterOutput.query;
+        } else {
+          assetUrl.search = '?' + cachebusterOutput.query;
+        }
+      }
     }
-    assetUrl.search += this.options.cachebuster(this.resolvePath(assetPath));
   }
   return cssesc(url.format(assetUrl));
 };
