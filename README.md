@@ -148,8 +148,30 @@ To define a custom cachebuster pass a function as an option:
 
 ```js
 var options = {
-  cachebuster: function (path) {
-    return fs.statSync(path).mtime.getTime().toString(16);
+  cachebuster: function (filePath, urlPathname) {
+    return fs.statSync(filePath).mtime.getTime().toString(16);
+  }
+};
+```
+
+If the returned value is falsy, no cache busting is done for the asset.
+
+If the returned value is an object the values of `pathname` and/or `query` are used to generate a cache busted path to the asset.
+
+If the returned value is a string, it is added as a query string.
+
+The returned values for query strings must not include the starting `?`.
+
+Busting the cache via path:
+
+```js
+var options = {
+  cachebuster: function (resolvedFilePath, resolvedUrlPathname) {
+    var hash = fs.statSync(resolvedFilePath).mtime.getTime().toString(16);
+    return {
+      pathname: path.dirname(resolvedUrlPathname) + '/' + path.basename(resolvedUrlPathname, path.extname(resolvedUrlPathname)) + hash + path.extname(resolvedUrlPathname),
+      query: false // you may omit this one
+    }
   }
 };
 ```
