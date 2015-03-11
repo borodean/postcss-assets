@@ -18,8 +18,10 @@ function process(css, opts, postcssOpts) {
   return postcss().use(plugin(opts)).process(css, postcssOpts).css.trim();
 }
 
-function processFixture(name, opts, postcssOpts) {
-  return process(fixture(name), opts, { from: fixturePath(name) });
+function processFixture(name, opts) {
+  return process(fixture(name), opts, {
+    from: fixturePath(name)
+  });
 }
 
 function compareFixtures(name, opts, postcssOpts) {
@@ -112,8 +114,9 @@ describe('resolve', function () {
   it('should accept custom buster function returning an object', function () {
     compareFixtures('cachebuster-object', {
       cachebuster: function (filePath, urlPathname) {
+        var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
         return {
-          pathname: path.dirname(urlPathname) + '/' + path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname),
+          pathname: path.dirname(urlPathname) + '/' + filename,
           query: 'buster'
         };
       },
@@ -123,7 +126,7 @@ describe('resolve', function () {
 
   it('should accept custom buster function returning a falsy value', function () {
     compareFixtures('cachebuster-falsy', {
-      cachebuster: function (filePath, urlPathname) {
+      cachebuster: function () {
         return;
       },
       loadPaths: ['test/fixtures/alpha/']
@@ -132,11 +135,15 @@ describe('resolve', function () {
 });
 
 describe('inline', function () {
-  it('should base64-encode assets', compareFixtures('inline', { basePath: 'test/fixtures/' }));
+  it('should base64-encode assets', compareFixtures('inline', {
+    basePath: 'test/fixtures/'
+  }));
 });
 
 describe('width, height and size', function () {
-  it('should resolve dimensions', compareFixtures('dimensions', { basePath: 'test/fixtures/' }));
+  it('should resolve dimensions', compareFixtures('dimensions', {
+    basePath: 'test/fixtures/'
+  }));
 
   it('should throw an error when an image is corrupted', function () {
     expect(function () {
