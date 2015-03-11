@@ -8,6 +8,7 @@ var url = require('url');
 var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
+var SVGEncoder = require('directory-encoder/lib/svg-uri-encoder.js');
 
 var Assets = function (options) {
   var self = this;
@@ -78,17 +79,14 @@ Assets.prototype.matchPath = function (assetPath) {
 };
 
 Assets.prototype.resolveDataUrl = function (assetStr) {
-  var data, encoding, mimeType, resolvedPath;
+  var data, mimeType, resolvedPath;
   resolvedPath = this.resolvePath(assetStr);
   mimeType = mime.lookup(resolvedPath);
   if (mimeType === 'image/svg+xml') {
-    data = cssesc(fs.readFileSync(resolvedPath).toString());
-    encoding = 'utf8';
-  } else {
-    data = new Buffer(fs.readFileSync(resolvedPath), 'binary').toString('base64');
-    encoding = 'base64';
+    return (new SVGEncoder(resolvedPath)).encode();
   }
-  return 'data:' + mimeType + ';' + encoding + ',' + data;
+  data = new Buffer(fs.readFileSync(resolvedPath), 'binary').toString('base64');
+  return 'data:' + mimeType + ';base64,' + data;
 };
 
 Assets.prototype.resolvePath = function (assetStr) {
