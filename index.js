@@ -1,5 +1,3 @@
-var vendor = require('postcss/lib/vendor');
-
 var mapFunctions = require('./lib/map-functions');
 var unescapeCss = require('./lib/unescape-css');
 

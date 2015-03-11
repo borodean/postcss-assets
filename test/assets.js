@@ -17,7 +17,7 @@ function process(css, opts, postcssOpts) {
   return postcss().use(plugin(opts)).process(css, postcssOpts).css.trim();
 }
 
-function processFixture(name, opts, postcssOpts) {
+function processFixture(name, opts) {
   return process(fixture(name), opts, {
     from: fixturePath(name)
   });
