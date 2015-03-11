@@ -111,9 +111,9 @@ describe('resolve', function () {
 
   it('should accept custom buster function returning an object', function () {
     compareFixtures('cachebuster-object', {
-      cachebuster: function (pathString, urlString) {
+      cachebuster: function (filePath, urlPathname) {
         return {
-          path: path.dirname(urlString) + '/' + path.basename(urlString, path.extname(urlString)) + '.cache' + path.extname(urlString),
+          pathname: path.dirname(urlPathname) + '/' + path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname),
           query: 'buster'
         };
       },
@@ -123,7 +123,7 @@ describe('resolve', function () {
 
   it('should accept custom buster function returning a falsy value', function () {
     compareFixtures('cachebuster-falsy', {
-      cachebuster: function (pathString, urlString) {
+      cachebuster: function (filePath, urlPathname) {
         return;
       },
       loadPaths: ['test/fixtures/alpha/']

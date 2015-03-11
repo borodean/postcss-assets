@@ -119,8 +119,8 @@ Assets.prototype.resolveUrl = function (assetStr) {
           assetUrl.search = '?' + cachebusterOutput;
         }
       }
-      if (cachebusterOutput.path) {
-        assetUrl.pathname = cachebusterOutput.path;
+      if (cachebusterOutput.pathname) {
+        assetUrl.pathname = cachebusterOutput.pathname;
       }
       if (cachebusterOutput.query) {
         if (assetUrl.search) {
