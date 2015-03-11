@@ -38,4 +38,4 @@ gulp.task('watch', function () {
   return gulp.watch(javascripts, ['default']);
 });
 
-gulp.task('default', ['test']);
+gulp.task('default', ['lint', 'jscs', 'test']);
