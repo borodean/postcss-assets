@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 
 var javascripts = [
+  'Gulpfile.js',
   'index.js',
   'lib/**/*.js',
   'test/**/*.js'
