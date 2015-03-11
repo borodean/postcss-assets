@@ -169,7 +169,9 @@ var options = {
   cachebuster: function (filePath, urlPathname) {
     var hash = fs.statSync(filePath).mtime.getTime().toString(16);
     return {
-      pathname: path.dirname(urlPathname) + '/' + path.basename(urlPathname, path.extname(urlPathname)) + hash + path.extname(urlPathname),
+      pathname: path.dirname(urlPathname)
+        + '/' + path.basename(urlPathname, path.extname(urlPathname))
+        + hash + path.extname(urlPathname),
       query: false // you may omit this one
     }
   }
