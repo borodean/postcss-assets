@@ -49,7 +49,7 @@ Assets.prototype.getImageSize = function (assetStr, density) {
   assetPath = this.resolvePath(assetStr.value);
   try {
     size = sizeOf(assetPath);
-    if (typeof density !== 'undefined') {
+    if (density !== undefined) {
       density = parseFloat(density.value, 10);
       size.width  = Number((size.width  / density).toFixed(4));
       size.height = Number((size.height / density).toFixed(4));
