@@ -1,14 +1,17 @@
-var mapFunctions = require('./lib/map-functions');
-var unescapeCss = require('./lib/unescape-css');
-
+// Native imports
 var fs = require('fs');
 var path = require('path');
 var url = require('url');
 
+// Vendor imports
 var cssesc = require('cssesc');
 var mime = require('mime');
 var sizeOf = require('image-size');
 var SVGEncoder = require('directory-encoder/lib/svg-uri-encoder.js');
+
+// Local imports
+var mapFunctions = require('./lib/map-functions');
+var unescapeCss = require('./lib/unescape-css');
 
 var Assets = function (options) {
   var self = this;

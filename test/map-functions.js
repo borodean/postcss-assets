@@ -1,5 +1,7 @@
+// Vendor imports
 var expect = require('chai').expect;
 
+// Local imports
 var mapFunctions = require('../lib/map-functions');
 
 var MAP = {

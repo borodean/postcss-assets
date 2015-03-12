@@ -1,10 +1,13 @@
+// Native imports
+var fs = require('fs');
+var path = require('path');
+
+// Vendor imports
 var postcss = require('postcss');
 var expect = require('chai').expect;
 
+// Local imports
 var plugin = require('..');
-
-var fs = require('fs');
-var path = require('path');
 
 function fixturePath(name) {
   return 'test/fixtures/' + name + '.css';
