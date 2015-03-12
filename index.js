@@ -133,9 +133,9 @@ Assets.prototype.resolveUrl = function (assetStr) {
   return cssesc(url.format(assetUrl));
 };
 
-Assets.prototype.postcss = function (cssTree) {
+Assets.prototype.postcss = function (css) {
   var self = this;
-  cssTree.eachDecl(function (decl) {
+  css.eachDecl(function (decl) {
     self.inputPath = decl.source.input.file;
     try {
       decl.value = mapFunctions(decl.value, {
@@ -175,8 +175,8 @@ var assets = function (options) {
   return new Assets(options);
 };
 
-assets.postcss = function (cssTree) {
-  assets().postcss(cssTree);
+assets.postcss = function (css) {
+  assets().postcss(css);
 };
 
 module.exports = assets;
