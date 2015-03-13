@@ -103,36 +103,30 @@ describe('resolve', function () {
     expect(resultA).to.not.equal(resultB);
   });
 
-  it('should accept custom buster function returning a string', function () {
-    test('resolve-cachebuster-string', {
-      cachebuster: function () {
-        return 'cachebuster';
-      },
-      loadPaths: ['test/fixtures/alpha/']
-    })();
-  });
+  it('should accept custom buster function returning a string', test('resolve-cachebuster-string', {
+    cachebuster: function () {
+      return 'cachebuster';
+    },
+    loadPaths: ['test/fixtures/alpha/']
+  }));
 
-  it('should accept custom buster function returning an object', function () {
-    test('resolve-cachebuster-object', {
-      cachebuster: function (filePath, urlPathname) {
-        var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
-        return {
-          pathname: path.dirname(urlPathname) + '/' + filename,
-          query: 'buster'
-        };
-      },
-      loadPaths: ['test/fixtures/alpha/']
-    })();
-  });
+  it('should accept custom buster function returning an object', test('resolve-cachebuster-object', {
+    cachebuster: function (filePath, urlPathname) {
+      var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
+      return {
+        pathname: path.dirname(urlPathname) + '/' + filename,
+        query: 'buster'
+      };
+    },
+    loadPaths: ['test/fixtures/alpha/']
+  }));
 
-  it('should accept custom buster function returning a falsy value', function () {
-    test('resolve-cachebuster-falsy', {
-      cachebuster: function () {
-        return;
-      },
-      loadPaths: ['test/fixtures/alpha/']
-    })();
-  });
+  it('should accept custom buster function returning a falsy value', test('resolve-cachebuster-falsy', {
+    cachebuster: function () {
+      return;
+    },
+    loadPaths: ['test/fixtures/alpha/']
+  }));
 });
 
 describe('inline', function () {
