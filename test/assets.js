@@ -17,14 +17,11 @@ function fixture(name) {
   return fs.readFileSync(fixturePath(name), 'utf8').trim();
 }
 
-function process(css, opts, postcssOpts) {
-  return postcss().use(plugin(opts)).process(css, postcssOpts).css.trim();
-}
-
 function processFixture(name, opts) {
-  return process(fixture(name), opts, {
+  var css = fixture(name);
+  return postcss().use(plugin(opts)).process(css, {
     from: fixturePath(name)
-  });
+  }).css.trim();
 }
 
 function test(name, options) {
@@ -85,7 +82,7 @@ describe('resolve', function () {
 
   it('should throw an error when an asset is unavailable', function () {
     expect(function () {
-      process('body { background: resolve("three-bears.jpg"); }');
+      processFixture('resolve-invalid');
     }).to.throw('Asset not found or unreadable');
   });
 
@@ -142,7 +139,7 @@ describe('width, height and size', function () {
 
   it('should throw an error when an image is corrupted', function () {
     expect(function () {
-      process('body { width: width("test/fixtures/alpha/invalid.jpg"); }');
+      processFixture('dimensions-invalid');
     }).to.throw('Image corrupted');
   });
 });
