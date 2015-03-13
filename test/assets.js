@@ -58,12 +58,12 @@ describe('resolve', function () {
     loadPaths: ['./alpha/', 'beta']
   }));
 
-  it('should resolve relative to the base URL', test('resolve-baseurl-1', {
+  it('should resolve relative to the base URL', test('resolve-baseurl', {
     basePath: 'test/fixtures',
     baseUrl: '/content/theme/'
   }));
 
-  it('should resolve relative to the base URL respecting domain', test('resolve-baseurl-2', {
+  it('should resolve relative to the base URL respecting domain', test('resolve-baseurl-domain', {
     basePath: 'test/fixtures',
     baseUrl: 'http://example.com'
   }));
