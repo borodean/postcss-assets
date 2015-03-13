@@ -68,7 +68,7 @@ describe('resolve', function () {
     baseUrl: 'http://example.com'
   }));
 
-  it('should resolve relative to the CSS file', test('resolve-css-relative-paths', {
+  it('should resolve from source file location', test('resolve-from-source', {
     basePath: 'test',
     loadPaths: ['fixtures/alpha']
   }));
