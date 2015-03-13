@@ -31,8 +31,6 @@ function compareFixtures(name, opts, postcssOpts) {
   return function () {
     var actual = processFixture(name, opts, postcssOpts);
     var expected = fixture(name + '.expected');
-
-    fs.writeFile('test/fixtures/' + name + '.actual.css', actual);
     expect(actual).to.equal(expected);
   };
 }
