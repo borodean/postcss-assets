@@ -49,17 +49,17 @@ Assets.prototype.getImageSize = function (assetStr, density) {
   assetPath = this.resolvePath(assetStr.value);
   try {
     size = sizeOf(assetPath);
-    if (density !== undefined) {
-      density = parseFloat(density.value, 10);
-      size.width  = Number((size.width  / density).toFixed(4));
-      size.height = Number((size.height / density).toFixed(4));
-    }
-    return size;
   } catch (exception) {
     err = new Error('Image corrupted: ' + assetPath);
     err.name = 'ECORRUPT';
     throw err;
   }
+  if (density !== undefined) {
+    density = parseFloat(density.value, 10);
+    size.width  = Number((size.width  / density).toFixed(4));
+    size.height = Number((size.height / density).toFixed(4));
+  }
+  return size;
 };
 
 Assets.prototype.matchPath = function (assetPath) {
