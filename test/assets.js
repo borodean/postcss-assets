@@ -73,7 +73,7 @@ describe('resolve', function () {
     loadPaths: ['fixtures/alpha']
   }));
 
-  it('should resolve relative paths', test('resolve-relative', {
+  it('should resolve relative paths', test('resolve-relative-to', {
     basePath: 'test/fixtures/alpha',
     relativeTo: 'test/fixtures/beta'
   }));
