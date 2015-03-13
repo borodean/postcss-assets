@@ -9,18 +9,18 @@ var expect = require('chai').expect;
 // Local imports
 var plugin = require('..');
 
-function fixturePath(name) {
+function fixture(name) {
   return 'test/fixtures/' + name + '.css';
 }
 
 function readFixture(name) {
-  return fs.readFileSync(fixturePath(name), 'utf8').trim();
+  return fs.readFileSync(fixture(name), 'utf8').trim();
 }
 
 function processFixture(name, opts) {
   var css = readFixture(name);
   return postcss().use(plugin(opts)).process(css, {
-    from: fixturePath(name)
+    from: fixture(name)
   }).css.trim();
 }
 
