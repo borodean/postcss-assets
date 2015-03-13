@@ -95,16 +95,16 @@ describe('resolve', function () {
       loadPaths: ['test/fixtures/alpha/']
     };
 
-    var resultA = processFixture('cachebuster', options);
+    var resultA = processFixture('resolve-cachebuster', options);
     modifyFile('test/fixtures/alpha/kateryna.jpg');
 
-    var resultB = processFixture('cachebuster', options);
+    var resultB = processFixture('resolve-cachebuster', options);
 
     expect(resultA).to.not.equal(resultB);
   });
 
   it('should accept custom buster function returning a string', function () {
-    test('cachebuster-string', {
+    test('resolve-cachebuster-string', {
       cachebuster: function () {
         return 'cachebuster';
       },
@@ -113,7 +113,7 @@ describe('resolve', function () {
   });
 
   it('should accept custom buster function returning an object', function () {
-    test('cachebuster-object', {
+    test('resolve-cachebuster-object', {
       cachebuster: function (filePath, urlPathname) {
         var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
         return {
@@ -126,7 +126,7 @@ describe('resolve', function () {
   });
 
   it('should accept custom buster function returning a falsy value', function () {
-    test('cachebuster-falsy', {
+    test('resolve-cachebuster-falsy', {
       cachebuster: function () {
         return;
       },
