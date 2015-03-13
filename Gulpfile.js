@@ -27,14 +27,18 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test', function () {
+gulp.task('test', function (cb) {
+  var istanbul = require('gulp-istanbul');
   var mocha = require('gulp-mocha');
-  return gulp.src(javascripts.tests, {
-    read: false
-  })
-    .pipe(mocha({
-      bail: true
-    }));
+  gulp.src(javascripts.source)
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire())
+    .on('finish', function () {
+      gulp.src(javascripts.tests)
+        .pipe(mocha())
+        .pipe(istanbul.writeReports())
+        .on('end', cb);
+    });
 });
 
 gulp.task('watch', function () {
