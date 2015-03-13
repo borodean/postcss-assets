@@ -13,12 +13,12 @@ function fixturePath(name) {
   return 'test/fixtures/' + name + '.css';
 }
 
-function fixture(name) {
+function readFixture(name) {
   return fs.readFileSync(fixturePath(name), 'utf8').trim();
 }
 
 function processFixture(name, opts) {
-  var css = fixture(name);
+  var css = readFixture(name);
   return postcss().use(plugin(opts)).process(css, {
     from: fixturePath(name)
   }).css.trim();
@@ -27,7 +27,7 @@ function processFixture(name, opts) {
 function test(name, options) {
   return function () {
     var actual = processFixture(name, options);
-    var expected = fixture(name + '.expected');
+    var expected = readFixture(name + '.expected');
     expect(actual).to.equal(expected);
   };
 }
