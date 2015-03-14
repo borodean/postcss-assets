@@ -1,5 +1,7 @@
+// Vendor imports
 var expect = require('chai').expect;
 
+// Local imports
 var unescapeCss = require('../lib/unescape-css');
 
 describe('unescapeCss()', function () {

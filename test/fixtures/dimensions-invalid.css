@@ -1,0 +1,3 @@
+body {
+  width: width('test/fixtures/alpha/invalid.jpg');
+}
