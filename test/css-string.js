@@ -28,7 +28,7 @@ describe('CSSString', function () {
 
   it('should force quotes when any quotes were added to the value', function () {
     var unquoted = new CSSString('foobar');
-    unquoted.value = 'foo\'bar'
+    unquoted.value = 'foo\'bar';
     expect(unquoted.toString()).to.equal('\'foo\'bar\'');
   });
 });
