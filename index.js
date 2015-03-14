@@ -29,8 +29,7 @@ var Assets = function (options) {
   }
 
   if (this.options.loadPaths) {
-    // Resolve each load path from the base path and convert it to an absolute form
-    // Expand each of the load paths to an absolute form built from the base path
+    // Convert each of the load paths to an absolute form built from the base path
     this.options.loadPaths = this.options.loadPaths.map(function (loadPath) {
       return path.resolve(self.options.basePath, loadPath);
     });
