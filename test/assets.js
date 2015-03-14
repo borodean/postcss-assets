@@ -38,6 +38,14 @@ function modifyFile(pathString) {
   fs.utimesSync(pathString, atime, mtime);
 }
 
+describe('plugin', function () {
+  it('should have a postcss method for a PostCSS Root node to be passed', function () {
+    var actualResult = postcss().use(plugin.postcss).process(readFixture('resolve')).css.trim();
+    var expectedResult = readFixture('resolve.expected');
+    expect(actualResult).to.equal(expectedResult);
+  });
+});
+
 describe('resolve', function () {
   it('should resolve paths', test('resolve'));
 
