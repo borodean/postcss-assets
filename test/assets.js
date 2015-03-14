@@ -17,18 +17,16 @@ function readFixture(name) {
   return fs.readFileSync(fixture(name), 'utf8').trim();
 }
 
-function processFixture(name, opts) {
+function processFixture(name, options, postcssOptions) {
   var css = readFixture(name);
-  return postcss().use(plugin(opts)).process(css, {
-    from: fixture(name)
-  }).css.trim();
+  return postcss().use(plugin(options)).process(css, postcssOptions).css.trim();
 }
 
-function test(name, options) {
+function test(name, options, postcssOptions) {
   return function () {
-    var actual = processFixture(name, options);
-    var expected = readFixture(name + '.expected');
-    expect(actual).to.equal(expected);
+    var actualResult = processFixture(name, options, postcssOptions);
+    var expectedResult = readFixture(name + '.expected');
+    expect(actualResult).to.equal(expectedResult);
   };
 }
 
@@ -76,6 +74,8 @@ describe('resolve', function () {
   it('should resolve from source file location', test('resolve-from-source', {
     basePath: 'test',
     loadPaths: ['fixtures/alpha']
+  }, {
+    from: fixture('resolve-from-source')
   }));
 
   it('should resolve relative paths', test('resolve-relative-to', {
