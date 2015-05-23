@@ -1,6 +1,6 @@
 // Native imports
 var fs = require('fs');
-var path = require('path');
+var path = require('canonical-path');
 var url = require('url');
 
 // Vendor imports

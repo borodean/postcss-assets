@@ -9,6 +9,7 @@
     "url": "https://github.com/borodean/postcss-assets"
   },
   "dependencies": {
+    "canonical-path": "0.0.2",
     "cssesc": "^0.1.0",
     "directory-encoder": "^0.6.1",
     "gonzales": "^1.0.7",
