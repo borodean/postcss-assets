@@ -15,7 +15,8 @@ gulp.task('jscs', function () {
   return gulp.src(javascripts.all)
     .pipe(jscs({
       preset: 'yandex',
-      disallowMultipleVarDecl: 'exceptUndefined'
+      disallowMultipleVarDecl: 'exceptUndefined',
+      validateIndentation: 2
     }));
 });
 
