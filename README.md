@@ -1,4 +1,4 @@
-PostCSS Assets [![Build Status](https://travis-ci.org/borodean/postcss-assets.svg?branch=master)](https://travis-ci.org/borodean/postcss-assets) [![Coverage Status](https://coveralls.io/repos/borodean/postcss-assets/badge.svg?branch=master)]
+PostCSS Assets [![Build Status](https://travis-ci.org/borodean/postcss-assets.svg?branch=master)](https://travis-ci.org/borodean/postcss-assets) [![Coverage Status](https://coveralls.io/repos/borodean/postcss-assets/badge.svg?branch=master)](https://coveralls.io/r/borodean/postcss-assets?branch=master)
 ==============
 
 PostCSS Assets is an asset manager for CSS. It isolates stylesheets from environmental changes, gets image sizes and inlines files.
