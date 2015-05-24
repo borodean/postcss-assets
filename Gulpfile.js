@@ -10,6 +10,12 @@ javascripts.all = Object.keys(javascripts).reduce(function (result, key) {
   return result.concat(javascripts[key]);
 }, []);
 
+gulp.task('coveralls', function () {
+  var coveralls = require('gulp-coveralls');
+  return gulp.src('coverage/**/lcov.info')
+    .pipe(coveralls());
+});
+
 gulp.task('jscs', function () {
   var jscs = require('gulp-jscs');
   return gulp.src(javascripts.all)
