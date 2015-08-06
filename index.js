@@ -227,8 +227,13 @@ Assets.prototype.postcss = function (css) {
       decl.value = mapFunctions(decl.value, {
 
         // Get URL to an asset file
-        resolve: function (assetStr) {
+        resolve: function (assetStr, queryString) {
           assetStr.value = self.resolveUrl(assetStr.value);
+
+          if (queryString && queryString.value) {
+            assetStr.value += '?' + queryString.value;
+          }
+
           return 'url(' + assetStr + ')';
         },
 
