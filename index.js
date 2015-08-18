@@ -269,5 +269,7 @@ Assets.prototype.postcss = function (css) {
 };
 
 module.exports = postcss.plugin('postcss-assets', function (options) {
-  return new Assets(options);
+  var assets = new Assets(options);
+
+  return assets.postcss;
 });
