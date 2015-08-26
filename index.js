@@ -215,7 +215,7 @@ Assets.prototype.postcss = function (css) {
   var self = this;
 
   // Loop through every declaration
-  css.eachDecl(function (decl) {
+  css.walkDecls(function (decl) {
 
     // Store the input file path of the file being processed
     self.inputPath = decl.source.input.file;
