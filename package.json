@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "2.1.3",
+  "version": "3.0.0",
   "description": "PostCSS plugin to manage assets",
   "keywords": ["css", "postcss", "postcss-plugin"],
   "author": "Vadim Borodean <borodean@gmail.com>",
