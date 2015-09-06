@@ -2,7 +2,11 @@
   "name": "postcss-assets",
   "version": "3.0.0",
   "description": "PostCSS plugin to manage assets",
-  "keywords": ["css", "postcss", "postcss-plugin"],
+  "keywords": [
+    "css",
+    "postcss",
+    "postcss-plugin"
+  ],
   "author": "Vadim Borodean <borodean@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -22,11 +26,9 @@
     "chai": "^3.2.0",
     "gulp": "^3.9.0",
     "gulp-coveralls": "^0.1.4",
+    "gulp-eslint": "^1.0.0",
     "gulp-istanbul": "^0.10.0",
-    "gulp-jscs": "^2.0.0",
-    "gulp-jshint": "^1.11.2",
     "gulp-mocha": "^2.1.3",
-    "jshint-stylish": "^2.0.1",
     "mocha": "^2.2.5"
   },
   "scripts": {

@@ -16,22 +16,12 @@ gulp.task('coveralls', function () {
     .pipe(coveralls());
 });
 
-gulp.task('jscs', function () {
-  var jscs = require('gulp-jscs');
-  return gulp.src(javascripts.all)
-    .pipe(jscs({
-      preset: 'yandex',
-      disallowMultipleVarDecl: 'exceptUndefined',
-      validateIndentation: 2
-    }));
-});
-
 gulp.task('lint', function () {
-  var jshint = require('gulp-jshint');
+  var eshint = require('gulp-eslint');
   return gulp.src(javascripts.all)
-    .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'));
+    .pipe(eshint())
+    .pipe(eshint.format())
+    .pipe(eshint.failOnError());
 });
 
 gulp.task('test', function (cb) {
@@ -52,4 +42,4 @@ gulp.task('watch', function () {
   return gulp.watch(javascripts.all, ['default']);
 });
 
-gulp.task('default', ['lint', 'jscs', 'test']);
+gulp.task('default', ['lint', 'test']);
