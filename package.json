@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
     "css",
@@ -18,7 +18,7 @@
     "cssesc": "^0.1.0",
     "directory-encoder": "^0.7.2",
     "gonzales": "^1.0.7",
-    "image-size": "borodean/image-size",
+    "image-size": "https://github.com/borodean/image-size/archive/da2c863807a3e9602617bdd357b0de3ab4a064c1.tar.gz",
     "mime": "^1.3.4",
     "postcss": "^5.0.0"
   },
