@@ -62,6 +62,8 @@ grunt.initConfig({
 });
 ```
 
+**Note: all of the listed options below are parameters for the ```assets``` object, not the top level postcss options object.**
+
 URL resolution
 --------------
 
