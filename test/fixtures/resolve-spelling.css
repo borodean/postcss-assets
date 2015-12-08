@@ -16,4 +16,5 @@ body {
   background: resolve('kateryna.jpg#baz');
   background: resolve('Gupsy Fortuneteller.jpg');
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
+  font-size ;
 }
