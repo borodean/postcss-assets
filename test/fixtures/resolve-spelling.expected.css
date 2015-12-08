@@ -16,4 +16,5 @@ body {
   background: url('/alpha/kateryna.jpg#baz');
   background: url('/alpha/Gupsy%20Fortuneteller.jpg');
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
+  font-size: ;
 }
