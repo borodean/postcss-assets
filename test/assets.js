@@ -19,14 +19,19 @@ function readFixture(name) {
 
 function processFixture(name, options, postcssOptions) {
   var css = readFixture(name);
-  return postcss().use(plugin(options)).process(css, postcssOptions).css.trim();
+  return postcss().use(plugin(options)).process(css, postcssOptions)
+    .then(function (result) {
+      return result.css.trim();
+    });
 }
 
 function test(name, options, postcssOptions) {
   return function () {
-    var actualResult = processFixture(name, options, postcssOptions);
     var expectedResult = readFixture(name + '.expected');
-    expect(actualResult).to.equal(expectedResult);
+    return processFixture(name, options, postcssOptions)
+      .then(function (actualResult) {
+        expect(actualResult).to.equal(expectedResult);
+      });
   };
 }
 
@@ -38,9 +43,12 @@ function modifyFile(pathString) {
 
 describe('plugin', function () {
   it('should have a postcss method for a PostCSS Root node to be passed', function () {
-    var actualResult = postcss().use(plugin.postcss).process(readFixture('resolve')).css.trim();
     var expectedResult = readFixture('resolve.expected');
-    expect(actualResult).to.equal(expectedResult);
+    postcss().use(plugin.postcss).process(readFixture('resolve'))
+      .then(function (result) {
+        var actualResult = result.css.trim();
+        expect(actualResult).to.equal(expectedResult);
+      });
   });
 });
 
@@ -79,8 +87,8 @@ describe('resolve', function () {
   }));
 
   it('should resolve relative paths', test('resolve-relative-to', {
-    basePath: 'test/fixtures/alpha',
-    relativeTo: 'test/fixtures/beta'
+    basePath: 'test/fixtures',
+    relativeTo: 'beta'
   }));
 
   it('should recognize funky spelling', test('resolve-spelling', {
@@ -88,10 +96,12 @@ describe('resolve', function () {
     loadPaths: ['alpha/']
   }));
 
-  it('should throw an error when an asset is unavailable', function () {
-    expect(function () {
-      processFixture('resolve-invalid');
-    }).to.throw('Asset not found or unreadable');
+  it('should reject with an error when an asset is unavailable', function () {
+    return processFixture('resolve-invalid')
+      .catch(function (err) {
+        expect(err).to.be.and.instanceof(Error);
+        expect(err.message).to.contain('Asset not found or unreadable');
+      });
   });
 
   it('should bust cache', function () {
@@ -145,9 +155,11 @@ describe('width, height and size', function () {
     basePath: 'test/fixtures/'
   }));
 
-  it('should throw an error when an image is corrupted', function () {
-    expect(function () {
-      processFixture('dimensions-invalid');
-    }).to.throw('Image corrupted');
+  it('should reject with an error when an image is corrupted', function () {
+    return processFixture('dimensions-invalid')
+      .catch(function (err) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(err.message).to.contain('File type not supported');
+      });
   });
 });
