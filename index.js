@@ -1,4 +1,4 @@
-var AssetResolver = require('asset-resolver');
+var Assets = require('assets');
 var functions = require('postcss-functions');
 var path = require('path');
 var postcss = require('postcss');
@@ -8,7 +8,7 @@ var unquote = require('./lib/unquote');
 var util = require('util');
 
 module.exports = postcss.plugin('postcss-assets', function (options) {
-  var resolver = AssetResolver(options);
+  var resolver = Assets(options);
 
   function measure (path, density) {
     return resolver.size(path)

@@ -14,7 +14,7 @@
     "url": "https://github.com/borodean/postcss-assets"
   },
   "dependencies": {
-    "asset-resolver": "git://github.com/borodean/asset-resolver.git#develop",
+    "assets": "^1.0.0",
     "canonical-path": "0.0.2",
     "cssesc": "^0.1.0",
     "directory-encoder": "^0.7.2",
