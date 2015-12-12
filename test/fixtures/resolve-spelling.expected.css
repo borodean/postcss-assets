@@ -1,8 +1,8 @@
 body {
   color: red;
-  background: url(/alpha/kateryna.jpg);
-  background: url(/alpha/kateryna.jpg);
-  background: no-repeat url(/alpha/kateryna.jpg) #000;
+  background: url('/alpha/kateryna.jpg');
+  background: url('/alpha/kateryna.jpg');
+  background: no-repeat url('/alpha/kateryna.jpg') #000;
   background:
     url('/alpha/kateryna.jpg'),
     url('/alpha/odalisque.jpg');

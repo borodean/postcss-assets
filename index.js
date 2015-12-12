@@ -1,9 +1,10 @@
 var AssetResolver = require('asset-resolver');
-var CSSString = require('./lib/css-string');
 var functions = require('postcss-functions');
 var path = require('path');
 var postcss = require('postcss');
+var quote = require('./lib/quote');
 var unescapeCss = require('./lib/unescape-css');
+var unquote = require('./lib/unquote');
 var util = require('util');
 
 module.exports = postcss.plugin('postcss-assets', function (options) {
@@ -29,38 +30,36 @@ module.exports = postcss.plugin('postcss-assets', function (options) {
     .use(functions({
       functions: {
         resolve: function (path) {
-          path = new CSSString(unescapeCss(path));
-          return resolver.url(path.value)
+          path = unquote(unescapeCss(path));
+          return resolver.url(path)
             .then(function (url) {
-              path.value = url;
-              return util.format('url(%s)', path);
+              return util.format('url(%s)', quote(url));
             });
         },
         inline: function (path) {
-          path = new CSSString(unescapeCss(path));
-          return resolver.data(path.value)
+          path = unquote(unescapeCss(path));
+          return resolver.data(path)
             .then(function (data) {
-              path.value = data;
-              return util.format('url(%s)', path);
+              return util.format('url(%s)', quote(data));
             });
         },
         size: function (path, density) {
-          path = new CSSString(unescapeCss(path));
-          return measure(path.value, density)
+          path = unquote(unescapeCss(path));
+          return measure(path, density)
             .then(function (size) {
               return util.format('%dpx %dpx', size.width, size.height);
             });
         },
         width: function (path, density) {
-          path = new CSSString(unescapeCss(path));
-          return measure(path.value, density)
+          path = unquote(unescapeCss(path));
+          return measure(path, density)
             .then(function (size) {
               return util.format('%dpx', size.width);
             });
         },
         height: function (path, density) {
-          path = new CSSString(unescapeCss(path));
-          return measure(path.value, density)
+          path = unquote(unescapeCss(path));
+          return measure(path, density)
             .then(function (size) {
               return util.format('%dpx', size.height);
             });
