@@ -95,7 +95,7 @@ Assets.prototype.matchPath = function (assetPath) {
   // If inputPath was provided then prepend it to the list of load paths,
   // otherwise leave them as they were
   if (typeof this.inputPath === 'string') {
-    loadPaths = [path.dirname(this.inputPath)].concat(this.options.loadPaths);
+    loadPaths = this.options.loadPaths.concat([path.dirname(this.inputPath)]);
   } else {
     loadPaths = this.options.loadPaths;
   }
