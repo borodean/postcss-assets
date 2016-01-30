@@ -1,23 +1,21 @@
 /* eslint quotes: 0 */
 
-var expect = require('chai').expect;
 var quote = require('../lib/quote');
+var test = require('ava');
 
-describe('quote()', function () {
-  it('adds quotes', function () {
-    expect(quote("foo")).to.equal("'foo'");
-  });
+test('adds quotes', function (t) {
+  t.is(quote("foo"), "'foo'");
+});
 
-  it('preserves quoted strings', function () {
-    expect(quote("'foo'")).to.equal("'foo'");
-    expect(quote('"foo"')).to.equal('"foo"');
-  });
+test('preserves quoted strings', function (t) {
+  t.is(quote("'foo'"), "'foo'");
+  t.is(quote('"foo"'), '"foo"');
+});
 
-  it('escapes inner quotes', function () {
-    expect(quote("foo'bar'baz")).to.equal("'foo\\'bar\\'baz'");
-  });
+test('escapes inner quotes', function (t) {
+  t.is(quote("foo'bar'baz"), "'foo\\'bar\\'baz'");
+});
 
-  it('preserves already escaped quotes', function () {
-    expect(quote("foo\\'bar\\'baz")).to.equal("'foo\\'bar\\'baz'");
-  });
+test('preserves already escaped quotes', function (t) {
+  t.is(quote("foo\\'bar\\'baz"), "'foo\\'bar\\'baz'");
 });

@@ -3,31 +3,31 @@
   "version": "3.0.3",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
+    "assets",
+    "base64",
     "css",
+    "image",
+    "path",
     "postcss",
-    "postcss-plugin"
+    "postcss-plugin",
+    "size",
+    "url"
   ],
-  "author": "Vadym Borodin <borodean@gmail.com>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/borodean/postcss-assets"
+  "author": "Vadym Borodin <borodean@gmail.com>",
+  "repository": "assetsjs/postcss-assets",
+  "scripts": {
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
-    "assets": "^1.0.0",
+    "assets": "^2.0.0",
     "postcss": "^5.0.12",
     "postcss-functions": "^2.1.0"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
-    "gulp": "^3.9.0",
-    "gulp-coveralls": "^0.1.4",
-    "gulp-eslint": "^1.1.0",
-    "gulp-istanbul": "^0.10.3",
-    "gulp-mocha": "^2.2.0"
-  },
-  "scripts": {
-    "test": "gulp",
-    "coveralls": "gulp coveralls"
+    "ava": "^0.11.0",
+    "eslint": "^1.10.3",
+    "nyc": "^5.5.0"
   }
 }

@@ -10,7 +10,7 @@ var util = require('util');
 module.exports = postcss.plugin('postcss-assets', function (options) {
   var resolver = Assets(options);
 
-  function measure (path, density) {
+  function measure(path, density) {
     return resolver.size(path)
       .then(function (size) {
         if (density !== undefined) {
@@ -24,7 +24,8 @@ module.exports = postcss.plugin('postcss-assets', function (options) {
   return postcss()
     .use(function (css) {
       if (css.source.input.file) {
-        resolver.options.currentPath = path.dirname(css.source.input.file);
+        resolver.options.loadPaths = resolver.options.loadPaths || [];
+        resolver.options.loadPaths.unshift(path.dirname(css.source.input.file));
       }
     })
     .use(functions({
