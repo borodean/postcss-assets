@@ -15,6 +15,13 @@
   ],
   "license": "MIT",
   "author": "Vadym Borodin <borodean@gmail.com>",
+  "contributors": [
+    "Alexey Plutalov <demiazz.py@gmail.com> (https://twitter.com/demiazz)",
+    "Andrey Sitnik <andrey@sitnik.ru> (http://sitnik.ru)",
+    "Dave Clayton <davedx@gmail.com> (http://www.dave78.com)",
+    "Ivan Vlasenko (https://github.com/avanes)",
+    "Pascal Duez (http://pascalduez.me)"
+  ],
   "repository": "assetsjs/postcss-assets",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
