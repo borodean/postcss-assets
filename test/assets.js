@@ -1,16 +1,11 @@
-// Native imports
 var fs = require('fs');
 var path = require('path');
-
-// Vendor imports
-var postcss = require('postcss');
-var expect = require('chai').expect;
-
-// Local imports
 var plugin = require('..');
+var postcss = require('postcss');
+var test = require('ava');
 
 function fixture(name) {
-  return 'test/fixtures/' + name + '.css';
+  return 'fixtures/' + name + '.css';
 }
 
 function readFixture(name) {
@@ -25,12 +20,12 @@ function processFixture(name, options, postcssOptions) {
     });
 }
 
-function test(name, options, postcssOptions) {
-  return function () {
+function validate(name, options, postcssOptions) {
+  return function (t) {
     var expectedResult = readFixture(name + '.expected');
     return processFixture(name, options, postcssOptions)
       .then(function (actualResult) {
-        expect(actualResult).to.equal(expectedResult);
+        t.is(actualResult, expectedResult);
       });
   };
 }
@@ -41,125 +36,116 @@ function modifyFile(pathString) {
   fs.utimesSync(pathString, atime, mtime);
 }
 
-describe('plugin', function () {
-  it('should have a postcss method for a PostCSS Root node to be passed', function () {
-    var expectedResult = readFixture('resolve.expected');
-    postcss().use(plugin.postcss).process(readFixture('resolve'))
-      .then(function (result) {
-        var actualResult = result.css.trim();
-        expect(actualResult).to.equal(expectedResult);
-      });
-  });
+test('plugin should have a postcss method for a PostCSS Root node to be passed', function (t) {
+  var expectedResult = readFixture('resolve.expected');
+  return postcss().use(plugin.postcss).process(readFixture('resolve'))
+    .then(function (result) {
+      var actualResult = result.css.trim();
+      t.is(actualResult, expectedResult);
+    });
 });
 
-describe('resolve', function () {
-  it('should resolve paths', test('resolve'));
+test('resolve should resolve paths', validate('resolve'));
 
-  it('should resolve relative to the base path', test('resolve-basepath', {
-    basePath: 'test/fixtures'
-  }));
+test('resolve should resolve relative to the base path', validate('resolve-basepath', {
+  basePath: 'fixtures'
+}));
 
-  it('should resolve relative to the load paths', test('resolve-loadpath', {
-    basePath: 'test/fixtures',
-    loadPaths: ['alpha/', 'beta/']
-  }));
+test('resolve should resolve relative to the load paths', validate('resolve-loadpath', {
+  basePath: 'fixtures',
+  loadPaths: ['alpha/', 'beta/']
+}));
 
-  it('should resolve relative to the load paths of a funky spelling', test('resolve-loadpath', {
-    basePath: 'test/fixtures',
-    loadPaths: ['./alpha/', 'beta']
-  }));
+test('resolve should resolve relative to the load paths of a funky spelling', validate('resolve-loadpath', {
+  basePath: 'fixtures',
+  loadPaths: ['./alpha/', 'beta']
+}));
 
-  it('should resolve relative to the base URL', test('resolve-baseurl', {
-    basePath: 'test/fixtures',
-    baseUrl: '/content/theme/'
-  }));
+test('resolve should resolve relative to the base URL', validate('resolve-baseurl', {
+  basePath: 'fixtures',
+  baseUrl: '/content/theme/'
+}));
 
-  it('should resolve relative to the base URL respecting domain', test('resolve-baseurl-domain', {
-    basePath: 'test/fixtures',
-    baseUrl: 'http://example.com'
-  }));
+test('resolve should resolve relative to the base URL respecting domain', validate('resolve-baseurl-domain', {
+  basePath: 'fixtures',
+  baseUrl: 'http://example.com'
+}));
 
-  it('should resolve from source file location', test('resolve-from-source', {
-    basePath: 'test',
-    loadPaths: ['fixtures/alpha']
-  }, {
-    from: fixture('resolve-from-source')
-  }));
+test('resolve should resolve from source file location', validate('resolve-from-source', {
+  loadPaths: ['fixtures/alpha']
+}, {
+  from: fixture('resolve-from-source')
+}));
 
-  it('should resolve relative paths', test('resolve-relative-to', {
-    basePath: 'test/fixtures',
-    relativeTo: 'beta'
-  }));
+test('resolve should resolve relative paths', validate('resolve-relative-to', {
+  basePath: 'fixtures',
+  relativeTo: 'beta'
+}));
 
-  it('should recognize funky spelling', test('resolve-spelling', {
-    basePath: 'test/fixtures',
-    loadPaths: ['alpha/']
-  }));
+test('resolve should recognize funky spelling', validate('resolve-spelling', {
+  basePath: 'fixtures',
+  loadPaths: ['alpha/']
+}));
 
-  it('should reject with an error when an asset is unavailable', function () {
-    return processFixture('resolve-invalid')
-      .catch(function (err) {
-        expect(err).to.be.and.instanceof(Error);
-        expect(err.message).to.contain('Asset not found or unreadable');
-      });
-  });
+test('resolve should reject with an error when an asset is unavailable', function (t) {
+  return processFixture('resolve-invalid')
+    .catch(function (err) {
+      t.ok(err instanceof Error);
+      t.ok(err.message.includes('Asset not found or unreadable'));
+    });
+});
 
-  it('should bust cache', function () {
-    var options = {
-      cachebuster: true,
-      loadPaths: ['test/fixtures/alpha/']
+test('resolve should bust cache', function (t) {
+  var options = {
+    cachebuster: true,
+    loadPaths: ['fixtures/alpha/']
+  };
+
+  var resultA = processFixture('resolve-cachebuster', options);
+  modifyFile('fixtures/alpha/kateryna.jpg');
+
+  var resultB = processFixture('resolve-cachebuster', options);
+
+  t.not(resultA, resultB);
+});
+
+test('resolve should accept custom buster function returning a string', validate('resolve-cachebuster-string', {
+  cachebuster: function () {
+    return 'cachebuster';
+  },
+  loadPaths: ['fixtures/alpha/']
+}));
+
+test('resolve should accept custom buster function returning an object', validate('resolve-cachebuster-object', {
+  cachebuster: function (filePath, urlPathname) {
+    var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
+    return {
+      pathname: path.dirname(urlPathname) + '/' + filename,
+      query: 'buster'
     };
+  },
+  loadPaths: ['fixtures/alpha/']
+}));
 
-    var resultA = processFixture('resolve-cachebuster', options);
-    modifyFile('test/fixtures/alpha/kateryna.jpg');
+test('resolve should accept custom buster function returning a falsy value', validate('resolve-cachebuster-falsy', {
+  cachebuster: function () {
+    return;
+  },
+  loadPaths: ['fixtures/alpha/']
+}));
 
-    var resultB = processFixture('resolve-cachebuster', options);
+test('inline should base64-encode assets', validate('inline', {
+  basePath: 'fixtures/'
+}));
 
-    expect(resultA).to.not.equal(resultB);
-  });
+test('width, height and size should resolve dimensions', validate('dimensions', {
+  basePath: 'fixtures/'
+}));
 
-  it('should accept custom buster function returning a string', test('resolve-cachebuster-string', {
-    cachebuster: function () {
-      return 'cachebuster';
-    },
-    loadPaths: ['test/fixtures/alpha/']
-  }));
-
-  it('should accept custom buster function returning an object', test('resolve-cachebuster-object', {
-    cachebuster: function (filePath, urlPathname) {
-      var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
-      return {
-        pathname: path.dirname(urlPathname) + '/' + filename,
-        query: 'buster'
-      };
-    },
-    loadPaths: ['test/fixtures/alpha/']
-  }));
-
-  it('should accept custom buster function returning a falsy value', test('resolve-cachebuster-falsy', {
-    cachebuster: function () {
-      return;
-    },
-    loadPaths: ['test/fixtures/alpha/']
-  }));
-});
-
-describe('inline', function () {
-  it('should base64-encode assets', test('inline', {
-    basePath: 'test/fixtures/'
-  }));
-});
-
-describe('width, height and size', function () {
-  it('should resolve dimensions', test('dimensions', {
-    basePath: 'test/fixtures/'
-  }));
-
-  it('should reject with an error when an image is corrupted', function () {
-    return processFixture('dimensions-invalid')
-      .catch(function (err) {
-        expect(err).to.be.an.instanceof(Error);
-        expect(err.message).to.contain('File type not supported');
-      });
-  });
+test('width, height and size should reject with an error when an image is corrupted', function (t) {
+  return processFixture('dimensions-invalid')
+    .catch(function (err) {
+      t.ok(err instanceof Error);
+      t.ok(err.message.includes('File type not supported'));
+    });
 });
