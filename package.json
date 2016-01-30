@@ -21,7 +21,7 @@
     "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
-    "assets": "^1.0.0",
+    "assets": "^2.0.0",
     "postcss": "^5.0.12",
     "postcss-functions": "^2.1.0"
   },
