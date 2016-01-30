@@ -1,7 +1,17 @@
-PostCSS Assets [![Build Status](https://travis-ci.org/borodean/postcss-assets.svg?branch=master)](https://travis-ci.org/borodean/postcss-assets) [![Coverage Status](https://coveralls.io/repos/borodean/postcss-assets/badge.svg?branch=master)](https://coveralls.io/r/borodean/postcss-assets?branch=master)
-==============
+<h1 align="center">
+  <img src="https://rawgit.com/assetsjs/assets/develop/media/logo.svg" alt="assets">
+</h1>
 
 PostCSS Assets is an asset manager for CSS. It isolates stylesheets from environmental changes, gets image sizes and inlines files.
+
+[![Unix Build Status][travis-badge]][travis] [![Windows Build Status][appveyor-badge]][appveyor] [![Coverage][coveralls-badge]][coveralls]
+
+[appveyor]:        https://ci.appveyor.com/project/borodean/postcss-assets
+[appveyor-badge]:  https://img.shields.io/appveyor/ci/borodean/postcss-assets.svg?label=windows
+[coveralls]:       https://coveralls.io/github/assetsjs/postcss-assets
+[coveralls-badge]: https://img.shields.io/coveralls/assetsjs/postcss-assets.svg
+[travis]:          https://travis-ci.org/assetsjs/postcss-assets
+[travis-badge]:    https://img.shields.io/travis/assetsjs/postcss-assets.svg?label=unix
 
 Table of contents
 -----------------
@@ -121,11 +131,11 @@ var options = {
 
 ### Relative paths
 
-To make resolved paths relative, define a directory to relate to:
+To make resolved paths relative to the input file, set a flag:
 
 ```js
 var options = {
-  relativeTo: 'assets/css'
+  relative: true
 };
 ```
 
@@ -225,4 +235,4 @@ Full list of options
 | `baseUrl`        | URL of the project when running the web server.                                   | `/`     |
 | `cachebuster`    | If cache should be busted. Pass a function to define custom busting strategy.     | `false` |
 | `loadPaths`      | Specific directories to look for the files.                                       | `[]`    |
-| `relativeTo`     | Directory to relate to when resolving URLs. When `false`, disables relative URLs. | `false` |
+| `relative`       | Should the resolved path be relative to the input file                            | `false` |

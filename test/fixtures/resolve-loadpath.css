@@ -1,5 +1,0 @@
-body {
-  background: resolve('kateryna.jpg');
-  background: resolve('maria.jpg');
-  background: resolve('beta/maria.jpg');
-}

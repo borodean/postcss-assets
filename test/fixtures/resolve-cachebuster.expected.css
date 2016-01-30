@@ -1,5 +1,0 @@
-body {
-  background: url('/test/fixtures/alpha/kateryna.jpg?g');
-  background: url('/test/fixtures/alpha/kateryna.jpg?foo=bar&g');
-  background: url('/test/fixtures/alpha/kateryna.jpg?g');
-}
