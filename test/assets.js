@@ -33,6 +33,18 @@ test('resolves urls from the current path', function (t) {
     });
 });
 
+test('resolves relative urls from the current path', function (t) {
+  return process("a { b: resolve('fonts/empty-sans.woff') }", {
+    basePath: 'fixtures',
+    relative: true
+  }, {
+    from: path.resolve('fixtures/images/style.css')
+  })
+    .then(function (result) {
+      t.is(result.css, "a { b: url('../fonts/empty-sans.woff') }");
+    });
+});
+
 test('busts cache when resolving urls', function (t) {
   return process("a { b: resolve('picture.png') }", {
     basePath: 'fixtures',

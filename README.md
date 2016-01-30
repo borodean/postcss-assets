@@ -130,11 +130,11 @@ var options = {
 
 ### Relative paths
 
-To make resolved paths relative, define a directory to relate to:
+To make resolved paths relative to the input file, set a flag:
 
 ```js
 var options = {
-  relativeTo: 'assets/css'
+  relative: true
 };
 ```
 
@@ -234,4 +234,4 @@ Full list of options
 | `baseUrl`        | URL of the project when running the web server.                                   | `/`     |
 | `cachebuster`    | If cache should be busted. Pass a function to define custom busting strategy.     | `false` |
 | `loadPaths`      | Specific directories to look for the files.                                       | `[]`    |
-| `relativeTo`     | Directory to relate to when resolving URLs. When `false`, disables relative URLs. | `false` |
+| `relative`       | Should the resolved path be relative to the input file                            | `false` |

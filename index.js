@@ -24,8 +24,14 @@ module.exports = postcss.plugin('postcss-assets', function (options) {
   return postcss()
     .use(function (css) {
       if (css.source.input.file) {
+        var inputDir = path.dirname(css.source.input.file);
+
         resolver.options.loadPaths = resolver.options.loadPaths || [];
-        resolver.options.loadPaths.unshift(path.dirname(css.source.input.file));
+        resolver.options.loadPaths.unshift(inputDir);
+
+        if (options.relative) {
+          resolver.options.relativeTo = inputDir;
+        }
       }
     })
     .use(functions({
