@@ -1,151 +1,149 @@
+/* eslint quotes: 0 */
+
 var fs = require('fs');
 var path = require('path');
 var plugin = require('..');
 var postcss = require('postcss');
 var test = require('ava');
 
-function fixture(name) {
-  return 'fixtures/' + name + '.css';
+function process(css, options, postcssOptions) {
+  return postcss().use(plugin(options)).process(css, postcssOptions);
 }
 
-function readFixture(name) {
-  return fs.readFileSync(fixture(name), 'utf8').trim();
-}
-
-function processFixture(name, options, postcssOptions) {
-  var css = readFixture(name);
-  return postcss().use(plugin(options)).process(css, postcssOptions)
+test('resolves urls', function (t) {
+  return process("a { b: resolve('picture.png') }", {
+    basePath: 'fixtures',
+    baseUrl: 'http://example.com/wp-content/themes',
+    loadPaths: ['fonts', 'images']
+  })
     .then(function (result) {
-      return result.css.trim();
+      t.is(result.css, "a { b: url('http://example.com/wp-content/themes/images/picture.png') }");
     });
-}
+});
 
-function validate(name, options, postcssOptions) {
-  return function (t) {
-    var expectedResult = readFixture(name + '.expected');
-    return processFixture(name, options, postcssOptions)
-      .then(function (actualResult) {
-        t.is(actualResult, expectedResult);
-      });
-  };
-}
-
-function modifyFile(pathString) {
-  var atime = fs.statSync(pathString).atime;
-  var mtime = new Date();
-  fs.utimesSync(pathString, atime, mtime);
-}
-
-test('plugin should have a postcss method for a PostCSS Root node to be passed', function (t) {
-  var expectedResult = readFixture('resolve.expected');
-  return postcss().use(plugin.postcss).process(readFixture('resolve'))
+test('resolves urls from the current path', function (t) {
+  return process("a { b: resolve('picture.png') }", {
+    basePath: 'fixtures',
+    baseUrl: 'http://example.com/wp-content/themes'
+  }, {
+    from: path.resolve('fixtures/images/style.css')
+  })
     .then(function (result) {
-      var actualResult = result.css.trim();
-      t.is(actualResult, expectedResult);
+      t.is(result.css, "a { b: url('http://example.com/wp-content/themes/images/picture.png') }");
     });
 });
 
-test('resolve should resolve paths', validate('resolve'));
-
-test('resolve should resolve relative to the base path', validate('resolve-basepath', {
-  basePath: 'fixtures'
-}));
-
-test('resolve should resolve relative to the load paths', validate('resolve-loadpath', {
-  basePath: 'fixtures',
-  loadPaths: ['alpha/', 'beta/']
-}));
-
-test('resolve should resolve relative to the load paths of a funky spelling', validate('resolve-loadpath', {
-  basePath: 'fixtures',
-  loadPaths: ['./alpha/', 'beta']
-}));
-
-test('resolve should resolve relative to the base URL', validate('resolve-baseurl', {
-  basePath: 'fixtures',
-  baseUrl: '/content/theme/'
-}));
-
-test('resolve should resolve relative to the base URL respecting domain', validate('resolve-baseurl-domain', {
-  basePath: 'fixtures',
-  baseUrl: 'http://example.com'
-}));
-
-test('resolve should resolve from source file location', validate('resolve-from-source', {
-  loadPaths: ['fixtures/alpha']
-}, {
-  from: fixture('resolve-from-source')
-}));
-
-test('resolve should resolve relative paths', validate('resolve-relative-to', {
-  basePath: 'fixtures',
-  relativeTo: 'beta'
-}));
-
-test('resolve should recognize funky spelling', validate('resolve-spelling', {
-  basePath: 'fixtures',
-  loadPaths: ['alpha/']
-}));
-
-test('resolve should reject with an error when an asset is unavailable', function (t) {
-  return processFixture('resolve-invalid')
-    .catch(function (err) {
-      t.ok(err instanceof Error);
-      t.ok(err.message.includes('Asset not found or unreadable'));
+test('busts cache when resolving urls', function (t) {
+  return process("a { b: resolve('picture.png') }", {
+    basePath: 'fixtures',
+    baseUrl: 'http://example.com/wp-content/themes',
+    cachebuster: function (resolvedPath) {
+      return fs.statSync(resolvedPath).size;
+    },
+    loadPaths: ['fonts', 'images']
+  })
+    .then(function (result) {
+      t.is(result.css, "a { b: url('http://example.com/wp-content/themes/images/picture.png?3061') }");
     });
 });
 
-test('resolve should bust cache', function (t) {
-  var options = {
-    cachebuster: true,
-    loadPaths: ['fixtures/alpha/']
-  };
-
-  var resultA = processFixture('resolve-cachebuster', options);
-  modifyFile('fixtures/alpha/kateryna.jpg');
-
-  var resultB = processFixture('resolve-cachebuster', options);
-
-  t.not(resultA, resultB);
+test('throws when trying to resolve a non-existing file', function (t) {
+  return process("a { b: resolve('non-existing.gif') }")
+    .then(t.fail, function (err) {
+      t.ok(err instanceof Error);
+      t.is(err.message, 'Asset not found or unreadable: non-existing.gif');
+    });
 });
 
-test('resolve should accept custom buster function returning a string', validate('resolve-cachebuster-string', {
-  cachebuster: function () {
-    return 'cachebuster';
-  },
-  loadPaths: ['fixtures/alpha/']
-}));
+test('inlines data', function (t) {
+  return process("a { b: inline('picture.png') }", {
+    basePath: 'fixtures',
+    loadPaths: ['fonts', 'images']
+  })
+    .then(function (result) {
+      t.is(result.css.slice(0, 32), "a { b: url('data:image/png;base6");
+      t.is(result.css.slice(-32), "ufaJraBKlQAAAABJRU5ErkJggg==') }");
+    });
+});
 
-test('resolve should accept custom buster function returning an object', validate('resolve-cachebuster-object', {
-  cachebuster: function (filePath, urlPathname) {
-    var filename = path.basename(urlPathname, path.extname(urlPathname)) + '.cache' + path.extname(urlPathname);
-    return {
-      pathname: path.dirname(urlPathname) + '/' + filename,
-      query: 'buster'
-    };
-  },
-  loadPaths: ['fixtures/alpha/']
-}));
+test('inlines svg unencoded', function (t) {
+  return process("a { b: inline('vector.svg') }", {
+    basePath: 'fixtures',
+    loadPaths: ['fonts', 'images']
+  })
+    .then(function (result) {
+      t.is(result.css.slice(0, 32), "a { b: url('data:image/svg+xml;c");
+      t.is(result.css.slice(-32), "z%22%2F%3E%0D%0A%3C%2Fsvg%3E') }");
+    });
+});
 
-test('resolve should accept custom buster function returning a falsy value', validate('resolve-cachebuster-falsy', {
-  cachebuster: function () {
-    return;
-  },
-  loadPaths: ['fixtures/alpha/']
-}));
-
-test('inline should base64-encode assets', validate('inline', {
-  basePath: 'fixtures/'
-}));
-
-test('width, height and size should resolve dimensions', validate('dimensions', {
-  basePath: 'fixtures/'
-}));
-
-test('width, height and size should reject with an error when an image is corrupted', function (t) {
-  return processFixture('dimensions-invalid')
-    .catch(function (err) {
+test('throws when trying to inline a non-existing file', function (t) {
+  return process("a { b: inline('non-existing.gif') }")
+    .then(t.fail, function (err) {
       t.ok(err instanceof Error);
-      t.ok(err.message.includes('File type not supported'));
+      t.is(err.message, 'Asset not found or unreadable: non-existing.gif');
+    });
+});
+
+test('measures images', function (t) {
+  return process("a { b: size('vector.svg'); c: width('picture.png'); d: height('picture.png') }", {
+    basePath: 'fixtures',
+    loadPaths: ['fonts', 'images']
+  })
+    .then(function (result) {
+      t.is(result.css, "a { b: 160px 120px; c: 200px; d: 57px }");
+    });
+});
+
+test('measures images with density provided', function (t) {
+  return process("a { b: size('vector.svg', 2); c: width('picture.png', 2); d: height('picture.png', 2) }", {
+    basePath: 'fixtures',
+    loadPaths: ['fonts', 'images']
+  })
+    .then(function (result) {
+      t.is(result.css, "a { b: 80px 60px; c: 100px; d: 28.5px }");
+    });
+});
+
+test('throws when trying to measure a non-existing image', function (t) {
+  return process("a { b: size('non-existing.gif') }")
+    .then(t.fail, function (err) {
+      t.ok(err instanceof Error);
+      t.is(err.message, 'Asset not found or unreadable: non-existing.gif');
+    });
+});
+
+test('throws when trying to measure an unsupported file', function (t) {
+  return process("a { b: size('fixtures/fonts/empty-sans.woff') }")
+    .then(t.fail, function (err) {
+      t.ok(err instanceof Error);
+      t.is(err.message, 'File type not supported: ' + path.resolve('fixtures/fonts/empty-sans.woff'));
+    });
+});
+
+test('throws when trying to measure an invalid file', function (t) {
+  return process("a { b: size('fixtures/images/invalid.jpg') }")
+    .then(t.fail, function (err) {
+      t.ok(err instanceof Error);
+      t.is(err.message, 'Invalid JPEG file: ' + path.resolve('fixtures/images/invalid.jpg'));
+    });
+});
+
+test('handles quotes and escaped characters', function (t) {
+  return process("a {" +
+    "b: resolve(picture.png);" +
+    "c: resolve('picture.png');" +
+    'd: resolve("picture.png");' +
+    'e: resolve("\\70 icture.png");' +
+  "}", {
+    basePath: 'fixtures/images'
+  })
+    .then(function (result) {
+      t.is(result.css, "a {" +
+        "b: url('/picture.png');" +
+        "c: url('/picture.png');" +
+        "d: url('/picture.png');" +
+        "e: url('/picture.png');" +
+      "}");
     });
 });

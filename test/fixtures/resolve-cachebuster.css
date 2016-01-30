@@ -1,5 +1,0 @@
-body {
-  background: resolve('fixtures/alpha/kateryna.jpg');
-  background: resolve('fixtures/alpha/kateryna.jpg?foo=bar');
-  background: resolve('kateryna.jpg');
-}

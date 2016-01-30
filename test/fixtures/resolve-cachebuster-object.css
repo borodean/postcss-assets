@@ -1,4 +1,0 @@
-body {
-  background: resolve('kateryna.jpg');
-  background: resolve('kateryna.jpg?foo');
-}
