@@ -7,7 +7,7 @@
     "postcss",
     "postcss-plugin"
   ],
-  "author": "Vadim Borodean <borodean@gmail.com>",
+  "author": "Vadym Borodin <borodean@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
