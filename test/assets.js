@@ -6,8 +6,10 @@ var plugin = require('..');
 var postcss = require('postcss');
 var test = require('ava');
 
-function process(css, options, postcssOptions) {
-  return postcss().use(plugin(options)).process(css, postcssOptions);
+function process(css, options) {
+  return postcss().use(plugin(options)).process(css, {
+    from: path.resolve('fixtures/images/style.css')
+  });
 }
 
 test('resolves urls', function (t) {
@@ -25,8 +27,6 @@ test('resolves urls from the current path', function (t) {
   return process("a { b: resolve('picture.png') }", {
     basePath: 'fixtures',
     baseUrl: 'http://example.com/wp-content/themes'
-  }, {
-    from: path.resolve('fixtures/images/style.css')
   })
     .then(function (result) {
       t.is(result.css, "a { b: url('http://example.com/wp-content/themes/images/picture.png') }");
@@ -37,8 +37,6 @@ test('resolves relative urls from the current path', function (t) {
   return process("a { b: resolve('fonts/empty-sans.woff') }", {
     basePath: 'fixtures',
     relative: true
-  }, {
-    from: path.resolve('fixtures/images/style.css')
   })
     .then(function (result) {
       t.is(result.css, "a { b: url('../fonts/empty-sans.woff') }");

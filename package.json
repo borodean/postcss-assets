@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
     "assets",
@@ -14,7 +14,14 @@
     "url"
   ],
   "license": "MIT",
-  "author": "Vadym Borodin <borodean@gmail.com>",
+  "author": "Vadym Borodin <borodean@gmail.com> (http://borodean.com)",
+  "contributors": [
+    "Alexey Plutalov <demiazz.py@gmail.com> (https://twitter.com/demiazz)",
+    "Andrey Sitnik <andrey@sitnik.ru> (http://sitnik.ru)",
+    "Dave Clayton <davedx@gmail.com> (http://www.dave78.com)",
+    "Ivan Vlasenko (https://github.com/avanes)",
+    "Pascal Duez (http://pascalduez.me)"
+  ],
   "repository": "assetsjs/postcss-assets",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",

@@ -8,6 +8,12 @@ var unquote = require('./lib/unquote');
 var util = require('util');
 
 module.exports = postcss.plugin('postcss-assets', function (options) {
+  options = options || {};
+
+  if (options.relative === undefined) {
+    options.relative = false;
+  }
+
   var resolver = Assets(options);
 
   function measure(path, density) {
