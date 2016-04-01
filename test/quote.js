@@ -1,21 +1,21 @@
 /* eslint quotes: 0 */
 
-var quote = require('../lib/quote');
-var test = require('ava');
+import quote from '../lib/quote';
+import test from 'ava';
 
-test('adds quotes', function (t) {
+test('adds quotes', (t) => {
   t.is(quote("foo"), "'foo'");
 });
 
-test('preserves quoted strings', function (t) {
+test('preserves quoted strings', (t) => {
   t.is(quote("'foo'"), "'foo'");
   t.is(quote('"foo"'), '"foo"');
 });
 
-test('escapes inner quotes', function (t) {
+test('escapes inner quotes', (t) => {
   t.is(quote("foo'bar'baz"), "'foo\\'bar\\'baz'");
 });
 
-test('preserves already escaped quotes', function (t) {
+test('preserves already escaped quotes', (t) => {
   t.is(quote("foo\\'bar\\'baz"), "'foo\\'bar\\'baz'");
 });
