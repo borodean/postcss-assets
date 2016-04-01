@@ -35,6 +35,7 @@
   "devDependencies": {
     "ava": "^0.13.0",
     "eslint": "^2.5.3",
+    "eslint-config-airbnb": "^6.2.0",
     "nyc": "^6.1.1"
   }
 }
