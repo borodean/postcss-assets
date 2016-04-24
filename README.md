@@ -139,6 +139,14 @@ var options = {
 };
 ```
 
+To relate to a particular directory, set it as a string:
+
+```js
+var options = {
+  relative: 'assets/css'
+};
+```
+
 Cachebuster
 -----------
 
@@ -235,4 +243,4 @@ Full list of options
 | `baseUrl`        | URL of the project when running the web server.                                   | `/`     |
 | `cachebuster`    | If cache should be busted. Pass a function to define custom busting strategy.     | `false` |
 | `loadPaths`      | Specific directories to look for the files.                                       | `[]`    |
-| `relative`       | Should the resolved path be relative to the input file                            | `false` |
+| `relative`       | Directory to relate to when resolving URLs. When `true`, relates to the input file. When `false`, disables relative URLs. | `false` |

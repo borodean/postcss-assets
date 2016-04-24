@@ -1,13 +1,13 @@
 /* eslint quotes: 0 */
 
-var test = require('ava');
-var unquote = require('../lib/unquote');
+import test from 'ava';
+import unquote from '../lib/unquote';
 
-test('removes quotes', function (t) {
+test('removes quotes', (t) => {
   t.is(unquote('"foo"'), 'foo');
   t.is(unquote("'bar'"), 'bar');
 });
 
-test('preserves unquoted strings', function (t) {
+test('preserves unquoted strings', (t) => {
   t.is(unquote('foo'), 'foo');
 });
