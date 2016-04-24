@@ -155,3 +155,9 @@ test('handles quotes and escaped characters', (t) =>
         "e: url('/picture.png');" +
       "}");
     }));
+
+test('allows usage inside media queries', (t) =>
+  process("@media a and (b: height('fixtures/images/picture.png')) { c { d: e }}")
+    .then((result) => {
+      t.is(result.css, "@media a and (b: 57px) { c { d: e }}");
+    }));
