@@ -42,6 +42,15 @@ test('resolves relative urls from the current path', (t) =>
       t.is(result.css, "a { b: url('../fonts/empty-sans.woff') }");
     }));
 
+test('resolves relative urls from the provided path', (t) =>
+  process("a { b: resolve('fonts/empty-sans.woff') }", {
+    basePath: 'fixtures',
+    relative: 'fonts',
+  })
+    .then((result) => {
+      t.is(result.css, "a { b: url('empty-sans.woff') }");
+    }));
+
 test('busts cache when resolving urls', (t) =>
   process("a { b: resolve('picture.png') }", {
     basePath: 'fixtures',

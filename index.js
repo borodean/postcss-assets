@@ -56,9 +56,13 @@ function plugin(options) {
         resolver.options.loadPaths = resolver.options.loadPaths || [];
         resolver.options.loadPaths.unshift(inputDir);
 
-        if (params.relative) {
+        if (params.relative === true) {
           resolver.options.relativeTo = inputDir;
         }
+      }
+
+      if (typeof params.relative === 'string') {
+        resolver.options.relativeTo = params.relative;
       }
     })
     .use(functions({
