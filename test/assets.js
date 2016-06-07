@@ -124,6 +124,19 @@ test('measures images with density provided', (t) =>
         t.is(result.css, "a { b: 80px 60px; c: 100px; d: 28.5px; }");
       }));
 
+test('measures images with unit and unitBase provided', (t) =>
+  process("a { " +
+    "b: size('vector.svg', 1, 'em', 16); " +
+    "c: width('picture.png', 1, 'em', 16); " +
+    "d: height('picture.png', 1, 'em', 16); " +
+    "}", {
+      basePath: 'fixtures',
+      loadPaths: ['fonts', 'images'],
+    })
+      .then((result) => {
+        t.is(result.css, "a { b: 10em 7.5em; c: 12.5em; d: 3.5625em; }");
+      }));
+
 test('throws when trying to measure a non-existing image', (t) =>
   process("a { b: size('non-existing.gif') }")
     .then(t.fail, (err) => {

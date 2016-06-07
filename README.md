@@ -221,6 +221,16 @@ body {
 }
 ```
 
+To specify a different unit and unit base, pass them as the third and fourth parameters:
+
+```css
+body {
+  width: width('images/foobar.png', 1, 'em', 16); /* 20em */
+  height: height('images/foobar.png', 1, 'em', 16); /* 15em */
+  background-size: size('images/foobar.png', 1, 'em', 16); /* 20em 15em */
+}
+```
+
 Inlining files
 --------------
 

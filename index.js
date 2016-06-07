@@ -11,16 +11,16 @@ function formatUrl(url) {
   return util.format('url(%s)', quote(url));
 }
 
-function formatSize(measurements) {
-  return util.format('%dpx %dpx', measurements.width, measurements.height);
+function formatSize(unit, measurements) {
+  return util.format('%d' + unit + ' %d' + unit, measurements.width, measurements.height);
 }
 
-function formatWidth(measurements) {
-  return util.format('%dpx', measurements.width);
+function formatWidth(unit, measurements) {
+  return util.format('%d' + unit, measurements.width);
 }
 
-function formatHeight(measurements) {
-  return util.format('%dpx', measurements.height);
+function formatHeight(unit, measurements) {
+  return util.format('%d' + unit, measurements.height);
 }
 
 function plugin(options) {
@@ -33,16 +33,31 @@ function plugin(options) {
 
   resolver = new Assets(options);
 
-  function measure(path, density) {
+  function measure(path, density, unitBase) {
     return resolver.size(path)
       .then(function correctDensity(size) {
         if (density !== undefined) {
           return {
-            width: Number((size.width / density).toFixed(4)),
-            height: Number((size.height / density).toFixed(4))
+            width: Number(size.width / density),
+            height: Number(size.height / density)
           };
         }
         return size;
+      })
+      .then(function correctUnitBase(size) {
+        if (unitBase !== undefined) {
+          return {
+            width: Number(size.width / unitBase),
+            height: Number(size.height / unitBase)
+          };
+        }
+        return size;
+      })
+      .then(function round(size) {
+        return {
+          width: size.width.toFixed(4),
+          height: size.height.toFixed(4)
+        };
       });
   }
 
@@ -75,17 +90,23 @@ function plugin(options) {
           var normalizedPath = unquote(unescapeCss(path));
           return resolver.data(normalizedPath).then(formatUrl);
         },
-        size: function size(path, density) {
+        size: function size(path, density, unit, unitBase) {
           var normalizedPath = unquote(unescapeCss(path));
-          return measure(normalizedPath, density).then(formatSize);
+          var normalizedUnit = unquote(unescapeCss(unit || 'px'));
+          return measure(normalizedPath, density, unitBase)
+            .then(formatSize.bind(null, normalizedUnit));
         },
-        width: function width(path, density) {
+        width: function width(path, density, unit, unitBase) {
           var normalizedPath = unquote(unescapeCss(path));
-          return measure(normalizedPath, density).then(formatWidth);
+          var normalizedUnit = unquote(unescapeCss(unit || 'px'));
+          return measure(normalizedPath, density, unitBase)
+            .then(formatWidth.bind(null, normalizedUnit));
         },
-        height: function height(path, density) {
+        height: function height(path, density, unit, unitBase) {
           var normalizedPath = unquote(unescapeCss(path));
-          return measure(normalizedPath, density).then(formatHeight);
+          var normalizedUnit = unquote(unescapeCss(unit || 'px'));
+          return measure(normalizedPath, density, unitBase)
+            .then(formatHeight.bind(null, normalizedUnit));
         }
       }
     }));
