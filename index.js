@@ -55,8 +55,8 @@ function plugin(options) {
       })
       .then(function round(size) {
         return {
-          width: size.width.toFixed(4),
-          height: size.height.toFixed(4)
+          width: size.width.toFixed(8),
+          height: size.height.toFixed(8)
         };
       });
   }
