@@ -13,16 +13,17 @@
     "size",
     "url"
   ],
-  "main": "./lib",
+  "bugs": "https://github.com/assetsjs/assets/issues",
   "license": "MIT",
   "author": "Vadym Borodin <borodean@gmail.com> (http://borodean.com)",
   "contributors": [
-    "Alexey Plutalov <demiazz.py@gmail.com> (https://twitter.com/demiazz)",
-    "Andrey Sitnik <andrey@sitnik.ru> (http://sitnik.ru)",
-    "Dave Clayton <davedx@gmail.com> (http://www.dave78.com)",
+    "Alexey Plutalov (https://github.com/demiazz)",
+    "Andrey Sitnik (https://github.com/ai)",
+    "Dave Clayton (https://github.com/davedx)",
     "Ivan Vlasenko (https://github.com/avanes)",
-    "Pascal Duez (http://pascalduez.me)"
+    "Pascal Duez (https://github.com/pascalduez)"
   ],
+  "main": "./lib",
   "repository": "assetsjs/postcss-assets",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
