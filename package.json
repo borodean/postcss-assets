@@ -13,6 +13,7 @@
     "size",
     "url"
   ],
+  "main": "./lib",
   "license": "MIT",
   "author": "Vadym Borodin <borodean@gmail.com> (http://borodean.com)",
   "contributors": [
