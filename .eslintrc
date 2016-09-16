@@ -1,4 +1,4 @@
 {
-  "extends": "airbnb/legacy",
+  "extends": "airbnb-base/legacy",
   "root": true
 }

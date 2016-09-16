@@ -30,14 +30,15 @@
     "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
-    "assets": "^2.0.0",
-    "postcss": "^5.0.12",
+    "assets": "^2.1.0",
+    "postcss": "^5.2.0",
     "postcss-functions": "^2.1.0"
   },
   "devDependencies": {
-    "ava": "^0.13.0",
-    "eslint": "^2.5.3",
-    "eslint-config-airbnb": "^6.2.0",
-    "nyc": "^6.1.1"
+    "ava": "^0.16.0",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb-base": "^3.0.1",
+    "eslint-plugin-import": "^1.7.0",
+    "nyc": "^8.3.0"
   }
 }

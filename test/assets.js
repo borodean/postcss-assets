@@ -67,7 +67,7 @@ test('busts cache when resolving urls', (t) =>
 test('throws when trying to resolve a non-existing file', (t) =>
   process("a { b: resolve('non-existing.gif') }")
     .then(t.fail, (err) => {
-      t.ok(err instanceof Error);
+      t.true(err instanceof Error);
       t.is(err.message, 'Asset not found or unreadable: non-existing.gif');
     }));
 
@@ -94,7 +94,7 @@ test('inlines svg unencoded', (t) =>
 test('throws when trying to inline a non-existing file', (t) =>
   process("a { b: inline('non-existing.gif') }")
     .then(t.fail, (err) => {
-      t.ok(err instanceof Error);
+      t.true(err instanceof Error);
       t.is(err.message, 'Asset not found or unreadable: non-existing.gif');
     }));
 
@@ -127,7 +127,7 @@ test('measures images with density provided', (t) =>
 test('throws when trying to measure a non-existing image', (t) =>
   process("a { b: size('non-existing.gif') }")
     .then(t.fail, (err) => {
-      t.ok(err instanceof Error);
+      t.true(err instanceof Error);
       t.is(err.message, 'Asset not found or unreadable: non-existing.gif');
     }));
 
@@ -135,7 +135,7 @@ test('throws when trying to measure an unsupported file', (t) =>
   process("a { b: size('fixtures/fonts/empty-sans.woff') }")
     .then(t.fail, (err) => {
       const absolutePath = path.resolve('fixtures/fonts/empty-sans.woff');
-      t.ok(err instanceof Error);
+      t.true(err instanceof Error);
       t.is(err.message, `File type not supported: ${absolutePath}`);
     }));
 
@@ -143,7 +143,7 @@ test('throws when trying to measure an invalid file', (t) =>
   process("a { b: size('fixtures/images/invalid.jpg') }")
     .then(t.fail, (err) => {
       const absolutePath = path.resolve('fixtures/images/invalid.jpg');
-      t.ok(err instanceof Error);
+      t.true(err instanceof Error);
       t.is(err.message, `Invalid JPEG file: ${absolutePath}`);
     }));
 
