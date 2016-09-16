@@ -1,6 +1,4 @@
-<h1 align="center">
-  <img src="https://rawgit.com/assetsjs/assets/develop/media/logo.svg" alt="assets">
-</h1>
+# ![postcss-assets](https://rawgit.com/assetsjs/postcss-assets/develop/media/postcss-assets.svg)
 
 PostCSS Assets is an asset manager for CSS. It isolates stylesheets from environmental changes, gets image sizes and inlines files.
 
