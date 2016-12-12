@@ -208,6 +208,7 @@ body {
   width: width('images/foobar.png'); /* 320px */
   height: height('images/foobar.png'); /* 240px */
   background-size: size('images/foobar.png'); /* 320px 240px */
+  padding-top: ratio('images/foobar.png'); /* 75% */
 }
 ```
 
@@ -218,6 +219,7 @@ body {
   width: width('images/foobar.png', 2); /* 160px */
   height: height('images/foobar.png', 2); /* 120px */
   background-size: size('images/foobar.png', 2); /* 160px 120px */
+  padding-top: ratio('images/foobar.png'); /* 75% */
 }
 ```
 
@@ -228,6 +230,7 @@ body {
   width: width('images/foobar.png', 1, 'em', 16); /* 20em */
   height: height('images/foobar.png', 1, 'em', 16); /* 15em */
   background-size: size('images/foobar.png', 1, 'em', 16); /* 20em 15em */
+  padding-top: ratio('images/foobar.png'); /* 75% */
 }
 ```
 
