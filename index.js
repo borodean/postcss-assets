@@ -23,6 +23,10 @@ function formatHeight(unit, measurements) {
   return util.format('%d' + unit, measurements.height);
 }
 
+function formatRatio(measurements) {
+  return util.format('%d' + '%', measurements.ratio * 100);
+}
+
 function plugin(options) {
   var params = options || {};
   var resolver;
@@ -57,6 +61,15 @@ function plugin(options) {
         return {
           width: size.width.toFixed(8),
           height: size.height.toFixed(8)
+        };
+      });
+  }
+
+  function measureRatio(path) {
+    return resolver.size(path)
+      .then(function calculateRatio(size) {
+        return {
+          ratio: Number(size.height / size.width)
         };
       });
   }
@@ -107,6 +120,11 @@ function plugin(options) {
           var normalizedUnit = unquote(unescapeCss(unit || 'px'));
           return measure(normalizedPath, density, unitBase)
             .then(formatHeight.bind(null, normalizedUnit));
+        },
+        ratio: function ratio(path) {
+          var normalizedPath = unquote(unescapeCss(path));
+          return measureRatio(normalizedPath)
+            .then(formatRatio.bind());
         }
       }
     }));
