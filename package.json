@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "assets": "^2.1.0",
+    "bluebird": "^3.5.0",
     "postcss": "^5.2.0",
     "postcss-functions": "^2.1.0"
   },
