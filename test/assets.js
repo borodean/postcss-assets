@@ -115,7 +115,7 @@ test('measures images with set cache dimensions', (t) => {
   const options = {
     basePath: 'fixtures',
     loadPaths: ['fonts', 'images'],
-    cacheDimensions: true,
+    cache: true,
   };
   process("a { " +
     "b: size('vector.svg'); " +
