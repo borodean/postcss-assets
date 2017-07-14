@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
     "assets",
@@ -21,6 +21,7 @@
     "Andrey Sitnik (https://github.com/ai)",
     "Dave Clayton (https://github.com/davedx)",
     "Ivan Vlasenko (https://github.com/avanes)",
+    "Liucw (https://github.com/booxood)",
     "Pascal Duez (https://github.com/pascalduez)"
   ],
   "main": "./lib",
