@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
     "assets",
@@ -13,29 +13,38 @@
     "size",
     "url"
   ],
+  "bugs": "https://github.com/assetsjs/assets/issues",
   "license": "MIT",
   "author": "Vadym Borodin <borodean@gmail.com> (http://borodean.com)",
   "contributors": [
-    "Alexey Plutalov <demiazz.py@gmail.com> (https://twitter.com/demiazz)",
-    "Andrey Sitnik <andrey@sitnik.ru> (http://sitnik.ru)",
-    "Dave Clayton <davedx@gmail.com> (http://www.dave78.com)",
+    "Alexey Plutalov (https://github.com/demiazz)",
+    "Andrey Sitnik (https://github.com/ai)",
+    "Dave Clayton (https://github.com/davedx)",
     "Ivan Vlasenko (https://github.com/avanes)",
-    "Pascal Duez (http://pascalduez.me)"
+    "Liucw (https://github.com/booxood)",
+    "Pascal Duez (https://github.com/pascalduez)"
   ],
+  "main": "./lib",
   "repository": "assetsjs/postcss-assets",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
-    "assets": "^2.0.0",
-    "postcss": "^5.0.12",
+    "assets": "^2.1.0",
+    "bluebird": "^3.5.0",
+    "postcss": "^5.2.0",
     "postcss-functions": "^2.1.0"
   },
   "devDependencies": {
-    "ava": "^0.13.0",
-    "eslint": "^2.5.3",
-    "eslint-config-airbnb": "^6.2.0",
-    "nyc": "^6.1.1"
+    "ava": "^0.16.0",
+    "coveralls": "^2.11.13",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb-base": "^3.0.1",
+    "eslint-plugin-import": "^1.7.0",
+    "nyc": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=0.12"
   }
 }
