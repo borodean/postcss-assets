@@ -31,16 +31,16 @@
   },
   "dependencies": {
     "assets": "borodean/assets#postcss-six",
-    "postcss": "^6.0.1",
-    "postcss-functions": "andyjansson/postcss-functions#717027b"
+    "postcss": "^6.0.10",
+    "postcss-functions": "^3.0.0"
   },
   "devDependencies": {
-    "ava": "^0.19.1",
+    "ava": "^0.22.0",
     "coveralls": "^2.11.13",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.3.0",
-    "nyc": "^11.0.2"
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-plugin-import": "^2.7.0",
+    "nyc": "^11.1.0"
   },
   "engines": {
     "node": ">=0.12"
