@@ -31,18 +31,18 @@
     "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
-    "assets": "^2.1.0",
+    "assets": "^3.0.0",
     "bluebird": "^3.5.0",
-    "postcss": "^5.2.0",
-    "postcss-functions": "^2.1.0"
+    "postcss": "^6.0.10",
+    "postcss-functions": "^3.0.0"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.22.0",
     "coveralls": "^2.11.13",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb-base": "^3.0.1",
-    "eslint-plugin-import": "^1.7.0",
-    "nyc": "^8.3.0"
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-plugin-import": "^2.7.0",
+    "nyc": "^11.1.0"
   },
   "engines": {
     "node": ">=0.12"
