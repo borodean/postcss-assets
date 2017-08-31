@@ -30,7 +30,7 @@
     "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
-    "assets": "borodean/assets#postcss-six",
+    "assets": "^3.0.0",
     "postcss": "^6.0.10",
     "postcss-functions": "^3.0.0"
   },
