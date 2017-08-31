@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "4.2.0",
+  "version": "5.0.0",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
     "assets",
