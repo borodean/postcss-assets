@@ -104,12 +104,12 @@ test('measures images', t =>
     "c: width('picture.png'); " +
     "d: height('picture.png'); " +
     "}", {
-      basePath: 'test/fixtures',
-      loadPaths: ['fonts', 'images'],
-    })
-      .then((result) => {
-        t.is(result.css, "a { b: 160px 120px; c: 200px; d: 57px; }");
-      }));
+    basePath: 'test/fixtures',
+    loadPaths: ['fonts', 'images'],
+  })
+    .then((result) => {
+      t.is(result.css, "a { b: 160px 120px; c: 200px; d: 57px; }");
+    }));
 
 test('measures images with density provided', t =>
   process("a { " +
@@ -117,12 +117,12 @@ test('measures images with density provided', t =>
     "c: width('picture.png', 2); " +
     "d: height('picture.png', 2); " +
     "}", {
-      basePath: 'test/fixtures',
-      loadPaths: ['fonts', 'images'],
-    })
-      .then((result) => {
-        t.is(result.css, "a { b: 80px 60px; c: 100px; d: 28.5px; }");
-      }));
+    basePath: 'test/fixtures',
+    loadPaths: ['fonts', 'images'],
+  })
+    .then((result) => {
+      t.is(result.css, "a { b: 80px 60px; c: 100px; d: 28.5px; }");
+    }));
 
 test('throws when trying to measure a non-existing image', t =>
   process("a { b: size('non-existing.gif') }")
