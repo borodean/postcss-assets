@@ -235,10 +235,11 @@ SVG files would be inlined unencoded, because [then they benefit in size](http:/
 Full list of options
 --------------------
 
-| Option           | Description                                                                       | Default |
-|:-----------------|:----------------------------------------------------------------------------------|:--------|
-| `basePath`       | Root directory of the project.                                                    | `.`     |
-| `baseUrl`        | URL of the project when running the web server.                                   | `/`     |
-| `cachebuster`    | If cache should be busted. Pass a function to define custom busting strategy.     | `false` |
-| `loadPaths`      | Specific directories to look for the files.                                       | `[]`    |
-| `relative`       | Directory to relate to when resolving URLs. When `true`, relates to the input file. When `false`, disables relative URLs. | `false` |
+| Option        | Description                                                                       | Default |
+|:--------------|:----------------------------------------------------------------------------------|:--------|
+| `basePath`    | Root directory of the project.                                                    | `.`     |
+| `baseUrl`     | URL of the project when running the web server.                                   | `/`     |
+| `cachebuster` | If cache should be busted. Pass a function to define custom busting strategy.     | `false` |
+| `loadPaths`   | Specific directories to look for the files.                                       | `[]`    |
+| `relative`    | Directory to relate to when resolving URLs. When `true`, relates to the input file. When `false`, disables relative URLs. | `false` |
+| `cache`       | When `true`, if the input file not been modifed, use the results before cached.   | `false` |

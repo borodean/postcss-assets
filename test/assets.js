@@ -111,6 +111,30 @@ test('measures images', t =>
       t.is(result.css, "a { b: 160px 120px; c: 200px; d: 57px; }");
     }));
 
+test('measures images with set cache dimensions', (t) => {
+  const options = {
+    basePath: 'test/fixtures',
+    loadPaths: ['fonts', 'images'],
+    cache: true,
+  };
+  return process("a { " +
+    "b: size('vector.svg'); " +
+    "c: width('picture.png'); " +
+    "d: height('picture.png'); " +
+    "}", options)
+    .then((firstResult) => {
+      t.is(firstResult.css, "a { b: 160px 120px; c: 200px; d: 57px; }");
+
+      return process("a { " +
+          "b: width('vector.svg'); " +
+          "c: size('picture.png'); " +
+          "}", options)
+        .then((secondResult) => {
+          t.is(secondResult.css, "a { b: 160px; c: 200px 57px; }");
+        });
+    });
+});
+
 test('measures images with density provided', t =>
   process("a { " +
     "b: size('vector.svg', 2); " +

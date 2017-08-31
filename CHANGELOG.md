@@ -1,5 +1,10 @@
 # Change log
 
+## 4.2.0
+**Features:**
+
+* Add `cache` option to cache resolved dimensions (https://github.com/borodean/postcss-assets/pull/73).
+
 ## 4.1.0
 **Features:**
 
