@@ -1,5 +1,11 @@
 # Change log
 
+## 5.0.0
+**Breaking**
+
+- Updates to PostCSS 6 (https://github.com/borodean/postcss-assets/issues/70, https://github.com/borodean/postcss-assets/issues/71, https://github.com/borodean/postcss-assets/pull/72).
+- Drops nodejs 0.12 support.
+
 ## 4.2.0
 **Features:**
 
