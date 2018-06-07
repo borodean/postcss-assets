@@ -148,13 +148,23 @@ var options = {
 Cachebuster
 -----------
 
-PostCSS Assets can bust assets cache, changing urls depending on asset’s modification date:
+PostCSS Assets can bust assets cache:
 
 ```js
 var options = {
   cachebuster: true
 };
 ```
+
+Example:
+
+```css
+body {
+  background: resolve('/images/icons/baz.png');
+}
+```
+
+PostCSS Assets will change urls depending on asset’s modification date:
 
 ```css
 body {
