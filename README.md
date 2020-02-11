@@ -4,12 +4,12 @@ PostCSS Assets is an asset manager for CSS. It isolates stylesheets from environ
 
 [![Unix Build Status][travis-badge]][travis] [![Windows Build Status][appveyor-badge]][appveyor] [![Coverage][coveralls-badge]][coveralls]
 
-[appveyor]:        https://ci.appveyor.com/project/borodean/postcss-assets
-[appveyor-badge]:  https://img.shields.io/appveyor/ci/borodean/postcss-assets.svg?label=windows
-[coveralls]:       https://coveralls.io/github/assetsjs/postcss-assets
-[coveralls-badge]: https://img.shields.io/coveralls/assetsjs/postcss-assets.svg
-[travis]:          https://travis-ci.org/assetsjs/postcss-assets
-[travis-badge]:    https://img.shields.io/travis/assetsjs/postcss-assets.svg?label=unix
+[appveyor]:        https://ci.appveyor.com/project/borodean/postcss-assets/branch/master
+[appveyor-badge]:  https://img.shields.io/appveyor/build/borodean/postcss-assets/master?label=windows
+[coveralls]:       https://coveralls.io/github/borodean/postcss-assets
+[coveralls-badge]: https://img.shields.io/coveralls/github/borodean/postcss-assets/master
+[travis]:          https://travis-ci.org/borodean/postcss-assets
+[travis-badge]:    https://img.shields.io/travis/borodean/postcss-assets/master?label=unix
 
 Table of contents
 -----------------
