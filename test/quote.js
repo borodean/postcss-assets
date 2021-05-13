@@ -1,7 +1,7 @@
 /* eslint quotes: 0 */
 
-import test from 'ava';
-import quote from '../lib/quote';
+const test = require('ava');
+const quote = require('../lib/quote');
 
 test('adds quotes', (t) => {
   t.is(quote("foo"), "'foo'");
