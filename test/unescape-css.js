@@ -1,5 +1,5 @@
-import test from 'ava';
-import unescapeCss from '../lib/unescape-css';
+const test = require('ava');
+const unescapeCss = require('../lib/unescape-css');
 
 test('unescapes plain chars', (t) => {
   t.is(unescapeCss('Romeo \\+ Juliette'), 'Romeo + Juliette');
