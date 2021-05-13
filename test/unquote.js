@@ -1,7 +1,7 @@
 /* eslint quotes: 0 */
 
-import test from 'ava';
-import unquote from '../lib/unquote';
+const test = require('ava');
+const unquote = require('../lib/unquote');
 
 test('removes quotes', (t) => {
   t.is(unquote('"foo"'), 'foo');

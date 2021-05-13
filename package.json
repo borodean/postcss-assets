@@ -1,6 +1,6 @@
 {
   "name": "postcss-assets",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "PostCSS plugin to manage assets",
   "keywords": [
     "assets",
@@ -28,23 +28,25 @@
   "repository": "assetsjs/postcss-assets",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
+    "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ava"
   },
   "dependencies": {
     "assets": "^3.0.0",
-    "bluebird": "^3.5.0",
-    "postcss": "^6.0.10",
-    "postcss-functions": "^3.0.0"
+    "postcss-functions": "^4.0.2"
   },
   "devDependencies": {
-    "ava": "^0.22.0",
-    "coveralls": "^2.11.13",
-    "eslint": "^4.5.0",
-    "eslint-config-airbnb-base": "^11.3.2",
+    "ava": "^3.15.0",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.7.0",
-    "nyc": "^11.1.0"
+    "nyc": "^15.1.0",
+    "postcss": "^8.2.15"
+  },
+  "peerDependencies": {
+    "postcss": "^8.2.15"
   },
   "engines": {
-    "node": ">=0.12"
+    "node": ">=10"
   }
 }
